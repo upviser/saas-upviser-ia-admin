@@ -26,6 +26,11 @@ export default function Page () {
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [sessionInfo, setSessionInfo] = useState<{
+    phone_number_id?: string;
+    waba_id?: string;
+  }>({});
+  const [fbReady, setFbReady] = useState(false)
 
   const router = useRouter()
 
@@ -58,6 +63,8 @@ export default function Page () {
         xfbml: true,
         version: 'v20.0',
       });
+
+      setFbReady(true); // 2. FB está listo
     };
 
     const sessionInfoListener = (event: MessageEvent) => {
@@ -75,12 +82,12 @@ export default function Page () {
     return () => window.removeEventListener('message', sessionInfoListener);
   }, []);
 
-  const [sessionInfo, setSessionInfo] = useState<{
-    phone_number_id?: string;
-    waba_id?: string;
-  }>({});
-
   const handleConnect = async () => {
+    if (!fbReady) {
+      console.warn('Facebook SDK aún no está listo.');
+      return;
+    }
+
     try {
       const response = await new Promise<any>((resolve, reject) => {
         window.FB.login(
@@ -113,7 +120,7 @@ export default function Page () {
           phone_number_id: sessionInfo.phone_number_id,
         });
         if (res.data.success === 'OK') {
-          getIntegrations()
+          getIntegrations();
         } else {
           console.error('No se ha podido crear el token correctamente.');
         }
@@ -207,8 +214,8 @@ export default function Page () {
                 <h3 className='text-sm'>Conectar Whatsapp</h3>
                 {
                   (integrations.idPhone && integrations.idPhone !== '') && (integrations.whatsappToken && integrations.whatsappToken !== '')
-                    ? <Button>Desconectar Whatsapp</Button>
-                    : <Button action={handleConnect}>Conectar Whatsapp</Button>
+                    ? fbReady ? <Button>Desconectar Whatsapp</Button> : ''
+                    : fbReady ? <Button action={handleConnect}>Conectar Whatsapp</Button> : ''
                 }
               </div>
               <div>
