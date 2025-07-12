@@ -46,45 +46,35 @@ export default function Page () {
   }, [])
 
   useEffect(() => {
-    const sdkId = 'facebook-jssdk';
-    if (!document.getElementById(sdkId)) {
-      const script = document.createElement('script');
-      script.id = sdkId;
-      script.src = 'https://connect.facebook.net/en_US/sdk.js';
-      script.async = true;
-      script.defer = true;
-      document.head.appendChild(script);
-    }
+    const interval = setInterval(() => {
+      if (typeof window !== 'undefined' && window.FB) {
+        console.log('🟢 FB listo');
+        setFbReady(true);
+        clearInterval(interval);
+      }
+    }, 100);
+    return () => clearInterval(interval);
+  }, []);
 
-    window.fbAsyncInit = () => {
-      window.FB.init({
-        appId: process.env.NEXT_PUBLIC_FB_APP_ID!,
-        cookie: true,
-        xfbml: true,
-        version: 'v20.0',
-      });
-
-      setFbReady(true); // 2. FB está listo
-    };
-
-    const sessionInfoListener = (event: MessageEvent) => {
-      if (!['https://www.facebook.com', 'https://web.facebook.com'].includes(event.origin)) return;
+  // Captura mensajes de sesión
+  useEffect(() => {
+    const listener = (e: MessageEvent) => {
+      if (!['https://www.facebook.com', 'https://web.facebook.com'].includes(e.origin)) return;
       try {
-        const data = JSON.parse(event.data);
+        const data = JSON.parse(e.data);
         if (data.type === 'WA_EMBEDDED_SIGNUP' && data.event === 'FINISH') {
           const { phone_number_id, waba_id } = data.data;
           setSessionInfo({ phone_number_id, waba_id });
         }
       } catch {}
     };
-
-    window.addEventListener('message', sessionInfoListener);
-    return () => window.removeEventListener('message', sessionInfoListener);
+    window.addEventListener('message', listener);
+    return () => window.removeEventListener('message', listener);
   }, []);
 
   const handleConnect = async () => {
     if (!fbReady) {
-      console.warn('Facebook SDK aún no está listo.');
+      console.warn('SDK no está listo');
       return;
     }
 
@@ -92,90 +82,60 @@ export default function Page () {
       const response = await new Promise<any>((resolve, reject) => {
         window.FB.login(
           (res: any) => {
-            if (res.authResponse) {
-              resolve(res);
-            } else {
-              reject(new Error('Usuario canceló o no autorizó.'));
-            }
+            res.authResponse ? resolve(res) : reject(new Error('Cancelado o no autorizado'));
           },
           {
             config_id: process.env.NEXT_PUBLIC_WHATSAPP_CONFIG_ID!,
             response_type: 'code',
             override_default_response_type: true,
             scope: 'business_management,whatsapp_business_management,whatsapp_business_messaging',
-            extras: {
-              feature: 'whatsapp_embedded_signup',
-              version: 2,
-              sessionInfoVersion: 3,
-              setup: {},
-            },
+            extras: { feature: 'whatsapp_embedded_signup', version: 2, sessionInfoVersion: 3, setup: {} },
+          }
+        );
+      });
+      const code = response.authResponse.code;
+      const { phone_number_id, waba_id } = sessionInfo;
+      if (phone_number_id && waba_id) {
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp-token`, { code, phone_number_id, waba_id });
+        res.data.success === 'OK' ? console.log('Token creado') : console.error('Error al crear token');
+      } else {
+        console.error('No recibí sessionInfo antes del login');
+      }
+    } catch (e) {
+      console.error('Error en conexión FB:', e);
+    }
+  };
+
+  const handleConnectFacebook = async () => {
+    if (!fbReady) {
+      console.warn('SDK no está listo');
+      return;
+    }
+
+    try {
+      const response = await new Promise<any>((resolve, reject) => {
+        window.FB.login(
+          (res: any) => {
+            res.authResponse ? resolve(res) : reject(new Error('Cancelado o no autorizado'));
+          },
+          {
+            scope: 'business_management,pages_show_list,pages_manage_metadata,pages_messaging,instagram_basic,instagram_manage_messages',
+            response_type: 'token',
           }
         );
       });
 
-      const code = response.authResponse.code;
-      if (sessionInfo.phone_number_id && sessionInfo.waba_id) {
-        const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp-token`, {
-          code,
-          phone_number_id: sessionInfo.phone_number_id,
-        });
-        if (res.data.success === 'OK') {
-          getIntegrations();
-        } else {
-          console.error('No se ha podido crear el token correctamente.');
-        }
+      const userToken = response.authResponse.accessToken
+
+      const resp = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/messenger-token`, { userToken })
+      if (resp.data.success) {
+        getIntegrations()
       } else {
-        console.error('No session info recibido antes del login.');
+        console.error('Error al guardar datos:', resp.data);
       }
-    } catch (error) {
-      console.error('Error en el proceso de conexión:', error);
+    } catch (e) {
+      console.error('Error en conexión FB:', e);
     }
-  };
-
-  useEffect(() => {
-    const id = 'facebook-jssdk';
-    if (!document.getElementById(id)) {
-      const script = document.createElement('script');
-      script.id = id;
-      script.src = 'https://connect.facebook.net/en_US/sdk.js';
-      script.async = true;
-      script.defer = true;
-      document.head.appendChild(script);
-    }
-
-    window.fbAsyncInit = () => {
-      window.FB.init({
-        appId: process.env.NEXT_PUBLIC_FB_APP_ID!,
-        cookie: true,
-        xfbml: false,
-        version: 'v20.0',
-      });
-    };
-  }, []);
-
-  const handleConnectFacebook = async () => {
-    window.FB.login(async (res: any) => {
-      if (!res.authResponse) return console.error('Permiso denegado.');
-      const userToken = res.authResponse.accessToken;
-      try {
-        const resp = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/messenger-token`, { userToken });
-        if (resp.data.success) {
-          getIntegrations()
-        } else {
-          console.error('Error al guardar datos:', resp.data);
-        }
-      } catch (e) {
-        console.error('Error API:', e);
-      }
-    }, {
-      scope: [
-        'pages_show_list',
-        'pages_manage_metadata',
-        'pages_messaging',
-        'instagram_basic',
-        'instagram_manage_messages'
-      ].join(',')
-    });
   };
 
   const handleSubmit = async () => {
@@ -218,29 +178,13 @@ export default function Page () {
                     : fbReady ? <Button action={handleConnect}>Conectar Whatsapp</Button> : ''
                 }
               </div>
-              <div>
-                <h3>Conectar Facebook/Instagram</h3>
+              <div className='flex flex-col gap-2'>
+                <h3 className='text-sm'>Conectar Facebook/Instagram</h3>
                 {
                   (integrations.messengerToken && integrations.messengerToken !== '') && (integrations.idPage && integrations.idPage !== '')
-                    ? <Button>Desconectar Facebook/Instagram</Button>
-                    : <Button action={handleConnectFacebook}>Conectar Facebook/Instagram</Button>
+                    ? fbReady ? <Button>Desconectar Facebook/Instagram</Button> : ''
+                    : fbReady ? <Button action={handleConnectFacebook}>Conectar Facebook/Instagram</Button> : ''
                 }
-              </div>
-              <div className='flex flex-col gap-2'>
-                <h3 className='text-sm'>ID del número de teléfono</h3>
-                <Input change={(e: any) => setIntegrations({ ...integrations, idPhone: e.target.value })} value={integrations.idPhone} placeholder='ID del número de teléfono' config='h-40' />
-              </div>
-              <div className='flex flex-col gap-2'>
-                <h3 className='text-sm'>Token Whatsapp App</h3>
-                <Input change={(e: any) => setIntegrations({ ...integrations, whatsappToken: e.target.value })} value={integrations.whatsappToken} placeholder='Api Meta Token' config='h-40' />
-              </div>
-              <div className='flex flex-col gap-2'>
-                <h3 className='text-sm'>ID de la página de Facebook</h3>
-                <Input change={(e: any) => setIntegrations({ ...integrations, idPage: e.target.value })} value={integrations.idPage} placeholder='ID de la página de Facebook' config='h-40' />
-              </div>
-              <div className='flex flex-col gap-2'>
-                <h3 className='text-sm'>Token Messenger App</h3>
-                <Input change={(e: any) => setIntegrations({ ...integrations, messengerToken: e.target.value })} value={integrations.messengerToken} placeholder='Api Meta Token' config='h-40' />
               </div>
               <div className='flex flex-col gap-2'>
                 <h3 className='text-sm'>Api Meta Token</h3>
