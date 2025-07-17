@@ -19,6 +19,7 @@ export default function Page () {
     idPhone: '',
     whatsappToken: '',
     idPage: '',
+    idInstagram: '',
     messengerToken: '',
     apiToken: '',
     apiPixelId: '',
@@ -181,8 +182,21 @@ export default function Page () {
               <div className='flex flex-col gap-2'>
                 <h3 className='text-sm'>Conectar Facebook/Instagram</h3>
                 {
+                  integrations.idPage && integrations.idPage !== '' && integrations.idInstagram && integrations.idInstagram !== ''
+                    ? (
+                      <>
+                        <p className='text-sm'>Id página de Facebook: {integrations.idPage}</p>
+                        <p className='text-sm'>Id Instagram: {integrations.idPage}</p>
+                      </>
+                    )
+                    : ''
+                }
+                {
                   (integrations.messengerToken && integrations.messengerToken !== '') && (integrations.idPage && integrations.idPage !== '')
-                    ? fbReady ? <Button>Desconectar Facebook/Instagram</Button> : ''
+                    ? fbReady ? <Button action={async () => {
+                      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/disconnect-facebook`)
+                      getIntegrations()
+                    }}>Desconectar Facebook/Instagram</Button> : ''
                     : fbReady ? <Button action={handleConnectFacebook}>Conectar Facebook/Instagram</Button> : ''
                 }
               </div>
