@@ -126,7 +126,7 @@ export default function Page () {
           <p className='font-medium'>Plantillas</p>
           {
             templates?.map((temp: any) => (
-              <div className='flex gap-2'>
+              <div key={temp.name} className='flex gap-2'>
                 <button onClick={() => {
                   setTemplate(temp)
                   setPopup2({ ...popup2, view: 'flex', opacity: 'opacity-0' })
@@ -251,7 +251,7 @@ export default function Page () {
                                   <p className='text-sm'>Variables de ejemplo</p>
                                   {
                                     component.example?.header_text.map((header, i) => (
-                                      <div className='flex gap-2'>
+                                      <div key={header} className='flex gap-2'>
                                         <p className='text-sm'>Variable {i + 1}</p>
                                         <Input change={(e: any) => {
                                           const oldComponents = [...template.components]
@@ -272,7 +272,7 @@ export default function Page () {
                                   <p className='text-sm'>Variables de ejemplo</p>
                                   {
                                     component.example?.body_text[0].map((body, i) => (
-                                      <div className='flex gap-2'>
+                                      <div key={body} className='flex gap-2'>
                                         <p className='text-sm'>Variable {i + 1}</p>
                                         <Input change={(e: any) => {
                                           const oldComponents = [...template.components]
