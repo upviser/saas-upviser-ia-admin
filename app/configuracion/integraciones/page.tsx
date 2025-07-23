@@ -5,6 +5,8 @@ import axios from 'axios'
 import Head from 'next/head'
 import { useRouter } from 'next/navigation'
 import React, { ChangeEvent, useEffect, useState } from 'react'
+import { randomBytes } from 'crypto'
+import jwt from 'jsonwebtoken'
 
 declare global {
   interface Window {
@@ -32,6 +34,7 @@ export default function Page () {
     waba_id?: string;
   }>({});
   const [fbReady, setFbReady] = useState(false)
+  const [user, setUser] = useState<any>()
 
   const router = useRouter()
 
@@ -44,6 +47,15 @@ export default function Page () {
 
   useEffect(() => {
     getIntegrations()
+  }, [])
+
+  const getUser = async () => {
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_MAIN_API_URL}/user-api/${process.env.NEXT_PUBLIC_API_URL}`)
+    setUser(response.data)
+  }
+
+  useEffect(() => {
+    getUser()
   }, [])
 
   useEffect(() => {
@@ -120,7 +132,7 @@ export default function Page () {
             res.authResponse ? resolve(res) : reject(new Error('Cancelado o no autorizado'));
           },
           {
-            scope: 'business_management,pages_show_list,pages_manage_metadata,pages_messaging,instagram_basic,instagram_manage_messages',
+            scope: 'business_management,pages_show_list,pages_manage_metadata,pages_messaging',
             response_type: 'token',
           }
         );
@@ -180,15 +192,10 @@ export default function Page () {
                 }
               </div>
               <div className='flex flex-col gap-2'>
-                <h3 className='text-sm'>Conectar Facebook/Instagram</h3>
+                <h3 className='text-sm'>Conectar Facebook</h3>
                 {
-                  integrations.idPage && integrations.idPage !== '' && integrations.idInstagram && integrations.idInstagram !== ''
-                    ? (
-                      <>
-                        <p className='text-sm'>Id página de Facebook: {integrations.idPage}</p>
-                        <p className='text-sm'>Id Instagram: {integrations.idPage}</p>
-                      </>
-                    )
+                  integrations.idPage && integrations.idPage !== ''
+                    ? <p className='text-sm'>Id página de Facebook: {integrations.idPage}</p>
                     : ''
                 }
                 {
@@ -196,8 +203,32 @@ export default function Page () {
                     ? fbReady ? <Button action={async () => {
                       await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/disconnect-facebook`)
                       getIntegrations()
-                    }}>Desconectar Facebook/Instagram</Button> : ''
-                    : fbReady ? <Button action={handleConnectFacebook}>Conectar Facebook/Instagram</Button> : ''
+                    }}>Desconectar Facebook</Button> : ''
+                    : fbReady ? <Button action={handleConnectFacebook}>Conectar Facebook</Button> : ''
+                }
+              </div>
+              <div className='flex flex-col gap-2'>
+                <h3 className='text-sm'>Conectar Instagram</h3>
+                {
+                  integrations.idInstagram && integrations.idInstagram !== ''
+                    ? <p className='text-sm'>Id Instagram: {integrations.idInstagram}</p>
+                    : ''
+                }
+                {
+                  integrations.idInstagram && integrations.idInstagram !== ''
+                    ? <Button action={async () => {
+                      await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/disconnect-instagram`)
+                      getIntegrations()
+                    }}>Desconectar Instagram</Button>
+                    : <Button action={async () => {
+                      const payload = { callback: `${process.env.NEXT_PUBLIC_API_URL}/auth/facebook/callback`, nonce: randomBytes(32).toString('hex'), exp: Date.now()+300000 };
+                      const state = jwt.sign(payload, process.env.JWT_SECRET!)
+                      window.open(
+                        `https://www.instagram.com/oauth/authorize?force_reauth=true&client_id=${process.env.NEXT_PUBLIC_IG_APP_ID}&redirect_uri=${process.env.NEXT_PUBLIC_FB_REDIRECT_URI}&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments%2Cinstagram_business_content_publish%2Cinstagram_business_manage_insights&state=${encodeURIComponent(state)}`,
+                        'Conectar Instagram',
+                        'width=600,height=800,resizable=yes,scrollbars=yes,noopener,noreferrer'
+                      );
+                    }}>Conectar Instagram</Button>
                 }
               </div>
               <div className='flex flex-col gap-2'>
