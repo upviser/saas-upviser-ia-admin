@@ -39,6 +39,7 @@ export default function Page () {
   }>({});
   const [fbReady, setFbReady] = useState(false)
   const [user, setUser] = useState<any>()
+  const [connecting, setConnecting] = useState(false)
 
   const router = useRouter()
 
@@ -227,15 +228,24 @@ export default function Page () {
                       await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/disconnect-instagram`)
                       getIntegrations()
                     }}>Desconectar Instagram</Button>
-                    : <Button action={async () => {
-                      const payload = { callback: `${process.env.NEXT_PUBLIC_API_URL}/auth/facebook/callback`, nonce: randomBytes(32).toString('hex'), exp: Date.now()+300000 };
-                      const state = jwt.sign(payload, process.env.JWT_SECRET!)
-                      window.open(
-                        `https://www.instagram.com/oauth/authorize?force_reauth=true&client_id=${process.env.NEXT_PUBLIC_IG_APP_ID}&redirect_uri=${process.env.NEXT_PUBLIC_FB_REDIRECT_URI}&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments%2Cinstagram_business_content_publish%2Cinstagram_business_manage_insights&state=${encodeURIComponent(state)}`,
-                        'Conectar Instagram',
-                        'width=600,height=800,resizable=yes,scrollbars=yes,noopener,noreferrer'
-                      );
-                    }}>Conectar Instagram</Button>
+                    : !connecting
+                      ? (
+                        <Button action={async () => {
+                          const payload = { callback: `${process.env.NEXT_PUBLIC_API_URL}/auth/facebook/callback`, nonce: randomBytes(32).toString('hex'), exp: Date.now()+300000 };
+                          const state = jwt.sign(payload, process.env.JWT_SECRET!)
+                          window.open(
+                            `https://www.instagram.com/oauth/authorize?force_reauth=true&client_id=${process.env.NEXT_PUBLIC_IG_APP_ID}&redirect_uri=${process.env.NEXT_PUBLIC_FB_REDIRECT_URI}&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments%2Cinstagram_business_content_publish%2Cinstagram_business_manage_insights&state=${encodeURIComponent(state)}`,
+                            'Conectar Instagram',
+                            'width=600,height=800,resizable=yes,scrollbars=yes,noopener,noreferrer'
+                          );
+                        }}>Conectar Instagram</Button>
+                      )
+                      : (
+                        <Button action={async () => {
+                          await getIntegrations()
+                          setConnecting(false)
+                        }}>Probar conexión</Button>
+                      )
                 }
               </div>
               <div className='flex flex-col gap-2'>
