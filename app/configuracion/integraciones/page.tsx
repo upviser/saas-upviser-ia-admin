@@ -232,7 +232,7 @@ export default function Page () {
                       ? (
                         <Button action={async () => {
                           const payload = { callback: `${process.env.NEXT_PUBLIC_API_URL}/auth/facebook/callback`, nonce: randomBytes(32).toString('hex'), exp: Date.now()+300000 };
-                          const state = jwt.sign(payload, process.env.JWT_SECRET!)
+                          const state = jwt.sign(payload, process.env.NEXT_PUBLIC_JWT_SECRET!)
                           window.open(
                             `https://www.instagram.com/oauth/authorize?force_reauth=true&client_id=${process.env.NEXT_PUBLIC_IG_APP_ID}&redirect_uri=${process.env.NEXT_PUBLIC_FB_REDIRECT_URI}&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments%2Cinstagram_business_content_publish%2Cinstagram_business_manage_insights&state=${encodeURIComponent(state)}`,
                             'Conectar Instagram',
