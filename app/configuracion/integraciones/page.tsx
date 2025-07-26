@@ -231,6 +231,7 @@ export default function Page () {
                     : !connecting
                       ? (
                         <Button action={async () => {
+                          setConnecting(true)
                           const state = randomBytes(16).toString('hex')
                           await axios.post(`${process.env.NEXT_PUBLIC_MAIN_API_URL}/user`, { api: process.env.NEXT_PUBLIC_API_URL, instagramState: state })
                           window.open(
