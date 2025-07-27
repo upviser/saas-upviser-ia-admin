@@ -191,6 +191,11 @@ export default function Page () {
               <div className='flex flex-col gap-2'>
                 <h3 className='text-sm'>Conectar Whatsapp</h3>
                 {
+                  integrations.idPhone && integrations.idPhone !== ''
+                    ? <p className='text-sm'>Id de Whatsapp: {integrations.idPhone}</p>
+                    : ''
+                }
+                {
                   (integrations.idPhone && integrations.idPhone !== '') && (integrations.whatsappToken && integrations.whatsappToken !== '')
                     ? fbReady ? <Button action={async () => {
                       await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/delete-whatsapp`)
