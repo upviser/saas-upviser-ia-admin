@@ -113,6 +113,7 @@ export default function Page () {
       });
       const code = response.authResponse.code;
       const { phone_number_id, waba_id } = sessionInfo;
+      console.log({ code, phone_number_id, waba_id })
       if (phone_number_id && waba_id) {
         const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp-token`, { code, phone_number_id, waba_id });
         res.data.success === 'OK' ? console.log('Token creado') : console.error('Error al crear token');
