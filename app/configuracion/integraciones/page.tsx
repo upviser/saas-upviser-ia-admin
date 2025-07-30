@@ -40,6 +40,7 @@ export default function Page () {
   const [fbReady, setFbReady] = useState(false)
   const [user, setUser] = useState<any>()
   const [connecting, setConnecting] = useState(false)
+  const [loginCode, setLoginCode] = useState(null)
 
   const router = useRouter()
 
@@ -74,7 +75,6 @@ export default function Page () {
     return () => clearInterval(interval);
   }, []);
 
-  // Captura mensajes de sesión
   useEffect(() => {
     const listener = (e: MessageEvent) => {
       if (!['https://www.facebook.com', 'https://web.facebook.com'].includes(e.origin)) return;
@@ -90,12 +90,38 @@ export default function Page () {
     return () => window.removeEventListener('message', listener);
   }, []);
 
+  // 2. Listener para cuando tengas ambos datos (loginCode y sessionInfo)
+  useEffect(() => {
+    if (loginCode && sessionInfo) {
+      const conectar = async () => {
+        try {
+          console.log({
+            code: loginCode,
+            phone_number_id: sessionInfo.phone_number_id,
+            waba_id: sessionInfo.waba_id
+          })
+          const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp-token`, {
+            code: loginCode,
+            phone_number_id: sessionInfo.phone_number_id,
+            waba_id: sessionInfo.waba_id
+          });
+          res.data.success === 'OK'
+            ? getIntegrations()
+            : console.error('Error al crear token');
+        } catch (e) {
+          console.error('Error en conexión FB:', e);
+        }
+      };
+      conectar();
+    }
+  }, [loginCode, sessionInfo]);
+
+  // 3. Tu handler de login
   const handleConnect = async () => {
     if (!fbReady) {
       console.warn('SDK no está listo');
       return;
     }
-
     try {
       const response = await new Promise<any>((resolve, reject) => {
         window.FB.login(
@@ -112,14 +138,7 @@ export default function Page () {
         );
       });
       const code = response.authResponse.code;
-      const { phone_number_id, waba_id } = sessionInfo;
-      console.log({ code, phone_number_id, waba_id })
-      if (phone_number_id && waba_id) {
-        const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp-token`, { code, phone_number_id, waba_id });
-        res.data.success === 'OK' ? console.log('Token creado') : console.error('Error al crear token');
-      } else {
-        console.error('No recibí sessionInfo antes del login');
-      }
+      setLoginCode(code); // ahora todo el flujo será manejado por el useEffect!
     } catch (e) {
       console.error('Error en conexión FB:', e);
     }
