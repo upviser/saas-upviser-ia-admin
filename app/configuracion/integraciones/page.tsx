@@ -95,11 +95,6 @@ export default function Page () {
     if (loginCode && sessionInfo) {
       const conectar = async () => {
         try {
-          console.log({
-            code: loginCode,
-            phone_number_id: sessionInfo.phone_number_id,
-            waba_id: sessionInfo.waba_id
-          })
           await axios.post(`${process.env.NEXT_PUBLIC_MAIN_API_URL}/user`, { api: process.env.NEXT_PUBLIC_API_URL, idPhone: sessionInfo.phone_number_id })
           const res = await axios.post(`${process.env.NEXT_PUBLIC_MAIN_API_URL}/whatsapp-token`, {
             code: loginCode,
