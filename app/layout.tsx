@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="es" className={myFont.className}>
       <head>
         <title>Panel administrativo</title>
-        <link rel="icon" href={process.env.NEXT_PUBLIC_FAVICON} />
+        <link rel="icon" href='https://upviser-website.b-cdn.net/Favicon.png' />
       </head>
       <body>
         <div id="fb-root" />

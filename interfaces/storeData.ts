@@ -17,7 +17,8 @@ export interface IStoreData {
     }[]
     schedule?: ISchedule
     logo?: string
-    logoWhite: string
+    logoWhite?: string
+    favicon?: string
     instagram?: string
     facebook?: string
     tiktok?: string

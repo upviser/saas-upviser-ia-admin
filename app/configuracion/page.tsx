@@ -140,6 +140,23 @@ export default function Page () {
     }
   }
 
+  const imageChange3 = async (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.length && loadingLogoWhite === false) {
+      setLoadingLogoWhite(true)
+      const formData = new FormData();
+      formData.append('image', e.target.files[0]);
+      formData.append('name', e.target.files[0].name);
+      const { data } = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/image`, formData, {
+        headers: {
+          accept: 'application/json',
+          'Accept-Language': 'en-US,en;q=0.8'
+        }
+      })
+      setStoreData({...storeData, favicon: data})
+      setLoadingLogoWhite(false)
+    }
+  }
+
   const handleSubmit = async (e: any) => {
     e.preventDefault()
     if (!loading) {
@@ -224,6 +241,19 @@ export default function Page () {
                   {
                     storeData.logoWhite !== ''
                       ? <img src={storeData.logoWhite} alt='Logo blanco del negocio' className='max-w-96' />
+                      : ''
+                  }
+                </div>
+                <div className='flex flex-col gap-2'>
+                  <p className='text-sm'>Favicon</p>
+                  {
+                    loadingLogoWhite
+                      ? <Spinner />
+                      : <input onChange={imageChange3} type='file' className='text-sm block w-full file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-main/10 file:text-main hover:file:bg-main/20' />
+                  }
+                  {
+                    storeData.logoWhite !== ''
+                      ? <img src={storeData.favicon} alt='Logo blanco del negocio' className='max-w-96' />
                       : ''
                   }
                 </div>
