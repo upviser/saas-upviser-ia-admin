@@ -70,6 +70,7 @@ export default function Page () {
   const [error, setError] = useState('')
   const [loadingLogo, setLoadingLogo] = useState(false)
   const [loadingLogoWhite, setLoadingLogoWhite] = useState(false)
+  const [loadingFavicon, setLoadingFavicon] = useState(false)
   const [chile, setChile] = useState<any>()
   const [streets, setStreets] = useState([])
 
@@ -96,7 +97,7 @@ export default function Page () {
     const request = await axios.get('https://testservices.wschilexpress.com/georeference/api/v1.0/regions', {
       headers: {
         'Cache-Control': 'no-cache',
-        'Ocp-Apim-Subscription-Key': res.data.coberturaKey
+        'Ocp-Apim-Subscription-Key': res.data.coberturaKey && res.data.coberturaKey !== '' ? res.data.coberturaKey : '22a2efe563e740c584c88371559a9cf4'
       }
     })
     setRegions(request.data.regions)
@@ -141,8 +142,8 @@ export default function Page () {
   }
 
   const imageChange3 = async (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.length && loadingLogoWhite === false) {
-      setLoadingLogoWhite(true)
+    if (e.target.files?.length && loadingFavicon === false) {
+      setLoadingFavicon(true)
       const formData = new FormData();
       formData.append('image', e.target.files[0]);
       formData.append('name', e.target.files[0].name);
@@ -153,7 +154,7 @@ export default function Page () {
         }
       })
       setStoreData({...storeData, favicon: data})
-      setLoadingLogoWhite(false)
+      setLoadingFavicon(false)
     }
   }
 
@@ -247,12 +248,12 @@ export default function Page () {
                 <div className='flex flex-col gap-2'>
                   <p className='text-sm'>Favicon</p>
                   {
-                    loadingLogoWhite
+                    loadingFavicon
                       ? <Spinner />
                       : <input onChange={imageChange3} type='file' className='text-sm block w-full file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-main/10 file:text-main hover:file:bg-main/20' />
                   }
                   {
-                    storeData.logoWhite !== ''
+                    storeData.favicon !== ''
                       ? <img src={storeData.favicon} alt='Logo blanco del negocio' className='max-w-96' />
                       : ''
                   }
@@ -328,7 +329,7 @@ export default function Page () {
                             const request = await axios.get(`https://testservices.wschilexpress.com/georeference/api/v1.0/coverage-areas?RegionCode=${region?.regionId}&type=0`, {
                               headers: {
                                 'Cache-Control': 'no-cache',
-                                'Ocp-Apim-Subscription-Key': chile?.coberturaKey
+                                'Ocp-Apim-Subscription-Key': chile?.coberturaKey && chile.coberturaKey !== '' ? chile.coberturaKey : '22a2efe563e740c584c88371559a9cf4'
                               }
                             })
                             setCitys(request.data.coverageAreas)
@@ -361,7 +362,7 @@ export default function Page () {
                               headers: {
                                 'Content-Type': 'application/json',
                                 'Cache-Control': 'no-cache',
-                                'Ocp-Apim-Subscription-Key': chile?.coberturaKey
+                                'Ocp-Apim-Subscription-Key': chile?.coberturaKey && chile.coberturaKey !== '' ? chile.coberturaKey : '22a2efe563e740c584c88371559a9cf4'
                               }
                             })
                             console.log(res.data)
