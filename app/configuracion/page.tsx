@@ -59,6 +59,7 @@ export default function Page () {
     },
     logo: '',
     logoWhite: '',
+    favicon: '',
     instagram: '',
     facebook: '',
     tiktok: '',
