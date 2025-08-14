@@ -98,7 +98,7 @@ export default function Page () {
     const request = await axios.get('https://testservices.wschilexpress.com/georeference/api/v1.0/regions', {
       headers: {
         'Cache-Control': 'no-cache',
-        'Ocp-Apim-Subscription-Key': res.data.coberturaKey && res.data.coberturaKey !== '' ? res.data.coberturaKey : '22a2efe563e740c584c88371559a9cf4'
+        'Ocp-Apim-Subscription-Key': res.data.coberturaKey && res.data.coberturaKey !== '' ? res.data.coberturaKey : '0b6ef002313f4ac09294aeee6e8ac261'
       }
     })
     setRegions(request.data.regions)
@@ -307,12 +307,12 @@ export default function Page () {
                         }} placeholder='Dirección' />
                       </div>
                        <div className='flex flex-col gap-2'>
-                        <p className='text-sm'>Numero</p>
+                        <p className='text-sm'>Número</p>
                         <Input name='address' value={location.streetNumber} change={(e: any) => {
                           const beforeLocations = [...storeData.locations!]
                           beforeLocations[index].streetNumber = e.target.value
                           setStoreData({ ...storeData, locations: beforeLocations })
-                        }} placeholder='Dirección' />
+                        }} placeholder='Número' />
                       </div>
                       <div className='flex flex-col gap-2'>
                         <p className='text-sm'>Departamento, local, etc. (opcional)</p>
@@ -330,7 +330,7 @@ export default function Page () {
                             const request = await axios.get(`https://testservices.wschilexpress.com/georeference/api/v1.0/coverage-areas?RegionCode=${region?.regionId}&type=0`, {
                               headers: {
                                 'Cache-Control': 'no-cache',
-                                'Ocp-Apim-Subscription-Key': chile?.coberturaKey && chile.coberturaKey !== '' ? chile.coberturaKey : '22a2efe563e740c584c88371559a9cf4'
+                                'Ocp-Apim-Subscription-Key': chile?.coberturaKey && chile.coberturaKey !== '' ? chile.coberturaKey : '0b6ef002313f4ac09294aeee6e8ac261'
                               }
                             })
                             setCitys(request.data.coverageAreas)
@@ -363,7 +363,7 @@ export default function Page () {
                               headers: {
                                 'Content-Type': 'application/json',
                                 'Cache-Control': 'no-cache',
-                                'Ocp-Apim-Subscription-Key': chile?.coberturaKey && chile.coberturaKey !== '' ? chile.coberturaKey : '22a2efe563e740c584c88371559a9cf4'
+                                'Ocp-Apim-Subscription-Key': chile?.coberturaKey && chile.coberturaKey !== '' ? chile.coberturaKey : '0b6ef002313f4ac09294aeee6e8ac261'
                               }
                             })
                             console.log(res.data)
