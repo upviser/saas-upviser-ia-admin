@@ -353,7 +353,7 @@ export default function Page () {
                             const beforeLocations = [...storeData.locations!]
                             beforeLocations[index].city = city?.countyName
                             beforeLocations[index].countyCoverageCode = city?.countyCode
-                            const res = await axios.post('http://testservices.wschilexpress.com/georeference/api/v1.0/streets/search', {
+                            const res = await axios.post('https://testservices.wschilexpress.com/georeference/api/v1.0/streets/search', {
                               "countyName": city?.countyName,
                               "streetName": location.address,
                               "pointsOfInterestEnabled": true,
