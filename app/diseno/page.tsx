@@ -20,6 +20,7 @@ import "swiper/css/pagination"
 import styles from  "./Slider.module.css"
 import { Pagination } from "swiper/modules"
 import { NumberFormat } from '@/utils'
+import { FaRegEye } from 'react-icons/fa'
 
 export default function Page () {
 
@@ -373,7 +374,10 @@ export default function Page () {
               part === ''
                 ? (
                   <div className='flex flex-col gap-4'>
-                    <h2 className='text-lg font-medium'>Páginas</h2>
+                    <div className='flex gap-2 justify-between'>
+                      <h2 className='text-lg font-medium'>Páginas</h2>
+                      <Link href={process.env.NEXT_PUBLIC_WEB_URL!} target='_blank' className='my-auto flex gap-1 transition-colors duration-150 hover:bg-neutral-100 p-1 rounded-md dark:hover:bg-neutral-800'><FaRegEye className='text-xl my-auto' />Ver sitio web</Link>
+                    </div>
                     <div className='flex flex-col gap-2'>
                       {
                         pages.map((page, index) => (
@@ -1176,7 +1180,10 @@ export default function Page () {
             part === ''
               ? (
                 <div className='flex flex-col gap-4 p-4'>
-                  <h2 className='text-lg font-medium'>Páginas</h2>
+                  <div className='flex gap-2 justify-between'>
+                    <h2 className='text-lg font-medium'>Páginas</h2>
+                    <Link href={process.env.NEXT_PUBLIC_WEB_URL!} target='_blank' className='my-auto flex gap-1 transition-colors duration-150 hover:bg-neutral-100 p-1 rounded-md dark:hover:bg-neutral-800'><FaRegEye className='text-xl my-auto' />Ver sitio web</Link>
+                  </div>
                   <div className='flex flex-col gap-2'>
                     {
                       pages.map((page, index) => {
