@@ -35,6 +35,8 @@ export default function Page () {
       const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/domain`, domain)
       if (res.data.verified) {
         setVerified(true)
+      } else {
+        setError('No se ha podido conectar el dominio')
       }
       setLoading(false)
     }
