@@ -26,7 +26,8 @@ export default function Page () {
     if (!loading) {
       setLoading(true)
       setError('')
-      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/domain`, domain)
+      const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/domain`, domain)
+      console.log(res.data)
       setLoading(false)
     }
   }
