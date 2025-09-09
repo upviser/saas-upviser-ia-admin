@@ -1,6 +1,6 @@
 "use client"
 import { Nav } from '@/components/configuration'
-import { ButtonSubmit, Input } from '@/components/ui'
+import { ButtonSubmit, Input, Table } from '@/components/ui'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import React, { ChangeEvent, useEffect, useState } from 'react'
@@ -10,6 +10,7 @@ export default function Page () {
   const [loading, setLoading] = useState(false)
   const [domain, setDomain] = useState({ domain: '' })
   const [error, setError] = useState('')
+  const [verified, setVerified] = useState(false)
 
   const router = useRouter()
 
@@ -17,6 +18,9 @@ export default function Page () {
     const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/domain`)
     if (res.data.domain && res.data.domain !== '') {
         setDomain(res.data)
+        if (!res.data.domain.includes('upviser.cl')) {
+            setVerified(true)
+        }
     }
   }
 
@@ -29,7 +33,9 @@ export default function Page () {
       setLoading(true)
       setError('')
       const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/domain`, domain)
-      console.log(res.data)
+      if (res.data.verified) {
+        setVerified(true)
+      }
       setLoading(false)
     }
   }
@@ -61,6 +67,19 @@ export default function Page () {
                   <Input change={(e: ChangeEvent<HTMLInputElement>) => setDomain({ domain: e.target.value })} value={domain.domain} placeholder='dominio' />
                 </div>
               </div>
+              {
+                verified
+                  ? (
+                   <Table th={['Tipo', 'Nombre', 'Valor']}>
+                      <tr className='bg-white'>
+                        <td className="p-2">A</td>
+                        <td className="p-2">@</td>
+                        <td className="p-2">216.198.79.1</td>
+                      </tr>
+                   </Table>
+                  )
+                  : ''
+              }
             </div>
           </div>
         </div>
