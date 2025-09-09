@@ -71,7 +71,7 @@ export default function Page () {
                 verified
                   ? (
                    <Table th={['Tipo', 'Nombre', 'Valor']}>
-                      <tr className='bg-white'>
+                      <tr className='bg-white dark:bg-neutral-800'>
                         <td className="p-2">A</td>
                         <td className="p-2">@</td>
                         <td className="p-2">216.198.79.1</td>
