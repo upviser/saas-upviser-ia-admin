@@ -15,7 +15,9 @@ export default function Page () {
 
   const getDomain = async () => {
     const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/domain`)
-    setDomain(res.data)
+    if (res.data.domain && res.data.domain !== '') {
+        setDomain(res.data)
+    }
   }
 
   useEffect(() => {
