@@ -8,9 +8,9 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 export default function Page () {
 
   const [loading, setLoading] = useState(false)
-  const [domain, setDomain] = useState({ domain: '' })
+  const [domain, setDomain] = useState({ domain: '', email: '' })
   const [error, setError] = useState('')
-  const [verified, setVerified] = useState(false)
+  const [res, setRes] = useState<any>()
 
   const router = useRouter()
 
@@ -19,7 +19,7 @@ export default function Page () {
     if (res.data.domain && res.data.domain !== '') {
         setDomain(res.data)
         if (!res.data.domain.includes('upviser.cl')) {
-            setVerified(true)
+            setRes(res.data)
         }
     }
   }
@@ -33,8 +33,8 @@ export default function Page () {
       setLoading(true)
       setError('')
       const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/domain`, domain)
-      if (res.data.verified) {
-        setVerified(true)
+      if (res.data.domain) {
+        setRes(res.data)
       } else {
         setError('No se ha podido conectar el dominio')
       }
@@ -66,17 +66,44 @@ export default function Page () {
                 <p className='text-sm font-medium'>Agrega un dominio personalizado a tu sitio web</p>
                 <div className='flex flex-col gap-2'>
                   <p className='text-sm'>Dominio</p>
-                  <Input change={(e: ChangeEvent<HTMLInputElement>) => setDomain({ domain: e.target.value })} value={domain.domain} placeholder='dominio' />
+                  <Input change={(e: ChangeEvent<HTMLInputElement>) => setDomain({ ...domain, domain: e.target.value })} value={domain.domain} placeholder='Dominio' />
+                </div>
+                 <div className='flex flex-col gap-2'>
+                  <p className='text-sm'>Correo</p>
+                  <div className='flex gap-2'>
+                    <Input change={(e: ChangeEvent<HTMLInputElement>) => setDomain({ ...domain, email: e.target.value })} value={domain.email} placeholder='Correo' config='w-fit' />
+                    <p>@{domain.domain}</p>
+                  </div>
                 </div>
               </div>
               {
-                verified
+                res.domain
                   ? (
                    <Table th={['Tipo', 'Nombre', 'Valor']}>
                       <tr className='bg-white dark:bg-neutral-800'>
                         <td className="p-2">A</td>
                         <td className="p-2">@</td>
                         <td className="p-2">216.198.79.1</td>
+                      </tr>
+                      <tr className='bg-white dark:bg-neutral-800'>
+                        <td className="p-2">{res.dkim1.type}</td>
+                        <td className="p-2">{res.dkim1.value}</td>
+                        <td className="p-2">{res.dkim1.hostname}</td>
+                      </tr>
+                      <tr className='bg-white dark:bg-neutral-800'>
+                        <td className="p-2">{res.dkim2.type}</td>
+                        <td className="p-2">{res.dkim2.value}</td>
+                        <td className="p-2">{res.dkim2.hostname}</td>
+                      </tr>
+                      <tr className='bg-white dark:bg-neutral-800'>
+                        <td className="p-2">{res.brevo.type}</td>
+                        <td className="p-2">{res.brevo.value}</td>
+                        <td className="p-2">{res.brevo.hostname}</td>
+                      </tr>
+                      <tr className='bg-white dark:bg-neutral-800'>
+                        <td className="p-2">{res.dmarc.type}</td>
+                        <td className="p-2">{res.dmarc.value}</td>
+                        <td className="p-2">{res.dmarc.hostname}</td>
                       </tr>
                    </Table>
                   )
