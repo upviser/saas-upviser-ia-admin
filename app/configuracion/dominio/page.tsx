@@ -77,7 +77,7 @@ export default function Page () {
                 </div>
               </div>
               {
-                res.domain
+                res?.domain
                   ? (
                    <Table th={['Tipo', 'Nombre', 'Valor']}>
                       <tr className='bg-white dark:bg-neutral-800'>
