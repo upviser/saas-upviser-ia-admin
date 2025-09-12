@@ -92,16 +92,16 @@ export const Config: React.FC<Props> = ({ setEmail, email, setDate, date, client
           <Select change={(e: any) => setEmail({...email, url: e.target.value})}>
             <option>Selecciona una pagina</option>
             {
-              design?.pages.map(page => <option key={page._id} value={`${domain.domain === 'upviser.cl' ? process.env.NEXT_PUBLIC_WEB_URL : `https://${domain.domain}`}/${page.slug}`}>{page.page}</option>)
+              design?.pages.map(page => <option key={page._id} value={`${domain?.domain === 'upviser.cl' ? process.env.NEXT_PUBLIC_WEB_URL : `https://${domain?.domain}`}/${page.slug}`}>{page.page}</option>)
             }
             {
-              funnels?.map(funnel => funnel.steps.filter(step => step.slug && step.slug !== '').map(step => <option key={step._id} value={`${domain.domain === 'upviser.cl' ? process.env.NEXT_PUBLIC_WEB_URL : `https://${domain.domain}`}/${step.slug}`}>Embudo: {funnel.funnel} - {step.step}</option>))
+              funnels?.map(funnel => funnel.steps.filter(step => step.slug && step.slug !== '').map(step => <option key={step._id} value={`${domain?.domain === 'upviser.cl' ? process.env.NEXT_PUBLIC_WEB_URL : `https://${domain?.domain}`}/${step.slug}`}>Embudo: {funnel.funnel} - {step.step}</option>))
             }
             {
-              services?.map(service => service.steps.filter(step => step.slug && step.slug !== '').map(step => <option key={step._id} value={`${domain.domain === 'upviser.cl' ? process.env.NEXT_PUBLIC_WEB_URL : `https://${domain.domain}`}/${step.slug}`}>Servicio: {service.name} - {step.step}</option>))
+              services?.map(service => service.steps.filter(step => step.slug && step.slug !== '').map(step => <option key={step._id} value={`${domain?.domain === 'upviser.cl' ? process.env.NEXT_PUBLIC_WEB_URL : `https://${domain?.domain}`}/${step.slug}`}>Servicio: {service.name} - {step.step}</option>))
             }
             {
-              calls?.map(call => <option key={call._id} value={`${domain.domain === 'upviser.cl' ? process.env.NEXT_PUBLIC_WEB_URL : `https://${domain.domain}`}/llamadas/${call.nameMeeting.replaceAll(' ', '-')}`}>Llamada: {call.nameMeeting}</option>)
+              calls?.map(call => <option key={call._id} value={`${domain?.domain === 'upviser.cl' ? process.env.NEXT_PUBLIC_WEB_URL : `https://${domain?.domain}`}/llamadas/${call.nameMeeting.replaceAll(' ', '-')}`}>Llamada: {call.nameMeeting}</option>)
             }
           </Select>
         </div>

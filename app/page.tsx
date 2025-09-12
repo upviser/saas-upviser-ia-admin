@@ -13,31 +13,31 @@ export default function Page () {
         <div className="flex flex-col gap-4 w-fit">
           <h3 className='font-medium'>Tareas iniciales</h3>
           <Table th={['Tarea', '']}>
-            <tr>
+            <tr className="bg-white dark:bg-neutral-800">
               <td className="p-2">Completa los datos del negocio</td>
               <td className="p-2"><ButtonLink href={"/configuracion"}>Completar</ButtonLink></td>
             </tr>
-            <tr>
+            <tr className="bg-white dark:bg-neutral-800">
               <td className="p-2">Agrega tus productos</td>
               <td className="p-2"><ButtonLink href={"/productos"}>Completar</ButtonLink></td>
             </tr>
-            <tr>
+            <tr className="bg-white dark:bg-neutral-800">
               <td className="p-2">Agrega tus servicios</td>
               <td className="p-2"><ButtonLink href={"/servicios"}>Completar</ButtonLink></td>
             </tr>
-            <tr>
+            <tr className="bg-white dark:bg-neutral-800">
               <td className="p-2">Elije el color y estilo del sitio web</td>
               <td className="p-2"><ButtonLink href={"/diseno?page=Estilo"}>Completar</ButtonLink></td>
             </tr>
-            <tr>
+            <tr className="bg-white dark:bg-neutral-800">
               <td className="p-2">Agrega paginas y diseña cada una</td>
               <td className="p-2"><ButtonLink href={"/diseno"}>Completar</ButtonLink></td>
             </tr>
-            <tr>
+            <tr className="bg-white dark:bg-neutral-800">
               <td className="p-2">Agrega los metodos de pago</td>
               <td className="p-2"><ButtonLink href={"/configuracion/pasarela-de-pago"}>Completar</ButtonLink></td>
             </tr>
-            <tr>
+            <tr className="bg-white dark:bg-neutral-800">
               <td className="p-2">Agrega el metodo de envío</td>
               <td className="p-2"><ButtonLink href={"/configuracion/envios"}>Completar</ButtonLink></td>
             </tr>

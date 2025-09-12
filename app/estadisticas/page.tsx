@@ -76,10 +76,9 @@ export default function Page () {
       <Head>
         <title>Estadisticas</title>
       </Head>
-        <div className='p-6 bg-bg flex flex-col gap-6 w-full h-full overflow-y-auto dark:bg-neutral-900'>
+        <div className='p-6 bg-bg flex flex-col gap-6 w-full h-full dark:bg-neutral-900'>
           <div className='flex flex-col gap-4 w-full max-w-[1280px] mx-auto'>
             <h1 className='text-lg font-medium'>Estadisticas</h1>
-            <p className='text-[15px] font-medium'>Estadisticas del sitio</p>
             <div className='flex gap-2 flex-col lg:flex-row'>
               <div className='flex flex-col gap-2'>
                 <p className='text-sm'>Desde</p>
@@ -92,7 +91,7 @@ export default function Page () {
               <Button action={handleFilter} config='mt-auto'>Filtrar</Button>
             </div>
           </div>
-          <div className='flex gap-6 w-full flex-wrap max-w-[1280px] mx-auto overflow-auto min-h-[550px]'>
+          <div className='flex gap-6 w-full flex-wrap max-w-[1280px] mx-auto overflow-auto'>
             {
               loading
                 ? (

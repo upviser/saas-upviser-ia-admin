@@ -388,21 +388,6 @@ export default function Page () {
           </div>
           <div className='w-full max-w-[1280px] flex mx-auto gap-6 flex-col lg:flex-row'>
             <div className='w-full lg:w-1/2 flex flex-col gap-2'>
-              <div className='flex gap-2'>
-                <Button action={() => {
-                  setTemplate({ name: '', category: 'MARKETING', components: [{ type: 'BODY' }] })
-                  setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
-                  setTimeout(() => {
-                    setPopup({ ...popup, view: 'flex', opacity: 'opacity-1' })
-                  }, 10)
-                }}>Crear plantilla</Button>
-                <ButtonSecondary action={() => {
-                  setPopup2({ ...popup, view: 'flex', opacity: 'opacity-0' })
-                  setTimeout(() => {
-                    setPopup2({ ...popup, view: 'flex', opacity: 'opacity-1' })
-                  }, 10)
-                }}>Ver plantillas</ButtonSecondary>
-              </div>
               {
                 phones === undefined
                   ? (
@@ -430,7 +415,7 @@ export default function Page () {
                                   setSelectedPhone(phone.phone)
                                   await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp/${phone.phone}`)
                                   getMessages()
-                                }} key={phone.phone} className={`${phone.phone === selectedPhone ? 'bg-main/50' : 'bg-white dark:bg-neutral-700/60'} bg-white w-full flex gap-2 transition-colors duration-150 justify-between text-left h-20 p-2 rounded-xl dark:bg-neutral-700/60 hover:bg-neutral-200/40 dark:hover:bg-neutral-700`}>
+                                }} key={phone.phone} className={`${phone.phone === selectedPhone ? 'bg-main/50' : 'bg-white dark:bg-neutral-700/60'} bg-white w-full flex gap-2 border border-border transition-colors duration-150 justify-between text-left h-20 p-2 rounded-xl dark:border-neutral-700 dark:bg-neutral-700/60 hover:bg-neutral-200/40 dark:hover:bg-neutral-700`}>
                                   <div className='mt-auto mb-auto'>
                                     <p>{phone.phone}</p>
                                     <p className='text-sm text-neutral-600 dark:text-neutral-400'>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
@@ -452,7 +437,7 @@ export default function Page () {
                                   setSelectedPhone(phone.phone)
                                   await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp/${phone.phone}`)
                                   getMessages()
-                                }} key={phone.phone} className={`${phone.phone === selectedPhone ? 'bg-main/50' : 'bg-white dark:bg-neutral-700/60'} bg-white w-full flex gap-2 transition-colors duration-150 justify-between text-left h-20 p-2 rounded-xl dark:bg-neutral-700/60 hover:bg-neutral-200/40 dark:hover:bg-neutral-700`}>
+                                }} key={phone.phone} className={`${phone.phone === selectedPhone ? 'bg-main/50' : 'bg-white dark:bg-neutral-700/60'} bg-white w-full flex gap-2 border border-border transition-colors duration-150 justify-between text-left h-20 p-2 rounded-xl dark:bg-neutral-700/60 hover:bg-neutral-200/40 dark:hover:bg-neutral-700 dark:obrder-neutral-700`}>
                                   <div className='mt-auto mb-auto'>
                                     <p>{phone.phone}</p>
                                     <p className='text-sm text-neutral-600 dark:text-neutral-400'>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
@@ -472,7 +457,7 @@ export default function Page () {
               }
             </div>
             <div className='w-full lg:w-1/2'>
-              <div className='bg-white pt-4 pb-4 pl-4 flex flex-col gap-4 justify-between border border-black/5 rounded-xl w-full h-[70vh] dark:bg-neutral-800 dark:border-neutral-700' style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
+              <div className='bg-white pt-4 pb-4 pl-4 flex flex-col gap-4 justify-between border border-black/5 rounded-xl w-full h-full dark:bg-neutral-800 dark:border-neutral-700' style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
                 <div ref={containerRef} className='w-full h-full pr-4 flex flex-col' style={{ overflow: 'overlay' }}>
                   {
                     messages?.map(message => {
