@@ -8,7 +8,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 export default function Page () {
 
   const [loading, setLoading] = useState(false)
-  const [domain, setDomain] = useState({ domain: '', email: '' })
+  const [domain, setDomain] = useState({ domain: '', email: '', name: '' })
   const [error, setError] = useState('')
   const [res, setRes] = useState<any>()
 
@@ -68,7 +68,11 @@ export default function Page () {
                   <p className='text-sm'>Dominio</p>
                   <Input change={(e: ChangeEvent<HTMLInputElement>) => setDomain({ ...domain, domain: e.target.value })} value={domain.domain} placeholder='Dominio' />
                 </div>
-                 <div className='flex flex-col gap-2'>
+                <div className='flex flex-col gap-2'>
+                  <p className='text-sm'>Remitente correos</p>
+                  <Input change={(e: ChangeEvent<HTMLInputElement>) => setDomain({ ...domain, name: e.target.value })} value={domain.name} placeholder='Remitente' />
+                </div>
+                <div className='flex flex-col gap-2'>
                   <p className='text-sm'>Correo</p>
                   <div className='flex gap-2'>
                     <Input change={(e: ChangeEvent<HTMLInputElement>) => setDomain({ ...domain, email: e.target.value })} value={domain.email} placeholder='Correo' config='w-fit' />
