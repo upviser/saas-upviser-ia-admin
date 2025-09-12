@@ -76,40 +76,43 @@ export default function Page () {
                   <p className='text-sm'>Correo</p>
                   <div className='flex gap-2'>
                     <Input change={(e: ChangeEvent<HTMLInputElement>) => setDomain({ ...domain, email: e.target.value })} value={domain.email} placeholder='Correo' config='w-fit' />
-                    <p>@{domain.domain}</p>
+                    <p className='my-auto'>@{domain.domain}</p>
                   </div>
                 </div>
               </div>
               {
                 res?.domain
                   ? (
-                   <Table th={['Tipo', 'Nombre', 'Valor']}>
-                      <tr className='bg-white dark:bg-neutral-800'>
-                        <td className="p-2">A</td>
-                        <td className="p-2">@</td>
-                        <td className="p-2">216.198.79.1</td>
-                      </tr>
-                      <tr className='bg-white dark:bg-neutral-800'>
-                        <td className="p-2">{res.dkim1.type}</td>
-                        <td className="p-2">{res.dkim1.value}</td>
-                        <td className="p-2">{res.dkim1.hostname}</td>
-                      </tr>
-                      <tr className='bg-white dark:bg-neutral-800'>
-                        <td className="p-2">{res.dkim2.type}</td>
-                        <td className="p-2">{res.dkim2.value}</td>
-                        <td className="p-2">{res.dkim2.hostname}</td>
-                      </tr>
-                      <tr className='bg-white dark:bg-neutral-800'>
-                        <td className="p-2">{res.brevo.type}</td>
-                        <td className="p-2">{res.brevo.value}</td>
-                        <td className="p-2">{res.brevo.hostname}</td>
-                      </tr>
-                      <tr className='bg-white dark:bg-neutral-800'>
-                        <td className="p-2">{res.dmarc.type}</td>
-                        <td className="p-2">{res.dmarc.value}</td>
-                        <td className="p-2">{res.dmarc.hostname}</td>
-                      </tr>
-                   </Table>
+                    <>
+                      <p className='text-lg font-medium'>Configuración DNS</p>
+                      <Table th={['Tipo', 'Nombre', 'Valor']}>
+                        <tr className='bg-white dark:bg-neutral-800'>
+                          <td className="p-2">A</td>
+                          <td className="p-2">@</td>
+                          <td className="p-2">216.198.79.1</td>
+                        </tr>
+                        <tr className='bg-white dark:bg-neutral-800'>
+                          <td className="p-2">{res.dkim1.type}</td>
+                          <td className="p-2">{res.dkim1.value}</td>
+                          <td className="p-2">{res.dkim1.hostname}</td>
+                        </tr>
+                        <tr className='bg-white dark:bg-neutral-800'>
+                          <td className="p-2">{res.dkim2.type}</td>
+                          <td className="p-2">{res.dkim2.value}</td>
+                          <td className="p-2">{res.dkim2.hostname}</td>
+                        </tr>
+                        <tr className='bg-white dark:bg-neutral-800'>
+                          <td className="p-2">{res.brevo.type}</td>
+                          <td className="p-2">{res.brevo.value}</td>
+                          <td className="p-2">{res.brevo.hostname}</td>
+                        </tr>
+                        <tr className='bg-white dark:bg-neutral-800'>
+                          <td className="p-2">{res.dmarc.type}</td>
+                          <td className="p-2">{res.dmarc.value}</td>
+                          <td className="p-2">{res.dmarc.hostname}</td>
+                        </tr>
+                      </Table>
+                    </> 
                   )
                   : ''
               }
