@@ -29,9 +29,7 @@ export default function Page () {
   useEffect(() => {
     const getPlan = () => {
       const planParam = searchParams.get("plan")
-      const now = new Date()
-      const days = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate()
-      setLoginData({ ...loginData, plan: planParam ? planParam : '', imagesAI: planParam ? planParam === 'Esencial' ? 40 : planParam === 'Avanzado' ? 80 : planParam === 'Profesional' ? 120 : 0 : 0, videosAI: planParam ? planParam === 'Esencial' ? 20 : planParam === 'Avanzado' ? 40 : planParam === 'Profesional' ? 80 : 0 : 0, conversationsAI: planParam ? planParam === 'Esencial' ? 500 : planParam === 'Avanzado' ? 1000 : planParam === 'Profesional' ? 2000 : 0 : 0, emails: planParam ? planParam === 'Esencial' ? 100 * days : planParam === 'Avanzado' ? 200 * days : planParam === 'Profesional' ? 300 * days : 0 : 0 })
+      setLoginData({ ...loginData, plan: planParam ? planParam : '', imagesAI: planParam ? planParam === 'Esencial' ? 40 : planParam === 'Avanzado' ? 80 : planParam === 'Profesional' ? 120 : 0 : 0, videosAI: planParam ? planParam === 'Esencial' ? 20 : planParam === 'Avanzado' ? 40 : planParam === 'Profesional' ? 80 : 0 : 0, conversationsAI: planParam ? planParam === 'Esencial' ? 500 : planParam === 'Avanzado' ? 1000 : planParam === 'Profesional' ? 2000 : 0 : 0, emails: planParam ? planParam === 'Esencial' ? 2500 : planParam === 'Avanzado' ? 5000 : planParam === 'Profesional' ? 10000 : 0 : 0 })
     }
 
     getPlan()
