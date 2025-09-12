@@ -1,7 +1,7 @@
 "use client"
 import { Email, Segment, Config, PopupStadistics } from '@/components/campaigns'
 import { Button2, ButtonSubmit, Spinner } from '@/components/ui'
-import { IClientTag, IEmail, IStoreData } from '@/interfaces'
+import { ICall, IClientTag, IEmail, IService, IStoreData } from '@/interfaces'
 import axios from 'axios'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -18,6 +18,9 @@ export default function Page ({ params }: { params: { slug: string } }) {
   const [clientTags, setClientTags] = useState<IClientTag[]>([])
   const [clientData, setClientData] = useState([])
   const [popup, setPopup] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
+  const [domain, setDomain] = useState<any>()
+  const [calls, setCalls] = useState<ICall[]>()
+  const [services, setServices] = useState<IService[]>()
 
   const router = useRouter()
 
@@ -57,6 +60,33 @@ export default function Page ({ params }: { params: { slug: string } }) {
 
   useEffect(() => {
     getClientData()
+  }, [])
+
+  const getDomain = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/domain`)
+    setDomain(res.data)
+  }
+
+  useEffect(() => {
+    getDomain()
+  }, [])
+
+  const getCalls = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/calls`)
+    setCalls(res.data)
+  }
+
+  useEffect(() => {
+    getCalls()
+  }, [])
+
+  const getServices = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/services`)
+    setServices(res.data)
+  }
+
+  useEffect(() => {
+    getServices()
   }, [])
 
   const submit = async () => {
@@ -104,7 +134,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
                     <div className='w-full flex'>
                       <div className='flex flex-wrap gap-6 m-auto'>
                         <Email email={email} storeData={storeData} />
-                        <Config setEmail={setEmail} email={email} setDate={setDate} date={date} clientData={clientData} setClientData={setClientData} />
+                        <Config setEmail={setEmail} email={email} setDate={setDate} date={date} clientData={clientData} setClientData={setClientData} domain={domain} calls={calls} services={services} />
                       </div>
                     </div>
                   </div>

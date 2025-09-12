@@ -45,6 +45,7 @@ export default function Page() {
   const [services, setServices] = useState<IService[]>([])
   const [funnels, setFunnels] = useState<IFunnel[]>([])
   const [error, setError] = useState('')
+  const [domain, setDomain] = useState<any>()
 
   const router = useRouter()
 
@@ -113,6 +114,15 @@ export default function Page() {
 
   useEffect(() => {
     getFunnels()
+  }, [])
+
+  const getDomain = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/domain`)
+    setDomain(res.data)
+  }
+
+  useEffect(() => {
+    getDomain()
   }, [])
 
   const handleSubmit = async (e: any) => {
@@ -233,7 +243,7 @@ export default function Page() {
                 (tempEmail.buttonText !== '' || tempEmail.paragraph !== '' || tempEmail.title !== '')
                   ? (
                     <div className='w-full'>
-                      <Config setTempEmail={setTempEmail} automatization={automatization} tempEmail={tempEmail} setAutomatization={setAutomatization} storeData={storeData} clientData={clientData} setClientData={setClientData} services={services} calls={calls} funnels={funnels} />
+                      <Config setTempEmail={setTempEmail} automatization={automatization} tempEmail={tempEmail} setAutomatization={setAutomatization} storeData={storeData} clientData={clientData} setClientData={setClientData} services={services} calls={calls} funnels={funnels} domain={domain} />
                     </div>
                   )
                   : ''

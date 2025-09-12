@@ -31,6 +31,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
   const [services, setServices] = useState<IService[]>([])
   const [funnels, setFunnels] = useState<IFunnel[]>([])
   const [popup, setPopup] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
+  const [domain, setDomain] = useState<any>()
 
   const router = useRouter()
 
@@ -109,6 +110,15 @@ export default function Page ({ params }: { params: { slug: string } }) {
 
   useEffect(() => {
     getFunnels()
+  }, [])
+
+  const getDomain = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/domain`)
+    setDomain(res.data)
+  }
+
+  useEffect(() => {
+    getDomain()
   }, [])
 
   const editEmail = (email: IEmailAutomatization, index: any, e: any) => {
@@ -234,7 +244,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
                         (tempEmail.buttonText !== '' || tempEmail.paragraph !== '' || tempEmail.title !== '')
                           ? (
                             <div className='w-full'>
-                              <Config setTempEmail={setTempEmail} automatization={automatization} tempEmail={tempEmail} setAutomatization={setAutomatization} storeData={storeData} clientData={clientData} setClientData={setClientData} services={services} calls={calls} funnels={funnels} />
+                              <Config setTempEmail={setTempEmail} automatization={automatization} tempEmail={tempEmail} setAutomatization={setAutomatization} storeData={storeData} clientData={clientData} setClientData={setClientData} services={services} calls={calls} funnels={funnels} domain={domain} />
                             </div>
                           )
                           : ''

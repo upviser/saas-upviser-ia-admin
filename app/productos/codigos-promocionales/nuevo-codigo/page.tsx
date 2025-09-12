@@ -1,6 +1,6 @@
 "use client"
 import { Code, Promotion, State } from '@/components/promotional-codes'
-import { Spinner2 } from '@/components/ui'
+import { ButtonSubmit, Spinner2 } from '@/components/ui'
 import axios from 'axios'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -58,11 +58,7 @@ export default function Page () {
                 : ''
             }
             <div className='flex gap-6 ml-auto w-fit'>
-              {
-                codeInfo.promotionalCode === promotionalCode
-                  ? <button onClick={(e: any) => e.preventDefault()} className='bg-main/50 cursor-not-allowed w-36 h-10 text-white text-sm rounded-xl'>Crear codigo</button>
-                  : <button onClick={handleSubmit} className='bg-main border border-main transition-colors duration-200 text-white text-sm rounded-xl w-36 h-10 hover:bg-transparent hover:text-main'>{submitLoading ? <Spinner2 /> : 'Crear codigo'}</button>
-              }
+              <ButtonSubmit submitLoading={submitLoading} textButton='Crear codigo' action={handleSubmit} color={'main'} />
               <Link className='text-sm my-auto' href='/productos/codigos-promocionales'>Descartar</Link>
             </div>
           </div>
