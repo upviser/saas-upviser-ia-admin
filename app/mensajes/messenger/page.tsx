@@ -4,6 +4,7 @@ import { IMessengerId, IMessengerMessage } from '@/interfaces'
 import axios from 'axios'
 import Head from 'next/head'
 import React, { useEffect, useRef, useState } from 'react'
+import { FaTag } from 'react-icons/fa'
 import io from 'socket.io-client'
 
 const socket = io(`${process.env.NEXT_PUBLIC_API_URL}`)
@@ -17,6 +18,7 @@ export default function Page () {
   const [newMessage, setNewMessage] = useState('')
   const [selectedMessengerId, setSelectedMessengerId] = useState('')
   const [shopLogin, setShopLogin] = useState<any>()
+  const [chatTags, setChatTags] = useState<any>()
 
   const containerRef = useRef<HTMLDivElement>(null)
   const messagesRef = useRef(messages)
@@ -40,6 +42,15 @@ export default function Page () {
 
   useEffect(() => {
     getShopLogin()
+  }, [])
+
+  const getChatTags = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chat-tags`)
+    setChatTags(res.data)
+  }
+
+  useEffect(() => {
+    getChatTags()
   }, [])
 
   useEffect(() => {
@@ -120,7 +131,11 @@ export default function Page () {
                                   getMessages()
                                 }} key={messenger.messengerId} className={`${messenger.messengerId === selectedMessengerId ? 'bg-main/50' : 'bg-white dark:bg-neutral-700/60'} w-full text-left transition-colors duration-150 border border-border h-20 p-2 flex gap-2 justify-between rounded-xl hover:bg-neutral-200/40 dark:hover:bg-neutral-700 dark:border-neutral-700`}>
                                   <div className='mt-auto mb-auto'>
-                                    <p>{messenger.messengerId}</p>
+                                    <div className='flex gap-2'>
+                                      <p className='my-auto'>{messenger.messengerId}</p>
+                                      <p className={`px-2 py-1 rounded-lg text-white flex gap-2`} style={{ backgroundColor: chatTags.find((chatTag: any) => chatTag.tag === messenger.tag)?.color }}><FaTag className='my-auto' />{messenger.tag}</p>
+                                    </div>
+                                    <p>{messenger.message}</p>
                                     <p className='text-sm text-neutral-600 dark:text-neutral-400'>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
                                   </div>
                                   {
@@ -142,7 +157,11 @@ export default function Page () {
                                   getMessages()
                                 }} key={messenger.messengerId} className={`${messenger.messengerId === selectedMessengerId ? 'bg-main/50' : 'bg-white dark:bg-neutral-700/60'} w-full text-left transition-colors duration-150 border border-border h-20 p-2 flex gap-2 justify-between rounded-xl hover:bg-neutral-200/40 dark:hover:bg-neutral-700 dark:border-neutral-700`}>
                                   <div className='mt-auto mb-auto'>
-                                    <p>{messenger.messengerId}</p>
+                                    <div className='flex gap-2'>
+                                      <p className='my-auto'>{messenger.messengerId}</p>
+                                      <p className={`px-2 py-1 rounded-lg text-white flex gap-2`} style={{ backgroundColor: chatTags.find((chatTag: any) => chatTag.tag === messenger.tag)?.color }}><FaTag className='my-auto' />{messenger.tag}</p>
+                                    </div>
+                                    <p>{messenger.message}</p>
                                     <p className='text-sm text-neutral-600 dark:text-neutral-400'>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
                                   </div>
                                   {
@@ -160,7 +179,7 @@ export default function Page () {
               }
             </div>
             <div className='w-full lg:w-1/2'>
-              <div className='bg-white pt-4 pb-4 pl-4 flex flex-col gap-4 justify-between border border-black/5 rounded-xl w-full h-full dark:bg-neutral-800 dark:border-neutral-700' style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
+              <div className='bg-white pt-4 pb-4 pl-4 flex flex-col gap-4 justify-between border border-black/5 rounded-xl w-full h-[63vh] dark:bg-neutral-800 dark:border-neutral-700' style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
                 <div ref={containerRef} className='w-full h-full pr-4 flex flex-col' style={{ overflow: 'overlay' }}>
                   {
                     messages?.map(message => {
