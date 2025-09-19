@@ -80,13 +80,13 @@ export default function Page ({ params }: { params: { slug: string } }) {
             </div>
           </div>
         </div>
-        <div className='p-6 bg-bg flex flex-col gap-6 overflow-y-auto dark:bg-neutral-900' style={{ height: 'calc(100% - 65px)' }}>
+        <div className='p-4 lg:p-6 bg-bg flex flex-col gap-6 overflow-y-auto dark:bg-neutral-900' style={{ height: 'calc(100% - 65px)' }}>
           {
             codeInfo
               ? (
                 <>
                   <div className='flex gap-3 w-full max-w-[1280px] mx-auto'>
-                    <Link href='/productos/codigos-promocionales' className='border rounded-lg p-2 transition-colors duration-150 bg-white hover:bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl' /></Link>
+                    <Link href='/productos/codigos-promocionales' className='border rounded-xl p-2 transition-colors duration-150 bg-white hover:bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl' /></Link>
                     <h1 className='text-lg font-medium mt-auto mb-auto'>{codeInfo.promotionalCode}</h1>
                   </div>
                   <form className='flex gap-6 w-full max-w-[1280px] mx-auto flex-col lg:flex-row'>

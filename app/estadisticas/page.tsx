@@ -76,7 +76,7 @@ export default function Page () {
       <Head>
         <title>Estadisticas</title>
       </Head>
-        <div className='p-6 bg-bg flex flex-col gap-6 w-full h-full dark:bg-neutral-900'>
+        <div className='p-4 lg:p-6 bg-bg flex flex-col gap-6 w-full h-full dark:bg-neutral-900'>
           <div className='flex flex-col gap-4 w-full max-w-[1280px] mx-auto'>
             <h1 className='text-lg font-medium'>Estadisticas</h1>
             <div className='flex gap-2 flex-col lg:flex-row'>

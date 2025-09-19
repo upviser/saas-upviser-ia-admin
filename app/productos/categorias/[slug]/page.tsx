@@ -92,7 +92,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
             </div>
           </div>
         </div>
-        <div className='p-6 w-full flex flex-col gap-4 overflow-y-auto bg-bg mb-16 dark:bg-neutral-900' style={{ height: 'calc(100% - 73px)' }}>
+        <div className='p-4 lg:p-6 w-full flex flex-col gap-4 overflow-y-auto bg-bg mb-16 dark:bg-neutral-900' style={{ height: 'calc(100% - 73px)' }}>
           {
             categoryInfo
               ? (

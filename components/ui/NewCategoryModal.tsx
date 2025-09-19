@@ -59,7 +59,7 @@ export const NewCategoryModal: React.FC<Props> = ({ newCategory, setNewCategory,
   }
 
   return (
-    <div className={`fixed right-0 w-full flex flex-col gap-4 h-full top-0 left-0 z-50 bg-black/30 ${newCategory.view} ${newCategory.opacity} transition-opacity duration-200 dark:bg-black/40`} onClick={() => {
+    <div className={`fixed right-0 w-full flex flex-col px-4 gap-4 h-full top-0 left-0 z-50 bg-black/30 ${newCategory.view} ${newCategory.opacity} transition-opacity duration-200 dark:bg-black/40`} onClick={() => {
       if (!newCategory.mouse) {
         setNewCategory({ ...newCategory, view: 'flex', opacity: 'opacity-0' })
         setTimeout(() => {
@@ -67,7 +67,7 @@ export const NewCategoryModal: React.FC<Props> = ({ newCategory, setNewCategory,
         }, 200)
       }
     }}>
-      <div className={`${newCategory.opacity === 'opacity-1' ? 'scale-1' : 'scale-90'} transition-transform duration-200 p-6 bg-white w-[600px] flex flex-col gap-4 rounded-xl border border-border h-fit m-auto dark:bg-neutral-800 dark:border-neutral-700`} onMouseEnter={() => setNewCategory({ ...newCategory, mouse: true })} onMouseLeave={() => setNewCategory({ ...newCategory, mouse: false })}>
+      <div className={`${newCategory.opacity === 'opacity-1' ? 'scale-1' : 'scale-90'} transition-transform duration-200 p-6 bg-white w-full sm:w-[600px] flex flex-col gap-4 rounded-xl border border-border h-fit m-auto dark:bg-neutral-800 dark:border-neutral-700`} onMouseEnter={() => setNewCategory({ ...newCategory, mouse: true })} onMouseLeave={() => setNewCategory({ ...newCategory, mouse: false })}>
         <h2 className='font-medium'>Nueva categoría</h2>
         <div className='flex flex-col gap-2'>
           <p className='text-sm'>Nombre</p>
@@ -83,7 +83,7 @@ export const NewCategoryModal: React.FC<Props> = ({ newCategory, setNewCategory,
         </div>
         <div className='flex flex-col gap-2'>
           <p className='text-sm'>Imagen</p>
-          <input type='file' onChange={imageChange} className='text-sm block w-full file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-main/10 file:text-main hover:file:bg-main/20' />
+          <input type='file' onChange={imageChange} className='text-sm block file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-main/10 file:text-main hover:file:bg-main/20' />
         </div>
         <div className='flex gap-4'>
           <ButtonSubmit action={handleSubmit} color='main' submitLoading={loading} textButton='Crear categoría' config='w-40' />

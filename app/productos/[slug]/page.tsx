@@ -127,7 +127,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
           </div>
         </div>
         <NewCategoryModal setCategories={setCategories} newCategory={newCategory} newCategoryData={newCategoryData} setNewCategory={setNewCategory} setNewCategoryData={setNewCategoryData} />
-        <div className='p-6 w-full bg-bg flex flex-col gap-6 overflow-y-auto mb-16 dark:bg-neutral-900' style={{ height: 'calc(100% - 73px)' }}>
+        <div className='p-4 lg:p-6 w-full bg-bg flex flex-col gap-6 overflow-y-auto mb-16 dark:bg-neutral-900' style={{ height: 'calc(100% - 73px)' }}>
           {
             information
               ? (
