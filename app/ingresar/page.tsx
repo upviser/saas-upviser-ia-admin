@@ -29,7 +29,7 @@ export default function Page () {
   useEffect(() => {
     const getPlan = () => {
       const planParam = searchParams.get("plan")
-      setLoginData({ ...loginData, plan: planParam ? planParam : '', imagesAI: planParam ? planParam === 'Esencial' ? 20 : planParam === 'Avanzado' ? 40 : planParam === 'Profesional' ? 60 : 0 : 0, videosAI: planParam ? planParam === 'Avanzado' ? 15 : planParam === 'Profesional' ? 30 : 0 : 0, conversationsAI: planParam ? planParam === 'Esencial' ? 250 : planParam === 'Avanzado' ? 500 : planParam === 'Profesional' ? 1000 : 0 : 0, emails: planParam ? planParam === 'Esencial' ? 1000 : planParam === 'Avanzado' ? 2000 : planParam === 'Profesional' ? 4000 : 0 : 0 })
+      setLoginData({ ...loginData, plan: planParam ? planParam : '', imagesAI: planParam ? planParam === 'Esencial' ? 20 : planParam === 'Avanzado' ? 40 : planParam === 'Profesional' ? 60 : 0 : 0, videosAI: planParam ? planParam === 'Avanzado' ? 15 : planParam === 'Profesional' ? 30 : 0 : 0, conversationsAI: planParam ? planParam === 'Esencial' ? 250 : planParam === 'Avanzado' ? 500 : planParam === 'Profesional' ? 1000 : 0 : 0, emails: planParam ? planParam === 'Esencial' ? 1000 : planParam === 'Avanzado' ? 2000 : planParam === 'Profesional' ? 4000 : 0 : 0, textAI: planParam ? planParam === 'Esencial' ? 100 : planParam === 'Avanzado' ? 200 : planParam === 'Profesional' ? 400 : 0 : 0 })
     }
 
     getPlan()
