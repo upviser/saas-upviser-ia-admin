@@ -46,7 +46,7 @@ export const Config: React.FC<Props> = ({ setEmail, email, setDate, date, client
       <h2 className='font-medium'>Contenido</h2>
       <div className='flex flex-col gap-2'>
         <div className='flex gap-2 justify-between'>
-          <p className='text-sm my-auto'>Titulo</p>
+          <p className='text-sm my-auto'>Título</p>
           <Select change={(e: any) => {
             e.preventDefault()
             setEmail({...email, title: email.title + e.target.value})
@@ -83,12 +83,12 @@ export const Config: React.FC<Props> = ({ setEmail, email, setDate, date, client
         <Textarea placeholder='Parrafo' change={(e: any) => setEmail({...email, paragraph: e.target.value})} value={email.paragraph} />
       </div>
       <div className='flex flex-col gap-2'>
-        <p className='text-sm'>Texto boton</p>
-        <Input placeholder='Boton' change={(e: any) => setEmail({...email, buttonText: e.target.value})} value={email.buttonText} />
+        <p className='text-sm'>Texto botón</p>
+        <Input placeholder='Botón' change={(e: any) => setEmail({...email, buttonText: e.target.value})} value={email.buttonText} />
       </div>
       <div className='flex flex-col gap-2'>
         <div className='flex gap-4 justify-between'>
-          <p className='text-sm'>Link boton</p>
+          <p className='text-sm'>Link botón</p>
           <Select change={(e: any) => setEmail({...email, url: e.target.value})}>
             <option>Selecciona una pagina</option>
             {
@@ -108,7 +108,7 @@ export const Config: React.FC<Props> = ({ setEmail, email, setDate, date, client
         <Input placeholder='Url' change={(e: any) => setEmail({...email, url: e.target.value})} value={email.url} />
       </div>
       <div className='flex flex-col gap-2'>
-        <p className='text-sm'>Programar envio</p>
+        <p className='text-sm'>Programar envío</p>
         <div className='flex gap-2'>
           <input type='radio' name='send' onClick={() => setEmail({...email, date: undefined})} />
           <p className='text-sm'>En este momento</p>

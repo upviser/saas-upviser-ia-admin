@@ -68,7 +68,7 @@ export const CategorySeo: React.FC<Props> = ({setCategoryInfo, categoryInfo}) =>
           titleSeo !== ''
             ? (
               <div className='flex flex-col gap-2'>
-                <Input placeholder='Titulo generado por la inteligencia artificial' value={titleSeo} change={(e: any) => setTitleSeo(e.target.value)} />
+                <Input placeholder='Título generado por la inteligencia artificial' value={titleSeo} change={(e: any) => setTitleSeo(e.target.value)} />
                 <Button2 action={(e: any) => {
                   e.preventDefault()
                   categoryInfo.descriptionSeo
@@ -77,7 +77,7 @@ export const CategorySeo: React.FC<Props> = ({setCategoryInfo, categoryInfo}) =>
                   setTimeout(() => {
                     setPopup({ ...popup, view: 'hidden', opacity: 'opacity-0' })
                   }, 200)
-                }}>Usar titulo SEO</Button2>
+                }}>Usar título SEO</Button2>
               </div>
             )
             : ''
