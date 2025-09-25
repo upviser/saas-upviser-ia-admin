@@ -151,6 +151,7 @@ export default function Page() {
             <h1 className='text-lg font-medium my-auto'>Generación de contenido con IA</h1>
           </div>
           <div className="flex p-2 border rounded-xl w-fit bg-white divide-x dark:border-neutral-700 dark:bg-neutral-800 dark:divide-neutral-700">
+            <p className="px-2">Textos: {shopLogin?.textAI}</p>
             <p className="px-2">Imágenes: {shopLogin?.imagesAI}</p>
             <p className="px-2">Videos: {shopLogin?.videosAI}</p>
           </div>
