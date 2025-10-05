@@ -24,7 +24,7 @@ interface Props {
     services: IService[]
     setError: any
     design?: Design
-    calls: ICall[]
+    calls?: ICall[]
 }
 
 export const PopupNewService: React.FC<Props> = ({ popupService, setPopupService, newService, setNewService, loadingService, setLoadingService, getServices, error, title, newFunctionality, setNewFunctionality, tags, getTags, services, setError, design, calls }) => {
@@ -131,7 +131,7 @@ export const PopupNewService: React.FC<Props> = ({ popupService, setPopupService
                 design?.pages.map(page => <option key={page._id} value={page.slug}>{page.page}</option>)
               }
               {
-                calls.map(call => <option key={call._id} value={`/llamadas/${call.nameMeeting}`}>{call.nameMeeting}</option>)
+                calls?.map(call => <option key={call._id} value={`/llamadas/${call.nameMeeting}`}>{call.nameMeeting}</option>)
               }
             </Select>
           </div>
