@@ -244,7 +244,7 @@ export const PopupNewUser: React.FC<Props> = ({ popup, setPopup, user, setUser, 
                 setLoadingUser(false)
               }, 200)
             }
-          }} loading={loadingUser} config="w-44">{user?._id ? 'Editar' : 'Crear'} usuario</Button>
+          }} loading={loadingUser} config="w-44 min-w-44">{user?._id ? 'Editar' : 'Crear'} usuario</Button>
           {
             user?._id && user.type === 'Usuario'
               ? <ButtonRed action={() => {
