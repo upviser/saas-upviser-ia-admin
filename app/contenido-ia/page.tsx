@@ -88,6 +88,11 @@ export default function Page() {
     if (!loadingText) {
       setLoadingText(true)
       setError('')
+      if (shopLogin.textAI === 0 && !shopLogin.textAIAdd) {
+        setError('No tienes textos disponibles')
+        setLoadingImage(false)
+        return
+      }
       if (text.promt === '') {
         setError('Debes describir el texto que quieres generar')
         setLoadingText(false)
@@ -96,6 +101,13 @@ export default function Page() {
       const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/text-ia`, text)
       setTextIA(res.data)
       setLoadingText(false)
+      if (shopLogin.textAI > 1) {
+        const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { textAI: shopLogin.textAI - 1 })
+        setShopLogin(res2.data)
+      } else if (shopLogin.textAIAdd) {
+        const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { textAIAdd: shopLogin.textAIAdd + 1 })
+        setShopLogin(res2.data)
+      }
     }
   }
 
@@ -103,7 +115,7 @@ export default function Page() {
     if (!loadingImage) {
       setLoadingImage(true)
       setError('')
-      if (shopLogin.imagesAI === 0) {
+      if (shopLogin.imagesAI === 0 && !shopLogin.imagesAIAdd) {
         setError('No tienes imagenes disponibles')
         setLoadingImage(false)
         return
@@ -116,8 +128,13 @@ export default function Page() {
       const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/image-ia`, { promt: image.promt, image: imageRef, size: image.size })
       setImageIA(res.data)
       setLoadingImage(false)
-      const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { imagesAI: shopLogin.imagesAI - 1 })
-      setShopLogin(res2.data)
+      if (shopLogin.imagesAI > 1) {
+        const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { imagesAI: shopLogin.imagesAI - 1 })
+        setShopLogin(res2.data)
+      } else if (shopLogin.imagesAIAdd) {
+        const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { imagesAIAdd: shopLogin.imagesAIAdd + 1 })
+        setShopLogin(res2.data)
+      }
     }
   }
 
@@ -125,7 +142,7 @@ export default function Page() {
     if (!loadingVideo) {
       setLoadingVideo(true)
       setError('')
-      if (shopLogin.videosAI === 0) {
+      if (shopLogin.videosAI === 0 && !shopLogin.videosAIAdd) {
         setError('No tienes videos disponibles')
         setLoadingVideo(false)
         return
@@ -138,8 +155,13 @@ export default function Page() {
       const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/video-ia`, video)
       setVideoIA(res.data)
       setLoadingVideo(false)
-      const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { videosAI: shopLogin.videosAI - 1 })
-      setShopLogin(res2.data)
+      if (shopLogin.videosAI > 1) {
+        const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { videosAI: shopLogin.videosAI - 1 })
+        setShopLogin(res2.data)
+      } else if (shopLogin.videosAIAdd) {
+        const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { videosAIAdd: shopLogin.videosAIAdd + 1 })
+        setShopLogin(res2.data)
+      }
     }
   }
 
