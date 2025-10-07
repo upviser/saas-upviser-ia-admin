@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react'
 
 export default function Page () {
 
-  const [loginData, setLoginData] = useState({
+  const [loginData, setLoginData] = useState<any>({
     name: '',
     email: '',
     password: '',
@@ -29,7 +29,13 @@ export default function Page () {
   useEffect(() => {
     const getPlan = () => {
       const planParam = searchParams.get("plan")
-      setLoginData({ ...loginData, plan: planParam ? planParam : '', imagesAI: planParam ? planParam === 'Esencial' ? 20 : planParam === 'Avanzado' ? 40 : planParam === 'Profesional' ? 60 : 0 : 0, videosAI: planParam ? planParam === 'Avanzado' ? 15 : planParam === 'Profesional' ? 30 : 0 : 0, conversationsAI: planParam ? planParam === 'Esencial' ? 250 : planParam === 'Avanzado' ? 500 : planParam === 'Profesional' ? 1000 : 0 : 0, emails: planParam ? planParam === 'Esencial' ? 1000 : planParam === 'Avanzado' ? 2000 : planParam === 'Profesional' ? 4000 : 0 : 0, textAI: planParam ? planParam === 'Esencial' ? 100 : planParam === 'Avanzado' ? 200 : planParam === 'Profesional' ? 400 : 0 : 0 })
+      const limitParam = searchParams.get("limit")
+      if (limitParam === 'Que se limiten') {
+        setLoginData({ ...loginData, plan: planParam ? planParam : '', imagesAI: planParam ? planParam === 'Esencial' ? 20 : planParam === 'Avanzado' ? 40 : planParam === 'Profesional' ? 60 : 0 : 0, videosAI: planParam ? planParam === 'Avanzado' ? 15 : planParam === 'Profesional' ? 30 : 0 : 0, conversationsAI: planParam ? planParam === 'Esencial' ? 250 : planParam === 'Avanzado' ? 500 : planParam === 'Profesional' ? 1000 : 0 : 0, emails: planParam ? planParam === 'Esencial' ? 1000 : planParam === 'Avanzado' ? 2000 : planParam === 'Profesional' ? 4000 : 0 : 0, textAI: planParam ? planParam === 'Esencial' ? 100 : planParam === 'Avanzado' ? 200 : planParam === 'Profesional' ? 400 : 0 : 0 })
+      } else if (limitParam === 'Que sigan funcionando') {
+        setLoginData({ ...loginData, plan: planParam ? planParam : '', imagesAI: planParam ? planParam === 'Esencial' ? 20 : planParam === 'Avanzado' ? 40 : planParam === 'Profesional' ? 60 : 0 : 0, videosAI: planParam ? planParam === 'Avanzado' ? 15 : planParam === 'Profesional' ? 30 : 0 : 0, conversationsAI: planParam ? planParam === 'Esencial' ? 250 : planParam === 'Avanzado' ? 500 : planParam === 'Profesional' ? 1000 : 0 : 0, emails: planParam ? planParam === 'Esencial' ? 1000 : planParam === 'Avanzado' ? 2000 : planParam === 'Profesional' ? 4000 : 0 : 0, textAI: planParam ? planParam === 'Esencial' ? 100 : planParam === 'Avanzado' ? 200 : planParam === 'Profesional' ? 400 : 0 : 0, imagesAIAdd: 0, videosAIAdd: 0, textAIAdd: 0, conversationsAIAdd: 0, emailsAdd: 0 })
+      }
+      
     }
 
     getPlan()
