@@ -193,6 +193,18 @@ export default function Page () {
     return () => window.removeEventListener('message', handleInstagramMessage);
   }, []);
 
+  useEffect(() => {
+    function handleZoomMessage(event: any) {
+      if (event.origin !== window.location.origin) return;
+      if (event.data.type === 'ZOOM_AUTH_SUCCESS') {
+        getIntegrations();
+      }
+    }
+
+    window.addEventListener('message', handleZoomMessage);
+    return () => window.removeEventListener('message', handleZoomMessage);
+  }, []);
+
   return (
     <>
       <Head>
@@ -264,7 +276,6 @@ export default function Page () {
                     : !connecting
                       ? (
                         <Button action={async () => {
-                          setConnecting(true)
                           const state = randomBytes(16).toString('hex')
                           await axios.post(`${process.env.NEXT_PUBLIC_MAIN_API_URL}/user`, { api: process.env.NEXT_PUBLIC_API_URL, admin: process.env.NEXT_PUBLIC_ADMIN_URL, instagramState: state })
                           window.open(
@@ -291,7 +302,10 @@ export default function Page () {
                 }
                 {
                   integrations.zoomToken && integrations.zoomToken !== '' && integrations.zoomAccountId && integrations.zoomAccountId !== ''
-                    ? <Button>Desconectar Zoom</Button>
+                    ? <Button action={async () =>{
+                      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/integrations`, { zoomAccountId: '', zoomToken: '', zoomRefreshToken: '', zoomCreateToken: '', zoomExpiresIn: '' })
+                      getIntegrations()
+                    }}>Desconectar Zoom</Button>
                     : (
                       <Button action={async () => {
                         const shopLogin = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`)
@@ -299,7 +313,7 @@ export default function Page () {
                         window.open(
                           `${process.env.NEXT_PUBLIC_API_URL}/auth/zoom?api=${encodeURIComponent(api)}`,
                           'Conectar Zoom',
-                          'width=600,height=800,resizable=yes,scrollbars=yes,noopener,noreferrer'
+                          'width=600,height=800,resizable=yes,scrollbars=yes'
                         );
                       }}>Conectar Zoom</Button>
                     )
