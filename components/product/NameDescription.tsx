@@ -6,9 +6,10 @@ import { Button, ButtonAI, Card, Input, Select, Spinner2, Textarea } from '../ui
 interface Props {
   information: IProduct,
   setInformation: any
+  shopLogin: any
 }
 
-export const NameDescription: React.FC<Props> = ({information, setInformation}) => {
+export const NameDescription: React.FC<Props> = ({information, setInformation, shopLogin}) => {
 
   const [descriptionAi, setDescriptionAi] = useState('')
   const [descriptionAiLoading, setDescriptionAiLoading] = useState(false)
@@ -16,6 +17,7 @@ export const NameDescription: React.FC<Props> = ({information, setInformation}) 
   const [type, setType] = useState('')
   const [description, setDescription] = useState('')
   const [newType, setNewType] = useState('')
+  const [error, setError] = useState('')
 
   const inputChange = async (e: any) => {
     setInformation({ ...information, [e.target.name]: e.target.value })
@@ -25,9 +27,25 @@ export const NameDescription: React.FC<Props> = ({information, setInformation}) 
     e.preventDefault()
     if (!descriptionAiLoading) {
       setDescriptionAiLoading(true)
+      setError('')
+      if (shopLogin.textAI === 0 && !shopLogin.textAIAdd) {
+        setError('No tienes imagenes disponibles')
+        setDescriptionAiLoading(false)
+        return
+      }
+      if (description === '') {
+        setError('Debes descrpbir el producto')
+        setDescriptionAiLoading(false)
+        return
+      }
       const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/description-product`, { description: description, type: type === 'Personalizado' ? newType : type })
       setDescriptionAi(response.data)
       setDescriptionAiLoading(false)
+      if (shopLogin.textAI > 1) {
+        await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { textAI: shopLogin?.textAI - 1 })
+      } else if (shopLogin.textAIAdd) {
+        await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { textAIAdd: shopLogin?.textAIAdd + 1 })
+      }
     }
   }
 

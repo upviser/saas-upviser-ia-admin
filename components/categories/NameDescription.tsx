@@ -7,9 +7,10 @@ import { Button, ButtonAI, Card, Input, Popup, Select, Textarea } from '../ui'
 interface Props {
   setCategoryInfo: any
   categoryInfo: ICategory
+  shopLogin: any
 }
 
-export const NameDescription: React.FC<Props> = ({setCategoryInfo, categoryInfo}) => {
+export const NameDescription: React.FC<Props> = ({setCategoryInfo, categoryInfo, shopLogin}) => {
 
   const [popup, setPopup] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
   const [descriptionLoading, setDecriptionLoading] = useState(false)
@@ -18,6 +19,7 @@ export const NameDescription: React.FC<Props> = ({setCategoryInfo, categoryInfo}
   const [type, setType] = useState('')
   const [description, setDescription] = useState('')
   const [newType, setNewType] = useState('')
+  const [error, setError] = useState('')
 
   const inputChange = (e: any) => {
     setCategoryInfo({...categoryInfo, [e.target.name]: e.target.value})
@@ -26,9 +28,25 @@ export const NameDescription: React.FC<Props> = ({setCategoryInfo, categoryInfo}
   const generateDescription = async () => {
     if (!descriptionLoading) {
       setDecriptionLoading(true)
+      setError('')
+      if (shopLogin.textAI === 0 && !shopLogin.textAIAdd) {
+        setError('No tienes imagenes disponibles')
+        setDecriptionLoading(false)
+        return
+      }
+      if (description === '') {
+        setError('Debes describir la categoría')
+        setDecriptionLoading(false)
+        return
+      }
       const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/description-category`, { description: description, type: type === 'Personalizado' ? newType : type })
       setDescriptionAi(response.data)
       setDecriptionLoading(false)
+      if (shopLogin.textAI > 1) {
+        await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { textAI: shopLogin?.textAI - 1 })
+      } else if (shopLogin.textAIAdd) {
+        await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { textAIAdd: shopLogin?.textAIAdd + 1 })
+      }
     }
   }
 

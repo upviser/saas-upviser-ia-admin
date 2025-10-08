@@ -3,7 +3,7 @@ import { CategorySeo, Media, NameDescription } from '@/components/categories'
 import { ICategory } from '@/interfaces'
 import Head from 'next/head'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BiArrowBack } from 'react-icons/bi'
 import { ButtonSubmit, Spinner2 } from '../../../../components/ui'
 import axios from 'axios'
@@ -18,9 +18,19 @@ export default  function Page () {
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [shopLogin, setShopLogin] = useState<any>()
   const initialCategory = { category: '' }
 
   const router = useRouter()
+
+  const getShopLogin = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`)
+    setShopLogin(res.data)
+  }
+
+  useEffect(() => {
+    getShopLogin()
+  }, [])
 
   const handleSubmit = async () => {
     if (!loading) {
@@ -75,8 +85,8 @@ export default  function Page () {
           </div>
           <form className='flex gap-6 w-full max-w-[1280px] m-auto flex-col lg:flex-row'>
             <div className='flex gap-6 flex-col w-full lg:w-2/3'>
-              <NameDescription categoryInfo={categoryInfo} setCategoryInfo={setCategoryInfo} />
-              <CategorySeo categoryInfo={categoryInfo} setCategoryInfo={setCategoryInfo} />
+              <NameDescription categoryInfo={categoryInfo} setCategoryInfo={setCategoryInfo} shopLogin={shopLogin} />
+              <CategorySeo categoryInfo={categoryInfo} setCategoryInfo={setCategoryInfo} shopLogin={shopLogin} />
             </div>
             <div className='flex gap-6 flex-col w-full lg:w-1/3'>
               <Media categoryInfo={categoryInfo} setCategoryInfo={setCategoryInfo} />

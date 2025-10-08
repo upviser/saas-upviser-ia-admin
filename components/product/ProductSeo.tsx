@@ -6,9 +6,10 @@ import { Button, Button2, ButtonAI, Input, Select, Spinner2, Textarea } from '..
 interface Props {
   information: IProduct
   setInformation: any
+  shopLogin: any
 }
 
-export const ProductSeo: React.FC<Props> = ({information, setInformation}) => {
+export const ProductSeo: React.FC<Props> = ({information, setInformation, shopLogin}) => {
 
   const [aiLoading, setAiLoading] = useState(false)
   const [aiView, setAiView] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
@@ -19,6 +20,7 @@ export const ProductSeo: React.FC<Props> = ({information, setInformation}) => {
   const [titleSeo, setTitleSeo] = useState('')
   const [descriptionSeo, setDescriptionSeo] = useState('')
   const [rotate, setRotate] = useState('rotate-90')
+  const [error, setError] = useState('')
 
   const inputChange = async (e: any) => {
     setInformation({ ...information, [e.target.name]: e.target.value })
@@ -28,12 +30,28 @@ export const ProductSeo: React.FC<Props> = ({information, setInformation}) => {
     e.preventDefault()
     if (!aiLoading) {
       setAiLoading(true)
+      setError('')
+      if (shopLogin.textAI === 0 && !shopLogin.textAIAdd) {
+        setError('No tienes imagenes disponibles')
+        setAiLoading(false)
+        return
+      }
+      if (description === '') {
+        setError('Debes describir el producto')
+        setAiLoading(false)
+        return
+      }
       const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/product-seo`, { description: description, type: type === 'Personalizado' ? newType : type })
       const filterTitleSeo = response.data.title
       const filterDescriptionSeo = response.data.description
       setTitleSeo(filterTitleSeo)
       setDescriptionSeo(filterDescriptionSeo)
       setAiLoading(false)
+      if (shopLogin.textAI > 1) {
+        await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { textAI: shopLogin?.textAI - 1 })
+      } else if (shopLogin.textAIAdd) {
+        await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { textAIAdd: shopLogin?.textAIAdd + 1 })
+      }
     }
   }
 

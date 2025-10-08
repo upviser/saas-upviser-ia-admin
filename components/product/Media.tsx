@@ -10,9 +10,10 @@ import Image from 'next/image'
 interface Props {
   information: IProduct
   setInformation: any
+  shopLogin: any
 }
 
-export const Media: React.FC<Props> = ({ information, setInformation }) => {
+export const Media: React.FC<Props> = ({ information, setInformation, shopLogin }) => {
 
   const [indexSelected, setIndexSelected] = useState(-1)
   const [trash, setTrash] = useState(-1)
@@ -23,18 +24,8 @@ export const Media: React.FC<Props> = ({ information, setInformation }) => {
   const [imageGenerate, setImageGenerate] = useState('')
   const [loading, setLoading] = useState(false)
   const [imageRef, setImageRef] = useState('')
-  const [shopLogin, setShopLogin] = useState<any>()
   const [error, setError] = useState('')
   const [size, setSize] = useState('1:1')
-
-  const getShopLogin = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`)
-    setShopLogin(res.data)
-  }
-
-  useEffect(() => {
-    getShopLogin()
-  }, [])
 
   const onDrop = (acceptedFiles: any) => {
     if (!loadingImage) {
@@ -149,7 +140,7 @@ export const Media: React.FC<Props> = ({ information, setInformation }) => {
           if (!loading) {
             setLoading(true)
             setError('')
-            if (shopLogin.imagesAI === 0) {
+            if (shopLogin.imagesAI === 0 && !shopLogin.imagesAIAdd) {
               setError('No tienes imagenes disponibles')
               setLoadingImage(false)
               return
@@ -162,7 +153,11 @@ export const Media: React.FC<Props> = ({ information, setInformation }) => {
             const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/image-ia`, { promt: description, image: imageRef, size: size })
             setImageGenerate(res.data)
             setLoading(false)
-            await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { imagesAI: shopLogin?.imagesAI - 1 })
+            if (shopLogin.imagesAI > 1) {
+              await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { imagesAI: shopLogin?.imagesAI - 1 })
+            } else if (shopLogin.imagesAIAdd) {
+              await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { imagesAIAdd: shopLogin?.imagesAIAdd + 1 })
+            }
           }
         }} text={'Generar imagen con IA'} loading={loading} config='min-h-9' />
         {

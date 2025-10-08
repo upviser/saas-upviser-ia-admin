@@ -6,9 +6,10 @@ import { Button, Button2, ButtonAI, Card, Input, Popup, Select, Textarea } from 
 interface Props {
   setCategoryInfo: any
   categoryInfo: ICategory
+  shopLogin: any
 }
 
-export const CategorySeo: React.FC<Props> = ({setCategoryInfo, categoryInfo}) => {
+export const CategorySeo: React.FC<Props> = ({setCategoryInfo, categoryInfo, shopLogin}) => {
 
   const [popup, setPopup] = useState({ view: 'hidden', opacity: 'opacity-1', mouse: false })
   const [metaTitleAiLoading, setMetaTitleAiLoading] = useState(false)
@@ -19,6 +20,7 @@ export const CategorySeo: React.FC<Props> = ({setCategoryInfo, categoryInfo}) =>
   const [aiLoading, setAiLoading] = useState(false)
   const [titleSeo, setTitleSeo] = useState('')
   const [descriptionSeo, setDescriptionSeo] = useState('')
+  const [error, setError] = useState('')
 
   const inputChange = (e: any) => {
     setCategoryInfo({...categoryInfo, [e.target.name]: e.target.value})
@@ -28,12 +30,28 @@ export const CategorySeo: React.FC<Props> = ({setCategoryInfo, categoryInfo}) =>
     e.preventDefault()
     if (!aiLoading) {
       setAiLoading(true)
+      setError('')
+      if (shopLogin.textAI === 0 && !shopLogin.textAIAdd) {
+        setError('No tienes imagenes disponibles')
+        setAiLoading(false)
+        return
+      }
+      if (description === '') {
+        setError('Debes describir la categoría')
+        setAiLoading(false)
+        return
+      }
       const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/category-seo`, { description: description, type: type === 'Personalizado' ? newType : type })
       const filterTitleSeo = response.data.title
       const filterDescriptionSeo = response.data.description
       setTitleSeo(filterTitleSeo)
       setDescriptionSeo(filterDescriptionSeo)
       setAiLoading(false)
+      if (shopLogin.textAI > 1) {
+        await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { textAI: shopLogin?.textAI - 1 })
+      } else if (shopLogin.textAIAdd) {
+        await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { textAIAdd: shopLogin?.textAIAdd + 1 })
+      }
     }
   }
 
