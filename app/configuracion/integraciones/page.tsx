@@ -308,10 +308,8 @@ export default function Page () {
                     }}>Desconectar Zoom</Button>
                     : (
                       <Button action={async () => {
-                        const shopLogin = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`)
-                        const api = shopLogin.data.api
                         window.open(
-                          `${process.env.NEXT_PUBLIC_API_URL}/auth/zoom?api=${encodeURIComponent(api)}`,
+                          `${process.env.NEXT_PUBLIC_API_URL}/auth/zoom?api=${encodeURIComponent(process.env.NEXT_PUBLIC_API_URL!)}`,
                           'Conectar Zoom',
                           'width=600,height=800,resizable=yes,scrollbars=yes'
                         );
