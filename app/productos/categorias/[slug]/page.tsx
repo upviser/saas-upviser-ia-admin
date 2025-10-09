@@ -16,6 +16,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
   const [popup, setPopup] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [shopLogin, setShopLogin] = useState<any>()
 
   const router = useRouter()
 
@@ -27,6 +28,15 @@ export default function Page ({ params }: { params: { slug: string } }) {
 
     getCategory()
   }, [params.slug])
+
+  const getShopLogin = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`)
+    setShopLogin(res.data)
+  }
+
+  useEffect(() => {
+    getShopLogin()
+  }, [])
 
   const handleSubmit = async () => {
     if (!updatingLoading) {
@@ -103,8 +113,8 @@ export default function Page ({ params }: { params: { slug: string } }) {
                   </div>
                   <form className='flex gap-6 w-full max-w-[1280px] mx-auto flex-col lg:flex-row'>
                     <div className='flex gap-6 flex-col w-full lg:w-2/3'>
-                      <NameDescription categoryInfo={categoryInfo} setCategoryInfo={setCategoryInfo} />
-                      <CategorySeo categoryInfo={categoryInfo} setCategoryInfo={setCategoryInfo} />
+                      <NameDescription categoryInfo={categoryInfo} setCategoryInfo={setCategoryInfo} shopLogin={shopLogin} />
+                      <CategorySeo categoryInfo={categoryInfo} setCategoryInfo={setCategoryInfo} shopLogin={shopLogin} />
                     </div>
                     <div className='flex gap-6 flex-col w-full lg:w-1/3'>
                       <Media categoryInfo={categoryInfo} setCategoryInfo={setCategoryInfo} />

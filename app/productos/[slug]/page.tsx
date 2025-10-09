@@ -30,6 +30,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
   const [popup, setPopup] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [shopLogin, setShopLogin] = useState<any>()
 
   const router = useRouter()
 
@@ -52,6 +53,15 @@ export default function Page ({ params }: { params: { slug: string } }) {
     getProduct()
     getCategories()
   }, [params.slug])
+
+  const getShopLogin = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`)
+    setShopLogin(res.data)
+  }
+
+  useEffect(() => {
+    getShopLogin()
+  }, [])
 
   const handleSubmit = async () => {
     if (!submitLoading) {
@@ -138,12 +148,12 @@ export default function Page ({ params }: { params: { slug: string } }) {
                   </div>
                   <form className='flex gap-6 w-full max-w-[1280px] mx-auto flex-col lg:flex-row'>
                     <div className='flex gap-6 flex-col w-full lg:w-2/3'>
-                      <NameDescription information={information} setInformation={setInformation} />
-                      <Media information={information} setInformation={setInformation} />
+                      <NameDescription information={information} setInformation={setInformation} shopLogin={shopLogin} />
+                      <Media information={information} setInformation={setInformation} shopLogin={shopLogin} />
                       <StockVariations information={information} setInformation={setInformation} />
                       <ProductOffer productsOffer={productsOffer} setProductsOffer={setProductsOffer} />
                       <Information information={information} setInformation={setInformation} />
-                      <ProductSeo information={information} setInformation={setInformation} />
+                      <ProductSeo information={information} setInformation={setInformation} shopLogin={shopLogin} />
                     </div>
                     <div className='w-full lg:w-1/3 flex flex-col gap-6'>
                       <Visibility setInformation={setInformation} information={information} />
