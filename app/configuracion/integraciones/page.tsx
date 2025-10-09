@@ -309,7 +309,7 @@ export default function Page () {
                     : (
                       <Button action={async () => {
                         window.open(
-                          `${process.env.NEXT_PUBLIC_API_URL}/auth/zoom?api=${encodeURIComponent(process.env.NEXT_PUBLIC_API_URL!)}`,
+                          `${process.env.NEXT_PUBLIC_API_URL}/auth/zoom?api=${encodeURIComponent(process.env.NEXT_PUBLIC_API_URL!.replace('https://', ''))}`,
                           'Conectar Zoom',
                           'width=600,height=800,resizable=yes,scrollbars=yes'
                         );
