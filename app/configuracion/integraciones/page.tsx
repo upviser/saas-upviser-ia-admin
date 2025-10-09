@@ -302,8 +302,8 @@ export default function Page () {
                 }
                 {
                   integrations.zoomToken && integrations.zoomToken !== '' && integrations.zoomAccountId && integrations.zoomAccountId !== ''
-                    ? <Button action={async () =>{
-                      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/integrations`, { zoomAccountId: '', zoomToken: '', zoomRefreshToken: '', zoomCreateToken: '', zoomExpiresIn: '' })
+                    ? <Button action={async () => {
+                      await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/remove-zoom`)
                       getIntegrations()
                     }}>Desconectar Zoom</Button>
                     : (
