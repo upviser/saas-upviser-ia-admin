@@ -40,17 +40,11 @@ export default function Page () {
     if (!loading) {
       setLoading(true)
       setError('')
-      const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/domain`, domain, {
+      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/domain`, domain, {
         headers: {
           'x-tenant-id': session?.tenantId
         }
       })
-      if (res.data.domain) {
-        await axios.post(`${process.env.NEXT_PUBLIC_MAIN_API_URL}/user`, { api: process.env.NEXT_PUBLIC_API_URL, senderEmail: `${domain.email}@${domain.domain}` })
-        setRes(res.data)
-      } else {
-        setError('No se ha podido conectar el dominio')
-      }
       setLoading(false)
     }
   }
