@@ -5,6 +5,7 @@ import { NumberFormat } from "@/utils"
 import axios from "axios"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
+import { useSession } from 'next-auth/react'
 
 export default function Page () {
 
@@ -15,35 +16,54 @@ export default function Page () {
   const [type, setType] = useState('Productos')
 
   const router = useRouter()
+  const { data: session } = useSession()
 
   const getPays = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/pays`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/pays`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setPays(res.data)
   }
 
   useEffect(() => {
-    getPays()
-  }, [])
+    if (session?.tenantId) {
+      getPays()
+    }
+  }, [session?.tenantId])
 
   const getServices = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/services`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/services`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setServices(res.data)
   }
 
   useEffect(() => {
-    getServices()
-  }, [])
+    if (session?.tenantId) {
+      getServices()
+    }
+  }, [session?.tenantId])
 
   const getSells = async () => {
     setLoading(true)
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/sells`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/sells`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setSells(res.data)
     setLoading(false)
   }
 
   useEffect(() => {
-    getSells()
-  }, [])
+    if (session?.tenantId) {
+      getSells()
+    }
+  }, [session?.tenantId])
 
   return (
     <div className='w-full h-full bg-bg flex flex-col gap-6 dark:bg-neutral-900'>

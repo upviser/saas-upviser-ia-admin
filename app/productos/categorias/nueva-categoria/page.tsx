@@ -8,6 +8,7 @@ import { BiArrowBack } from 'react-icons/bi'
 import { ButtonSubmit, Spinner2 } from '../../../../components/ui'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 
 export default  function Page () {
 
@@ -22,15 +23,22 @@ export default  function Page () {
   const initialCategory = { category: '' }
 
   const router = useRouter()
+  const { data: session } = useSession()
 
   const getShopLogin = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setShopLogin(res.data)
   }
 
   useEffect(() => {
-    getShopLogin()
-  }, [])
+    if (session?.tenantId) {
+      getShopLogin()
+    }
+  }, [session?.tenantId])
 
   const handleSubmit = async () => {
     if (!loading) {
@@ -51,7 +59,11 @@ export default  function Page () {
         setLoading(false)
         return
       }
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/categories`, categoryInfo)
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/categories`, categoryInfo, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       router.push('/productos/categorias')
     }
   }

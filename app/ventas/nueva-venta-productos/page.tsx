@@ -12,6 +12,7 @@ import { BiArrowBack } from 'react-icons/bi'
 import { IoClose } from 'react-icons/io5'
 import Image from 'next/image'
 import { io } from 'socket.io-client'
+import { useSession } from 'next-auth/react'
 
 const socket = io(`${process.env.NEXT_PUBLIC_API_URL}/`, {
   transports: ['websocket']
@@ -43,17 +44,24 @@ export default function Page () {
   const [serviceTypeCode, setServiceTypeCode] = useState()
 
   const router = useRouter()
+  const { data: session } = useSession()
 
   const initialEmail = ''
 
   const getProducts = async () => {
-    const products = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products`)
+    const products = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setProducts(products.data)
   }
 
   useEffect(() => {
-    getProducts()
-  }, [])
+    if (session?.tenantId) {
+      getProducts()
+    }
+  }, [session?.tenantId])
 
   const inputChange = (e: any) => {
     setSell({...sell, [e.target.name]: e.target.value})
@@ -103,8 +111,16 @@ export default function Page () {
         setSubmitLoading(false)
         return
       }
-      const res2 = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/store-data`)
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chilexpress`)
+      const res2 = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/store-data`, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chilexpress`, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       const dimentions = calcularPaquete(sell.cart)
       if (sell.shippingState === 'No empaquetado' || sell.shippingState === 'Productos empaquetados') {
         const shippingData = {
@@ -162,24 +178,48 @@ export default function Page () {
             'Ocp-Apim-Subscription-Key': res.data.enviosKey
           }
         })
-        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/sells`, { ...sell, shippingLabel: request.data.data.detail[0].label.labelData })
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/sells`, { ...sell, shippingLabel: request.data.data.detail[0].label.labelData }, {
+          headers: {
+            'x-tenant-id': session?.tenantId
+          }
+        })
       } else {
-        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/sells`, sell)
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/sells`, sell, {
+          headers: {
+            'x-tenant-id': session?.tenantId
+          }
+        })
       }
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/clients`, { ...sell, tags: sell.subscription ? ['Clientes', 'Suscriptores'] : ['Clientes'] })
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/clients`, { ...sell, tags: sell.subscription ? ['Clientes', 'Suscriptores'] : ['Clientes'] }, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       sell.cart.map(async (product: any) => {
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products/${product.slug}`)
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products/${product.slug}`, {
+          headers: {
+            'x-tenant-id': session?.tenantId
+          }
+        })
         let prod: IProduct = res.data
         if (product.variation?.variation) {
           if (product.variation.subVariation) {
             if (product.variation.subVariation2) {
               const variationIndex = prod.variations!.variations.findIndex((variation: IVariation) => variation.variation === product.variation?.variation && variation.subVariation === product.variation.subVariation && variation.subVariation2 === product.variation.subVariation2)
               prod.variations!.variations[variationIndex].stock = prod.variations!.variations[variationIndex].stock - product.quantity!
-              await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/products/${product._id}`, { stock: prod.stock - product.quantity, variations: prod.variations })
+              await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/products/${product._id}`, { stock: prod.stock - product.quantity, variations: prod.variations }, {
+                headers: {
+                  'x-tenant-id': session?.tenantId
+                }
+              })
             } else {
               const variationIndex = prod.variations!.variations.findIndex((variation: IVariation) => variation.variation === product.variation?.variation && variation.subVariation === product.variation.subVariation)
               prod.variations!.variations[variationIndex].stock = prod.variations!.variations[variationIndex].stock - product.quantity!
-              await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/products/${product._id}`, { stock: prod.stock - product.quantity, variations: prod.variations })
+              await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/products/${product._id}`, { stock: prod.stock - product.quantity, variations: prod.variations }, {
+                headers: {
+                  'x-tenant-id': session?.tenantId
+                }
+              })
             }
           } else {
             const variationIndex = prod.variations!.variations.findIndex((variation: IVariation) => variation.variation === product.variation?.variation)

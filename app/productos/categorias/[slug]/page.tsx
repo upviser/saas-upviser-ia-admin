@@ -8,6 +8,7 @@ import axios from 'axios'
 import Link from 'next/link'
 import { BiArrowBack } from 'react-icons/bi'
 import { NameDescription, CategorySeo, Media } from '@/components/categories'
+import { useSession } from 'next-auth/react'
 
 export default function Page ({ params }: { params: { slug: string } }) {
 
@@ -19,24 +20,37 @@ export default function Page ({ params }: { params: { slug: string } }) {
   const [shopLogin, setShopLogin] = useState<any>()
 
   const router = useRouter()
+  const { data: session } = useSession()
 
   useEffect(() => {
     const getCategory = async () => {
-      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/categories/${params.slug}`)
+      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/categories/${params.slug}`, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       setCategoryInfo(data)
     }
 
-    getCategory()
-  }, [params.slug])
+    if (session?.tenantId) {
+      getCategory()
+    }
+  }, [params.slug, session?.tenantId])
 
   const getShopLogin = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setShopLogin(res.data)
   }
 
   useEffect(() => {
-    getShopLogin()
-  }, [])
+    if (session?.tenantId) {
+      getShopLogin()
+    }
+  }, [session?.tenantId])
 
   const handleSubmit = async () => {
     if (!updatingLoading) {
@@ -57,7 +71,11 @@ export default function Page ({ params }: { params: { slug: string } }) {
         setLoading(false)
         return
       }
-      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/categories/${categoryInfo?._id}`, categoryInfo)
+      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/categories/${categoryInfo?._id}`, categoryInfo, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       router.push('/productos/categorias')
     }
   }
@@ -66,7 +84,11 @@ export default function Page ({ params }: { params: { slug: string } }) {
     e.preventDefault()
     if (!loading) {
       setLoading(true)
-      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/categories/${categoryInfo?._id}`)
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/categories/${categoryInfo?._id}`, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       router.push('/productos/categorias')
       setLoading(false)
     }

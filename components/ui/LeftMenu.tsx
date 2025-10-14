@@ -48,7 +48,7 @@ export const LeftMenu: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <>
       {
-        pathname !== '/ingresar'
+        pathname !== '/ingresar' && pathname !== '/registro'
           ? (
               <div className='flex bg-bg w-full' style={{ height: 'calc(100vh - 49px' }}>
                 <div className={`w-[250px] z-40 border-r border-border p-4 hidden flex-col justify-between lg:flex dark:border-neutral-800 dark:bg-neutral-900`}>

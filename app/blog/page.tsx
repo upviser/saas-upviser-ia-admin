@@ -7,6 +7,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { AiOutlineClose } from 'react-icons/ai'
+import { useSession } from 'next-auth/react'
 
 export default function Page () {
 
@@ -19,10 +20,15 @@ export default function Page () {
   })
   
   const router = useRouter()
+  const { data: session } = useSession()
 
   const getPosts = async () => {
     setLoading(true)
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/posts`)
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/posts`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     if (response.data) {
       setPosts(response.data)
     }
@@ -30,14 +36,20 @@ export default function Page () {
   }
 
   useEffect(() => {
-    getPosts()
-  }, [])
+    if (session?.tenantId) {
+      getPosts()
+    }
+  }, [session?.tenantId])
 
   const deleteProduct = async (e: any) => {
     e.preventDefault()
     if (!loading) {
       setLoading(true)
-      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/posts/${postSelect._id}`)
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/posts/${postSelect._id}`, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       router.refresh()
       setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
       setTimeout(() => {

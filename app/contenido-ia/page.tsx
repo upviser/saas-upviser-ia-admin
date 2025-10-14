@@ -3,6 +3,7 @@ import { Button, ButtonAI, Input, Select, Textarea } from "@/components/ui"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import Image from 'next/image'
+import { useSession } from 'next-auth/react'
 
 export default function Page() {
 
@@ -21,14 +22,22 @@ export default function Page() {
   const [shopLogin, setShopLogin] = useState<any>()
   const [error, setError] = useState('')
 
+  const { data: session } = useSession()
+
   const getShopLogin = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setShopLogin(res.data)
   }
 
   useEffect(() => {
-    getShopLogin()
-  }, [])
+    if (session?.tenantId) {
+      getShopLogin()
+    }
+  }, [session?.tenantId])
 
   const imageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -46,6 +55,7 @@ export default function Page() {
           headers: {
             accept: 'application/json',
             'Accept-Language': 'en-US,en;q=0.8',
+            'x-tenant-id': session?.tenantId,
           },
         }
       );
@@ -73,6 +83,7 @@ export default function Page() {
           headers: {
             accept: 'application/json',
             'Accept-Language': 'en-US,en;q=0.8',
+            'x-tenant-id': session?.tenantId,
           },
         }
       );
@@ -98,14 +109,26 @@ export default function Page() {
         setLoadingText(false)
         return
       }
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/text-ia`, text)
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/text-ia`, text, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       setTextIA(res.data)
       setLoadingText(false)
       if (shopLogin.textAI > 1) {
-        const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { textAI: shopLogin.textAI - 1 })
+        const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { textAI: shopLogin.textAI - 1 }, {
+          headers: {
+            'x-tenant-id': session?.tenantId
+          }
+        })
         setShopLogin(res2.data)
       } else if (shopLogin.textAIAdd) {
-        const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { textAIAdd: shopLogin.textAIAdd + 1 })
+        const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { textAIAdd: shopLogin.textAIAdd + 1 }, {
+          headers: {
+            'x-tenant-id': session?.tenantId
+          }
+        })
         setShopLogin(res2.data)
       }
     }
@@ -125,14 +148,26 @@ export default function Page() {
         setLoadingImage(false)
         return
       }
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/image-ia`, { promt: image.promt, image: imageRef, size: image.size })
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/image-ia`, { promt: image.promt, image: imageRef, size: image.size }, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       setImageIA(res.data)
       setLoadingImage(false)
       if (shopLogin.imagesAI > 1) {
-        const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { imagesAI: shopLogin.imagesAI - 1 })
+        const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { imagesAI: shopLogin.imagesAI - 1 }, {
+          headers: {
+            'x-tenant-id': session?.tenantId
+          }
+        })
         setShopLogin(res2.data)
       } else if (shopLogin.imagesAIAdd) {
-        const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { imagesAIAdd: shopLogin.imagesAIAdd + 1 })
+        const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { imagesAIAdd: shopLogin.imagesAIAdd + 1 }, {
+          headers: {
+            'x-tenant-id': session?.tenantId
+          }
+        })
         setShopLogin(res2.data)
       }
     }
@@ -152,14 +187,26 @@ export default function Page() {
         setLoadingVideo(false)
         return
       }
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/video-ia`, video)
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/video-ia`, video, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       setVideoIA(res.data)
       setLoadingVideo(false)
       if (shopLogin.videosAI > 1) {
-        const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { videosAI: shopLogin.videosAI - 1 })
+        const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { videosAI: shopLogin.videosAI - 1 }, {
+          headers: {
+            'x-tenant-id': session?.tenantId
+          }
+        })
         setShopLogin(res2.data)
       } else if (shopLogin.videosAIAdd) {
-        const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { videosAIAdd: shopLogin.videosAIAdd + 1 })
+        const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { videosAIAdd: shopLogin.videosAIAdd + 1 }, {
+          headers: {
+            'x-tenant-id': session?.tenantId
+          }
+        })
         setShopLogin(res2.data)
       }
     }

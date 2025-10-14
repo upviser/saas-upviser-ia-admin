@@ -10,6 +10,7 @@ import { CategoryProduct, Information, Media, NameDescription, Price, ProductOff
 import { IProductsOffer } from '../../../interfaces/products'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 
 export default function Page ({ params }: { params: { slug: string } }) {
 
@@ -33,10 +34,15 @@ export default function Page ({ params }: { params: { slug: string } }) {
   const [shopLogin, setShopLogin] = useState<any>()
 
   const router = useRouter()
+  const { data: session } = useSession()
 
   useEffect(() => {
     const getProduct = async () => {
-      const {data} = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products/${params.slug}`)
+      const {data} = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products/${params.slug}`, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       setInformation(data)
       setProductsOffer(data.productsOffer?.length ? data.productsOffer : [{productsSale: [], price: 0}])
       setQuantityOffers(data.quantityOffers?.length ? data.quantityOffers : [{
@@ -46,22 +52,34 @@ export default function Page ({ params }: { params: { slug: string } }) {
     }
   
     const getCategories = async () => {
-      const {data} = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/categories`)
+      const {data} = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/categories`, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       setCategories(data)
     }
 
-    getProduct()
-    getCategories()
-  }, [params.slug])
+    if (session?.tenantId) {
+      getProduct()
+      getCategories()
+    }
+  }, [params.slug, session?.tenantId])
 
   const getShopLogin = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setShopLogin(res.data)
   }
 
   useEffect(() => {
-    getShopLogin()
-  }, [])
+    if (session?.tenantId) {
+      getShopLogin()
+    }
+  }, [session?.tenantId])
 
   const handleSubmit = async () => {
     if (!submitLoading) {

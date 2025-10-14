@@ -6,6 +6,7 @@ import Head from 'next/head'
 import React, { useEffect, useRef, useState } from 'react'
 import { FaTag } from 'react-icons/fa'
 import io from 'socket.io-client'
+import { useSession } from 'next-auth/react'
 
 const socket = io(`${process.env.NEXT_PUBLIC_API_URL}`)
 
@@ -31,43 +32,69 @@ export default function Page () {
   const messagesRef = useRef(messages)
   const selectedPhoneRef = useRef(selectedPhone)
 
+  const { data: session } = useSession()
+
   const getMessages = async () => {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp`)
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setPhones(response.data)
     const phones = response.data.filter((phone: any) => phone.agent)
     setPhonesFilter(phones)
   }
   
   useEffect(() => {
-    getMessages()
-  }, [])
+    if (session?.tenantId) {
+      getMessages()
+    }
+  }, [session?.tenantId])
 
   const getShopLogin = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setShopLogin(res.data)
   }
 
   useEffect(() => {
-    getShopLogin()
-  }, [])
+    if (session?.tenantId) {
+      getShopLogin()
+    }
+  }, [session?.tenantId])
 
   const getTemplates = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp-templates`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp-templates`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setTemplates(res.data.data)
   }
 
   useEffect(() => {
-    getTemplates()
-  }, [])
+    if (session?.tenantId) {
+      getTemplates()
+    }
+  }, [session?.tenantId])
 
   const getChatTags = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chat-tags`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chat-tags`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setChatTags(res.data)
   }
 
   useEffect(() => {
-    getChatTags()
-  }, [])
+    if (session?.tenantId) {
+      getChatTags()
+    }
+  }, [session?.tenantId])
 
   useEffect(() => {
     const interval = setInterval(getMessages, 5000)
@@ -116,7 +143,11 @@ export default function Page () {
             <ButtonRed action={async () => {
               if (!loadingDelete) {
                 setLoadingDelete(true)
-                await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp-template/${template.name}`)
+                await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp-template/${template.name}`, {
+                  headers: {
+                    'x-tenant-id': session?.tenantId
+                  }
+                })
                 getTemplates()
                 setPopup3({ ...popup2, view: 'flex', opacity: 'opacity-0' })
                 setTimeout(() => {
@@ -373,14 +404,22 @@ export default function Page () {
             if (!loading) {
               setLoading(true)
               if (template.id) {
-                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/edit-template`, template)
+                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/edit-template`, template, {
+                  headers: {
+                    'x-tenant-id': session?.tenantId
+                  }
+                })
                 getTemplates()
                 setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
                 setTimeout(() => {
                   setPopup({ ...popup, view: 'hidden', opacity: 'opacity-0' })
                 }, 200)
               } else {
-                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp-template`, template)
+                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp-template`, template, {
+                  headers: {
+                    'x-tenant-id': session?.tenantId
+                  }
+                })
                 getTemplates()
                 setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
                 setTimeout(() => {
@@ -421,10 +460,18 @@ export default function Page () {
                               const createdAt = new Date(phone.createdAt!)
                               return (
                                 <button onClick={async () => {
-                                  const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp/${phone.phone}`)
+                                  const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp/${phone.phone}`, {
+                                    headers: {
+                                      'x-tenant-id': session?.tenantId
+                                    }
+                                  })
                                   setMessages(response.data)
                                   setSelectedPhone(phone.phone)
-                                  await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp/${phone.phone}`)
+                                  await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp/${phone.phone}`, {}, {
+                                    headers: {
+                                      'x-tenant-id': session?.tenantId
+                                    }
+                                  })
                                   getMessages()
                                 }} key={phone.phone} className={`${phone.phone === selectedPhone ? 'bg-main/50' : 'bg-white dark:bg-neutral-700/60'} bg-white w-full flex gap-2 border border-border transition-colors duration-150 justify-between text-left h-24 p-2 rounded-xl dark:border-neutral-700 dark:bg-neutral-700/60 hover:bg-neutral-200/40 dark:hover:bg-neutral-700`}>
                                   <div className='mt-auto mb-auto'>
@@ -447,10 +494,18 @@ export default function Page () {
                               const createdAt = new Date(phone.createdAt!)
                               return (
                                 <button onClick={async () => {
-                                  const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp/${phone.phone}`)
+                                  const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp/${phone.phone}`, {
+                                    headers: {
+                                      'x-tenant-id': session?.tenantId
+                                    }
+                                  })
                                   setMessages(response.data)
                                   setSelectedPhone(phone.phone)
-                                  await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp/${phone.phone}`)
+                                  await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp/${phone.phone}`, {}, {
+                                    headers: {
+                                      'x-tenant-id': session?.tenantId
+                                    }
+                                  })
                                   getMessages()
                                 }} key={phone.phone} className={`${phone.phone === selectedPhone ? 'bg-main/50' : 'bg-white dark:bg-neutral-700/60'} bg-white w-full flex gap-2 border border-border transition-colors duration-150 justify-between text-left h-24 p-2 rounded-xl dark:bg-neutral-700/60 hover:bg-neutral-200/40 dark:hover:bg-neutral-700 dark:obrder-neutral-700`}>
                                   <div className='mt-auto mb-auto'>
@@ -484,7 +539,11 @@ export default function Page () {
                     <div className='flex gap-4 border-b px-4 py-6'>
                       <p className='my-auto'>{selectedPhone}</p>
                       <select onChange={async (e: any) => {
-                        await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp-tag/${selectedPhone}`, { tag: e.target.value })
+                        await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp-tag/${selectedPhone}`, { tag: e.target.value }, {
+                          headers: {
+                            'x-tenant-id': session?.tenantId
+                          }
+                        })
                         getMessages()
                       }} className='px-2 py-1 rounded-lg' style={{ backgroundColor: chatTags?.find((chatTag: any) => chatTag.tag === phones?.find(phone => selectedPhone === phone.phone)?.tag)?.color, color: '#ffffff' }} value={chatTags?.find((chatTag: any) => chatTag.tag === phones?.find(phone => selectedPhone === phone.phone)?.tag)?.tag}>
                         {
@@ -536,7 +595,11 @@ export default function Page () {
                 setMessages(messages.concat({phone: selectedPhone, response: newMessage, agent: true, view: false, createdAt: new Date()}))
                 const newMe = newMessage
                 setNewMessage('')
-                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp`, {phone: selectedPhone, response: newMe, agent: true, view: false})
+                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp`, {phone: selectedPhone, response: newMe, agent: true, view: false}, {
+                  headers: {
+                    'x-tenant-id': session?.tenantId
+                  }
+                })
                 getMessages()
               }} className='flex gap-2 p-4'>
                 <input onChange={(e: any) => setNewMessage(e.target.value)} value={newMessage} type='text' placeholder='Escribe tu mensaje' className='border border-black/5 px-3 py-2 text-sm w-full rounded-xl dark:border-neutral-600 focus:outline-none focus:border-main focus:ring-1 focus:ring-main hover:border-main/80' />

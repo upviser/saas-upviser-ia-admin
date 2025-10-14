@@ -3,6 +3,7 @@ import { Nav } from '@/components/configuration'
 import { Button, ButtonSubmit, Card, Input, Select, Spinner } from '@/components/ui'
 import { IStoreData } from '@/interfaces'
 import axios from 'axios'
+import { useSession } from 'next-auth/react'
 import Head from 'next/head'
 import { useRouter } from 'next/navigation'
 import React, { ChangeEvent, useEffect, useState } from 'react'
@@ -77,8 +78,14 @@ export default function Page () {
 
   const router = useRouter()
 
+  const { data: session } = useSession()
+
   const getStoreData = async () => {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/store-data`)
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/store-data`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     if (response.data) {
       setStoreData(response.data)
     }
@@ -93,7 +100,11 @@ export default function Page () {
   }
 
   const requestRegions = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chilexpress`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chilexpress`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setChile(res.data)
     const request = await axios.get('https://testservices.wschilexpress.com/georeference/api/v1.0/regions', {
       headers: {
@@ -117,7 +128,8 @@ export default function Page () {
       const { data } = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/image`, formData, {
         headers: {
           accept: 'application/json',
-          'Accept-Language': 'en-US,en;q=0.8'
+          'Accept-Language': 'en-US,en;q=0.8',
+          'x-tenant-id': session?.tenantId
         }
       })
       setStoreData({...storeData, logo: data})
@@ -134,7 +146,8 @@ export default function Page () {
       const { data } = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/image`, formData, {
         headers: {
           accept: 'application/json',
-          'Accept-Language': 'en-US,en;q=0.8'
+          'Accept-Language': 'en-US,en;q=0.8',
+          'x-tenant-id': session?.tenantId
         }
       })
       setStoreData({...storeData, logoWhite: data})
@@ -151,7 +164,8 @@ export default function Page () {
       const { data } = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/image`, formData, {
         headers: {
           accept: 'application/json',
-          'Accept-Language': 'en-US,en;q=0.8'
+          'Accept-Language': 'en-US,en;q=0.8',
+          'x-tenant-id': session?.tenantId
         }
       })
       setStoreData({...storeData, favicon: data})
@@ -166,9 +180,17 @@ export default function Page () {
       setError('')
       if (storeData.email !== '') {
         if (storeData._id) {
-          await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/store-data/${storeData._id}`, storeData)
+          await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/store-data/${storeData._id}`, storeData, {
+            headers: {
+              'x-tenant-id': session?.tenantId
+            }
+          })
         } else {
-          await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/store-data`, storeData)
+          await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/store-data`, storeData, {
+            headers: {
+              'x-tenant-id': session?.tenantId
+            }
+          })
         }
       } else {
         setError('Debes llenar al menos el dato de email')

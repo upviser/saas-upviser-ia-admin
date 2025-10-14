@@ -29,41 +29,65 @@ export default function Page() {
 
   const getServices = async () => {
     setLoading(true)
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/services`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/services`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setServices(res.data)
     setLoading(false)
   }
 
   useEffect(() => {
-    getServices()
-  }, [])
+    if (session?.tenantId) {
+      getServices()
+    }
+  }, [session?.tenantId])
 
   const getTags = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-tag`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-tag`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setTags(res.data)
   }
 
   useEffect(() => {
-    getTags()
-  }, [])
+    if (session?.tenantId) {
+      getTags()
+    }
+  }, [session?.tenantId])
 
   const getDesign = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/design`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/design`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setDesign(res.data)
   }
 
   useEffect(() => {
-    getDesign()
-  }, [])
+    if (session?.tenantId) {
+      getDesign()
+    }
+  }, [session?.tenantId])
 
   const getCalls = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/calls`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/calls`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setCalls(res.data)
   }
 
   useEffect(() => {
-    getCalls()
-  }, [])
+    if (session?.tenantId) {
+      getCalls()
+    }
+  }, [session?.tenantId])
 
   return (
     <>

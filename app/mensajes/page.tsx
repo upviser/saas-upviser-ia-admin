@@ -6,6 +6,7 @@ import Head from 'next/head'
 import React, { useEffect, useRef, useState } from 'react'
 import { FaTag } from 'react-icons/fa'
 import io from 'socket.io-client'
+import { useSession } from 'next-auth/react'
 
 const socket = io(`${process.env.NEXT_PUBLIC_API_URL}/`, {
   transports: ['websocket']
@@ -26,34 +27,54 @@ export default function Page () {
   const messagesRef = useRef(messages)
   const containerRef = useRef<HTMLDivElement>(null)
 
+  const { data: session } = useSession()
+
   const getChats = async () => {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chat`)
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chat`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setChatIds(response.data)
     const chatFilter = response.data.filter((chat: any) => chat.agent)
     setChatIdsFilter(chatFilter)
   }
 
   useEffect(() => {
-    getChats()
-  }, [])
+    if (session?.tenantId) {
+      getChats()
+    }
+  }, [session?.tenantId])
 
   const getShopLogin = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setShopLogin(res.data)
   }
 
   useEffect(() => {
-    getShopLogin()
-  }, [])
+    if (session?.tenantId) {
+      getShopLogin()
+    }
+  }, [session?.tenantId])
 
   const getChatTags = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chat-tags`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chat-tags`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setChatTags(res.data)
   }
 
   useEffect(() => {
-    getChatTags()
-  }, [])
+    if (session?.tenantId) {
+      getChatTags()
+    }
+  }, [session?.tenantId])
 
   useEffect(() => {
     chatIdRef.current = chatId

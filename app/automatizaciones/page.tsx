@@ -23,29 +23,45 @@ export default function Page () {
 
   const getAutomatizations = async () => {
     setLoading(true)
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/automatizations`)
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/automatizations`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setAutomatizations(response.data)
     setLoading(false)
   }
 
   useEffect(() => {
-    getAutomatizations()
-  }, [])
+    if (session?.tenantId) {
+      getAutomatizations()
+    }
+  }, [session?.tenantId])
 
   const getShopLogin = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setShopLogin(res.data)
   }
 
   useEffect(() => {
-    getShopLogin()
-  }, [])
+    if (session?.tenantId) {
+      getShopLogin()
+    }
+  }, [session?.tenantId])
 
   const deleteAutomatization= async (e: any) => {
     e.preventDefault()
     if (!loadingDelete) {
       setLoadingDelete(true)
-      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/automatization/${automatizationSelect._id}`)
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/automatization/${automatizationSelect._id}`, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
       getAutomatizations()
       setTimeout(() => {

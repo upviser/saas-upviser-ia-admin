@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { BiArrowBack } from 'react-icons/bi'
 import { SlArrowDown } from 'react-icons/sl'
+import { useSession } from 'next-auth/react'
 
 export default function Page ({ params }: { params: { slug: string } }) {
 
@@ -43,27 +44,44 @@ export default function Page ({ params }: { params: { slug: string } }) {
   const [clientSells, setClientSells] = useState<ISell[]>()
 
   const router = useRouter()
+  const { data: session } = useSession()
 
   useEffect(() => {
     const getClientData = async () => {
       try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-email/${params.slug}`);
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-email/${params.slug}`, {
+          headers: {
+            'x-tenant-id': session?.tenantId
+          }
+        });
         setClientData(response.data);
 
-        const sells = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/sells-client/${params.slug}`)
+        const sells = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/sells-client/${params.slug}`, {
+          headers: {
+            'x-tenant-id': session?.tenantId
+          }
+        })
         setClientSells(sells.data)
         
         // Usar Promise.all para esperar que todas las llamadas se completen
         const funnelsFind = await Promise.all(
           response.data.funnels.map(async (funnel: any) => {
-            const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/funnel/${funnel.funnel}`);
+            const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/funnel/${funnel.funnel}`, {
+              headers: {
+                'x-tenant-id': session?.tenantId
+              }
+            });
             return res.data;
           })
         );
         
         setFunnels(funnelsFind);
   
-        const respon = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/services`);
+        const respon = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/services`, {
+          headers: {
+            'x-tenant-id': session?.tenantId
+          }
+        });
         const filter = respon.data.filter((service: IService) => 
           response.data.services.some((serv: any) => serv.service === service._id)
         );
@@ -73,79 +91,127 @@ export default function Page ({ params }: { params: { slug: string } }) {
       }
     };
   
-    getClientData();
-  }, [params.slug]);
+    if (session?.tenantId) {
+      getClientData();
+    }
+  }, [params.slug, session?.tenantId]);
 
   const getClientTags = async () => {
-    const {data} = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-tag`)
+    const {data} = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-tag`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setTags(data)
   }
 
   useEffect(() => {
-    getClientTags()
-  }, [])
+    if (session?.tenantId) {
+      getClientTags()
+    }
+  }, [session?.tenantId])
 
   const getMeetings = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/meetings/${params.slug}`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/meetings/${params.slug}`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setMeetings(res.data)
   }
 
   useEffect(() => {
-    getMeetings()
-  }, [])
+    if (session?.tenantId) {
+      getMeetings()
+    }
+  }, [session?.tenantId])
 
   const getData = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-data`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-data`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setData(res.data)
   }
 
   useEffect(() => {
-    getData()
-  }, [])
+    if (session?.tenantId) {
+      getData()
+    }
+  }, [session?.tenantId])
 
   const deleteClient = async (e: any) => {
     if (!loading) {
       setLoading(true)
-      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/client/${clientData?._id}`)
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/client/${clientData?._id}`, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       router.push('/clientes')
     }
   }
 
   const getLeads = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/leads`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/leads`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setLeads(res.data)
   }
 
   useEffect(() => {
-    getLeads()
-  }, [])
+    if (session?.tenantId) {
+      getLeads()
+    }
+  }, [session?.tenantId])
 
   const getForms = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/forms`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/forms`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setForms(res.data)
   }
 
   useEffect(() => {
-    getForms()
-  }, [])
+    if (session?.tenantId) {
+      getForms()
+    }
+  }, [session?.tenantId])
 
   const getContacts = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/contact`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/contact`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setContacts(res.data)
   }
 
   useEffect(() => {
-    getContacts()
-  }, [])
+    if (session?.tenantId) {
+      getContacts()
+    }
+  }, [session?.tenantId])
 
   const getCalls = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/calls`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/calls`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setCalls(res.data)
   }
 
   useEffect(() => {
-    getCalls()
-  }, [])
+    if (session?.tenantId) {
+      getCalls()
+    }
+  }, [session?.tenantId])
 
   return (
     <>

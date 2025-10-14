@@ -24,29 +24,45 @@ export default function Page () {
 
   const getCampaigns = async () => {
     setLoading(true)
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/campaigns`)
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/campaigns`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setCampaigns(response.data)
     setLoading(false)
   }
 
   useEffect(() => {
-    getCampaigns()
-  }, [])
+    if (session?.tenantId) {
+      getCampaigns()
+    }
+  }, [session?.tenantId])
 
   const getShopLogin = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setShopLogin(res.data)
   }
 
   useEffect(() => {
-    getShopLogin()
-  }, [])
+    if (session?.tenantId) {
+      getShopLogin()
+    }
+  }, [session?.tenantId])
 
   const deleteCampaign = async (e: any) => {
     e.preventDefault()
     if (!loadingDelete) {
       setLoadingDelete(true)
-      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/campaign/${campaignSelect._id}`)
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/campaign/${campaignSelect._id}`, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
       getCampaigns()
       setTimeout(() => {

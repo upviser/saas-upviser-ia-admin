@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { BiArrowBack } from 'react-icons/bi'
+import { useSession } from 'next-auth/react'
 
 export default function Page ({ params }: { params: { slug: string } }) {
 
@@ -23,76 +24,123 @@ export default function Page ({ params }: { params: { slug: string } }) {
   const [services, setServices] = useState<IService[]>()
 
   const router = useRouter()
+  const { data: session } = useSession()
 
   useEffect(() => {
     const getCampaign = async () => {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/campaign/${params.slug}`)
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/campaign/${params.slug}`, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       setEmail(response.data)
     }
 
-    getCampaign()
-  }, [params.slug])
+    if (session?.tenantId) {
+      getCampaign()
+    }
+  }, [params.slug, session?.tenantId])
 
   useEffect(() => {
     const getStoreData = async () => {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/store-data`)
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/store-data`, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       if (response.data) {
         setStoreData(response.data)
       }
     }
 
-    getStoreData()
-  }, [])
+    if (session?.tenantId) {
+      getStoreData()
+    }
+  }, [session?.tenantId])
 
   useEffect(() => {
     const getClientTags = async () => {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-tag`)
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-tag`, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       setClientTags(response.data)
     }
 
-    getClientTags()
-  }, [])
+    if (session?.tenantId) {
+      getClientTags()
+    }
+  }, [session?.tenantId])
 
   const getClientData = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-data`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-data`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setClientData(res.data)
   }
 
   useEffect(() => {
-    getClientData()
-  }, [])
+    if (session?.tenantId) {
+      getClientData()
+    }
+  }, [session?.tenantId])
 
   const getDomain = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/domain`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/domain`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setDomain(res.data)
   }
 
   useEffect(() => {
-    getDomain()
-  }, [])
+    if (session?.tenantId) {
+      getDomain()
+    }
+  }, [session?.tenantId])
 
   const getCalls = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/calls`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/calls`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setCalls(res.data)
   }
 
   useEffect(() => {
-    getCalls()
-  }, [])
+    if (session?.tenantId) {
+      getCalls()
+    }
+  }, [session?.tenantId])
 
   const getServices = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/services`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/services`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setServices(res.data)
   }
 
   useEffect(() => {
-    getServices()
-  }, [])
+    if (session?.tenantId) {
+      getServices()
+    }
+  }, [session?.tenantId])
 
   const submit = async () => {
     if (!loading) {
       setLoading(true)
-      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/campaign/${email?._id}`, email)
+      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/campaign/${email?._id}`, email, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       router.push('/campanas')
     }
   }

@@ -28,22 +28,34 @@ export default function AvaliableCallsPage () {
   const popupRef = useRef<HTMLFormElement | null>(null);
 
   const getCaledars = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/calendar`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/calendar`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setCalendars(res.data)
   }
 
   useEffect(() => {
-    getCaledars()
-  }, [])
+    if (session?.tenantId) {
+      getCaledars()
+    }
+  }, [session?.tenantId])
 
   const getShopLogin = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setShopLogin(res.data)
   }
 
   useEffect(() => {
-    getShopLogin()
-  }, [])
+    if (session?.tenantId) {
+      getShopLogin()
+    }
+  }, [session?.tenantId])
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -63,7 +75,11 @@ export default function AvaliableCallsPage () {
 
   const handleSubmit = async () => {
     setSubmitLoading(true)
-    await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/calendar`, { ...calendars.find((calendar: any) => calendar._id === selectedCalendar), dates: availableDates })
+    await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/calendar`, { ...calendars.find((calendar: any) => calendar._id === selectedCalendar), dates: availableDates }, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     router.push('/reuniones')
   }
 

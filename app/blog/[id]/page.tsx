@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { BiArrowBack } from 'react-icons/bi'
+import { useSession } from 'next-auth/react'
 
 export default function Page ({ params }: { params: { id: string } }) {
 
@@ -24,21 +25,32 @@ export default function Page ({ params }: { params: { id: string } }) {
   const [submitLoading, setSubmitLoading] = useState(false)
   const [content, setContent] = useState('')
   const router = useRouter()
+  const { data: session } = useSession()
 
   useEffect(() => {
     const getPost = async () => {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/post/${params.id}`)
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/post/${params.id}`, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       setContentData(res.data)
       setContent(res.data.content)
     }
 
-    getPost()
-  }, [params.id])
+    if (session?.tenantId) {
+      getPost()
+    }
+  }, [params.id, session?.tenantId])
 
   const handleSubmit = async () => {
     if (!submitLoading) {
       setSubmitLoading(true)
-      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/post/${contentData._id}`, contentData)
+      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/post/${contentData._id}`, contentData, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       router.push('/blog')
     }
   }

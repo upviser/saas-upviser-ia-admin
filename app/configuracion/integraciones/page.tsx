@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import { randomBytes } from 'crypto'
 import jwt from 'jsonwebtoken'
+import { useSession } from 'next-auth/react'
 
 declare global {
   interface Window {
@@ -43,17 +44,24 @@ export default function Page () {
   const [loginCode, setLoginCode] = useState(null)
 
   const router = useRouter()
+  const { data: session } = useSession()
 
   const getIntegrations = async () => {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/integrations`)
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/integrations`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     if (response.data) {
       setIntegrations(response.data)
     }
   }
 
   useEffect(() => {
-    getIntegrations()
-  }, [])
+    if (session?.tenantId) {
+      getIntegrations()
+    }
+  }, [session?.tenantId])
 
   const getUser = async () => {
     const response = await axios.get(`${process.env.NEXT_PUBLIC_MAIN_API_URL}/user-api/${process.env.NEXT_PUBLIC_API_URL}`)
@@ -161,7 +169,11 @@ export default function Page () {
 
       const userToken = response.authResponse.accessToken
 
-      const resp = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/messenger-token`, { userToken })
+      const resp = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/messenger-token`, { userToken }, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       if (resp.data.success) {
         getIntegrations()
       } else {
@@ -176,7 +188,11 @@ export default function Page () {
     if (!loading) {
       setLoading(true)
       setError('')
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/integrations`, integrations)
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/integrations`, integrations, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       setLoading(false)
     }
   }
@@ -238,7 +254,11 @@ export default function Page () {
                 {
                   (integrations.idPhone && integrations.idPhone !== '') && (integrations.whatsappToken && integrations.whatsappToken !== '')
                     ? fbReady ? <Button action={async () => {
-                      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/delete-whatsapp`)
+                      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/delete-whatsapp`, {
+                        headers: {
+                          'x-tenant-id': session?.tenantId
+                        }
+                      })
                       getIntegrations()
                     }}>Desconectar Whatsapp</Button> : ''
                     : fbReady ? <Button action={handleConnect}>Conectar Whatsapp</Button> : ''
@@ -254,7 +274,11 @@ export default function Page () {
                 {
                   (integrations.messengerToken && integrations.messengerToken !== '') && (integrations.idPage && integrations.idPage !== '')
                     ? fbReady ? <Button action={async () => {
-                      await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/disconnect-facebook`)
+                      await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/disconnect-facebook`, {
+                        headers: {
+                          'x-tenant-id': session?.tenantId
+                        }
+                      })
                       getIntegrations()
                     }}>Desconectar Facebook</Button> : ''
                     : fbReady ? <Button action={handleConnectFacebook}>Conectar Facebook</Button> : ''
@@ -270,7 +294,11 @@ export default function Page () {
                 {
                   integrations.idInstagram && integrations.idInstagram !== ''
                     ? <Button action={async () => {
-                      await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/disconnect-instagram`)
+                      await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/disconnect-instagram`, {
+                        headers: {
+                          'x-tenant-id': session?.tenantId
+                        }
+                      })
                       getIntegrations()
                     }}>Desconectar Instagram</Button>
                     : !connecting
@@ -303,7 +331,11 @@ export default function Page () {
                 {
                   integrations.zoomToken && integrations.zoomToken !== '' && integrations.zoomAccountId && integrations.zoomAccountId !== ''
                     ? <Button action={async () => {
-                      await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/remove-zoom`)
+                      await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/remove-zoom`, {
+                        headers: {
+                          'x-tenant-id': session?.tenantId
+                        }
+                      })
                       getIntegrations()
                     }}>Desconectar Zoom</Button>
                     : (

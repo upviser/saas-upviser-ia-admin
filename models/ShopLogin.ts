@@ -1,8 +1,23 @@
 import mongoose from 'mongoose'
 
 const ShopLoginSchema = new mongoose.Schema({
+    tenantId: { type: String },
+    name: { type: String },
     email: { type: String, required: true },
-    password: { type: String, required: true, select: false }
+    password: { type: String, required: true, select: false },
+    type: { type: String },
+    permissions: [{ type: String }],
+    plan: { type: String },
+    textAI: { type: Number },
+    imagesAI: { type: Number },
+    videosAI: { type: Number },
+    conversationsAI: { type: Number },
+    emails: { type: Number },
+    textAIAdd: { type: Number },
+    imagesAIAdd: { type: Number },
+    videosAIAdd: { type: Number },
+    conversationsAIAdd: { type: Number },
+    emailsAdd: { type: Number }
 }, {
     timestamps: true
 })

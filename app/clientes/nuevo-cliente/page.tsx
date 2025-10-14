@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { BiArrowBack } from 'react-icons/bi'
+import { useSession } from 'next-auth/react'
 
 export default function Page () {
 
@@ -21,17 +22,24 @@ export default function Page () {
   const [error, setError] = useState('')
 
   const router = useRouter()
+  const { data: session } = useSession()
 
   const initialEmail = ''
 
   const getClientTags = async () => {
-    const tags = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-tag`)
+    const tags = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-tag`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setClientTags(tags.data)
   }
 
   useEffect(() => {
-    getClientTags()
-  }, [])
+    if (session?.tenantId) {
+      getClientTags()
+    }
+  }, [session?.tenantId])
 
   const inputChange = (e: any) => {
     setClientData({...clientData, [e.target.name]: e.target.value})
@@ -44,7 +52,11 @@ export default function Page () {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
       if (clientData.email !== '') {
         if (emailRegex.test(clientData.email)) {
-          await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/clients`, clientData)
+          await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/clients`, clientData, {
+            headers: {
+              'x-tenant-id': session?.tenantId
+            }
+          })
           router.push('/clientes')
         } else {
           setError('Debes ingresar un email valido')

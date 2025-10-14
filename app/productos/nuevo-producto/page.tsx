@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { BiArrowBack } from 'react-icons/bi'
+import { useSession } from 'next-auth/react'
 
 export default function Page () {
 
@@ -49,26 +50,39 @@ export default function Page () {
   const [error, setError] = useState('')
 
   const router = useRouter()
+  const { data: session } = useSession()
 
   const getCategories = async () => {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/categories`)
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/categories`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     if (response.data) {
       setCategories(response.data)
     }
   }
 
   useEffect(() => {
-    getCategories()
-  }, [])
+    if (session?.tenantId) {
+      getCategories()
+    }
+  }, [session?.tenantId])
 
   const getShopLogin = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setShopLogin(res.data)
   }
 
   useEffect(() => {
-    getShopLogin()
-  }, [])
+    if (session?.tenantId) {
+      getShopLogin()
+    }
+  }, [session?.tenantId])
 
   const handleSubmit = async () => {
     if (!submitLoading) {
@@ -89,7 +103,11 @@ export default function Page () {
         setSubmitLoading(false)
         return
       }
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/products`, { name: information?.name, description: information?.description, category: information?.category, price: information?.price, beforePrice: information?.beforePrice, images: information?.images, stock: information?.stock, slug: information?.slug, state: information?.state, tags: information?.tags, titleSeo: information?.titleSeo, descriptionSeo: information?.descriptionSeo, variations: information?.variations, productsOffer: productsOffer, cost: information?.cost, quantityOffers: quantityOffers, informations: information.informations, dimentions: information.dimentions })
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/products`, { name: information?.name, description: information?.description, category: information?.category, price: information?.price, beforePrice: information?.beforePrice, images: information?.images, stock: information?.stock, slug: information?.slug, state: information?.state, tags: information?.tags, titleSeo: information?.titleSeo, descriptionSeo: information?.descriptionSeo, variations: information?.variations, productsOffer: productsOffer, cost: information?.cost, quantityOffers: quantityOffers, informations: information.informations, dimentions: information.dimentions }, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       router.push('/productos')
     }
   }

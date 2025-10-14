@@ -7,10 +7,12 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { AiOutlineClose } from 'react-icons/ai'
+import { useSession } from 'next-auth/react'
 
 export default function Page () {
 
   const router = useRouter()
+  const { data: session } = useSession()
 
   const [popup, setPopup] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
   const [codeSelect, setCodeSelect] = useState({
@@ -23,20 +25,30 @@ export default function Page () {
 
   const getCodes = async () => {
     setLoadingCodes(true)
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/promotional-code`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/promotional-code`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setCodes(res.data)
     setLoadingCodes(false)
   }
 
   useEffect(() => {
-    getCodes()
-  }, [])
+    if (session?.tenantId) {
+      getCodes()
+    }
+  }, [session?.tenantId])
 
   const deleteCode = async (e: any) => {
     e.preventDefault()
     if (!loading) {
       setLoading(true)
-      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/promotional-code/${codeSelect._id}`)
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/promotional-code/${codeSelect._id}`, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
       getCodes()
       setTimeout(() => {

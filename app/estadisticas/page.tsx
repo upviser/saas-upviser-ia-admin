@@ -6,6 +6,7 @@ import { NumberFormat } from '@/utils'
 import axios from 'axios'
 import Head from 'next/head'
 import React, { ChangeEvent, useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
 
 export default function Page () {
 
@@ -21,42 +22,68 @@ export default function Page () {
   const [services, setServices] = useState<IService[]>([])
   const [clients, setClients] = useState<IClient[]>([])
 
+  const { data: session } = useSession()
+
   const getStadistics = async () => {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/stadistics`)
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/stadistics`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setStadistics(response.data)
     setLoading(false)
   }
 
   useEffect(() => {
-    getStadistics()
-  }, [])
+    if (session?.tenantId) {
+      getStadistics()
+    }
+  }, [session?.tenantId])
 
   const getFunnels = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/funnels`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/funnels`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setFunnels(res.data)
   }
 
   useEffect(() => {
-    getFunnels()
-  }, [])
+    if (session?.tenantId) {
+      getFunnels()
+    }
+  }, [session?.tenantId])
 
   const getServices = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/services`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/services`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setServices(res.data)
   }
 
   useEffect(() => {
-    getServices()
-  }, [])
+    if (session?.tenantId) {
+      getServices()
+    }
+  }, [session?.tenantId])
 
   const getClients = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/clients`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/clients`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setClients(res.data)
   }
 
   useEffect(() => {
-    getClients()
-  }, [])
+    if (session?.tenantId) {
+      getClients()
+    }
+  }, [session?.tenantId])
 
   const inputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFilter({ ...filter, [e.target.name]: e.target.value })

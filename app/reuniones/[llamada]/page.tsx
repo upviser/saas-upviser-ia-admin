@@ -7,6 +7,7 @@ import axios from "axios"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { BiArrowBack } from "react-icons/bi"
+import { useSession } from 'next-auth/react'
 
 export default function Page ({ params }: { params: { llamada: string } }) {
 
@@ -18,11 +19,16 @@ export default function Page ({ params }: { params: { llamada: string } }) {
   const [scheduled, setScheduled] = useState(false)
   const [clientData, setClientData] = useState<IClientData[]>([])
   const [calls, setCalls] = useState<ICall[]>([])
+  const { data: session } = useSession()
 
   useEffect(() => {
     const getMeeting = async () => {
       setLoading(true)
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/meeting/${params.llamada}`)
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/meeting/${params.llamada}`, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       setMeeting(res.data)
       const fechaLlamada = (new Date(res.data.date)).toLocaleDateString('es-ES', {
         weekday: 'long',
@@ -36,26 +42,40 @@ export default function Page ({ params }: { params: { llamada: string } }) {
       setLoading(false)
     }
 
-    getMeeting()
-  }, [scheduled])
+    if (session?.tenantId) {
+      getMeeting()
+    }
+  }, [scheduled, session?.tenantId])
 
   useEffect(() => {
     const getClientData = async () => {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-data`)
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-data`, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       setClientData(res.data)
     }
 
-    getClientData()
-  }, [])
+    if (session?.tenantId) {
+      getClientData()
+    }
+  }, [session?.tenantId])
 
   useEffect(() => {
     const getCalls = async () => {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/calls`)
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/calls`, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       setCalls(res.data)
     }
 
-    getCalls()
-  }, [])
+    if (session?.tenantId) {
+      getCalls()
+    }
+  }, [session?.tenantId])
 
   return (
     <>

@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { AiOutlineClose } from 'react-icons/ai'
 import axios from 'axios'
 import Image from 'next/image'
+import { useSession } from 'next-auth/react'
 
 export default function Page () {
 
@@ -21,32 +22,49 @@ export default function Page () {
   const [products, setProducts] = useState([])
 
   const router = useRouter()
+  const { data: session } = useSession()
 
   const getCategories = async () => {
     setLoadingCategories(true)
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/categories`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/categories`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setCategories(res.data)
     setLoadingCategories(false)
   }
 
   useEffect(() => {
-    getCategories()
-  }, [])
+    if (session?.tenantId) {
+      getCategories()
+    }
+  }, [session?.tenantId])
 
   const getProducts = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setProducts(res.data)
   }
 
   useEffect(() => {
-    getProducts()
-  }, [])
+    if (session?.tenantId) {
+      getProducts()
+    }
+  }, [session?.tenantId])
 
   const deleteCategory = async (e: any) => {
     e.preventDefault()
     if (!loading) {
       setLoading(true)
-      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/categories/${categorySelect._id}`)
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/categories/${categorySelect._id}`, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
       getCategories()
       setTimeout(() => {

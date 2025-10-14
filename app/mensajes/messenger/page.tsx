@@ -6,6 +6,7 @@ import Head from 'next/head'
 import React, { useEffect, useRef, useState } from 'react'
 import { FaTag } from 'react-icons/fa'
 import io from 'socket.io-client'
+import { useSession } from 'next-auth/react'
 
 const socket = io(`${process.env.NEXT_PUBLIC_API_URL}`)
 
@@ -24,34 +25,54 @@ export default function Page () {
   const messagesRef = useRef(messages)
   const selectedMessengerIdRef = useRef(selectedMessengerId)
 
+  const { data: session } = useSession()
+
   const getMessages = async () => {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/messenger`)
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/messenger`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setMessengerIds(response.data)
     const messengerFilter = response.data.filter((messenger: any) => messenger.agent)
     setMessengerIdsFilter(messengerFilter)
   }
 
   useEffect(() => {
-    getMessages()
-  }, [])
+    if (session?.tenantId) {
+      getMessages()
+    }
+  }, [session?.tenantId])
 
   const getShopLogin = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setShopLogin(res.data)
   }
 
   useEffect(() => {
-    getShopLogin()
-  }, [])
+    if (session?.tenantId) {
+      getShopLogin()
+    }
+  }, [session?.tenantId])
 
   const getChatTags = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chat-tags`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chat-tags`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setChatTags(res.data)
   }
 
   useEffect(() => {
-    getChatTags()
-  }, [])
+    if (session?.tenantId) {
+      getChatTags()
+    }
+  }, [session?.tenantId])
 
   useEffect(() => {
     const interval = setInterval(getMessages, 5000)
@@ -124,10 +145,18 @@ export default function Page () {
                               const createdAt = new Date(messenger.createdAt!)
                               return (
                                 <button onClick={async () => {
-                                  const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/messenger/${messenger.messengerId}`)
+                                  const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/messenger/${messenger.messengerId}`, {
+                                    headers: {
+                                      'x-tenant-id': session?.tenantId
+                                    }
+                                  })
                                   setMessages(response.data)
                                   setSelectedMessengerId(messenger.messengerId)
-                                  await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/messenger/${messenger.messengerId}`)
+                                  await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/messenger/${messenger.messengerId}`, {}, {
+                                    headers: {
+                                      'x-tenant-id': session?.tenantId
+                                    }
+                                  })
                                   getMessages()
                                 }} key={messenger.messengerId} className={`${messenger.messengerId === selectedMessengerId ? 'bg-main/50' : 'bg-white dark:bg-neutral-700/60'} w-full text-left transition-colors duration-150 border border-border h-24 p-2 flex gap-2 justify-between rounded-xl hover:bg-neutral-200/40 dark:hover:bg-neutral-700 dark:border-neutral-700`}>
                                   <div className='mt-auto mb-auto'>
@@ -150,10 +179,18 @@ export default function Page () {
                               const createdAt = new Date(messenger.createdAt!)
                               return (
                                 <button onClick={async () => {
-                                  const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/messenger/${messenger.messengerId}`)
+                                  const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/messenger/${messenger.messengerId}`, {
+                                    headers: {
+                                      'x-tenant-id': session?.tenantId
+                                    }
+                                  })
                                   setMessages(response.data)
                                   setSelectedMessengerId(messenger.messengerId)
-                                  await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/messenger/${messenger.messengerId}`)
+                                  await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/messenger/${messenger.messengerId}`, {}, {
+                                    headers: {
+                                      'x-tenant-id': session?.tenantId
+                                    }
+                                  })
                                   getMessages()
                                 }} key={messenger.messengerId} className={`${messenger.messengerId === selectedMessengerId ? 'bg-main/50' : 'bg-white dark:bg-neutral-700/60'} w-full text-left transition-colors duration-150 border border-border h-24 p-2 flex gap-2 justify-between rounded-xl hover:bg-neutral-200/40 dark:hover:bg-neutral-700 dark:border-neutral-700`}>
                                   <div className='mt-auto mb-auto'>
@@ -187,7 +224,11 @@ export default function Page () {
                     <div className='flex gap-4 border-b px-4 py-6'>
                       <p className='my-auto'>{selectedMessengerId}</p>
                       <select onChange={async (e: any) => {
-                        await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/messenger-tag/${selectedMessengerId}`, { tag: e.target.value })
+                        await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/messenger-tag/${selectedMessengerId}`, { tag: e.target.value }, {
+                          headers: {
+                            'x-tenant-id': session?.tenantId
+                          }
+                        })
                         getMessages()
                       }} className='px-2 py-1 rounded-lg' style={{ backgroundColor: chatTags?.find((chatTag: any) => chatTag.tag === messengerIds?.find(messengerId => selectedMessengerId === messengerId.messengerId)?.tag)?.color, color: '#ffffff' }} value={chatTags?.find((chatTag: any) => chatTag.tag === messengerIds?.find(messengerId => selectedMessengerId === messengerId.messengerId)?.tag)?.tag}>
                         {
@@ -239,7 +280,11 @@ export default function Page () {
                 setMessages(messages.concat({messengerId: selectedMessengerId, response: newMessage, agent: true, view: false, createdAt: new Date()}))
                 const newMe = newMessage
                 setNewMessage('')
-                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/messenger`, {messengerId: selectedMessengerId, response: newMe, agent: true, view: true})
+                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/messenger`, {messengerId: selectedMessengerId, response: newMe, agent: true, view: true}, {
+                  headers: {
+                    'x-tenant-id': session?.tenantId
+                  }
+                })
                 getMessages()
               }} className='flex gap-2 p-4'>
                 <input onChange={(e: any) => setNewMessage(e.target.value)} value={newMessage} type='text' placeholder='Escribe tu mensaje' className='border border-black/5 px-3 py-2 text-sm w-full rounded-xl dark:border-neutral-600 focus:outline-none focus:border-main focus:ring-1 focus:ring-main hover:border-main/80' />

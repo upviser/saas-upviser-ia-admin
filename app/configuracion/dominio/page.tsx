@@ -4,6 +4,7 @@ import { ButtonSubmit, Input, Table } from '@/components/ui'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import React, { ChangeEvent, useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
 
 export default function Page () {
 
@@ -13,9 +14,14 @@ export default function Page () {
   const [res, setRes] = useState<any>()
 
   const router = useRouter()
+  const { data: session } = useSession()
 
   const getDomain = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/domain`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/domain`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     if (res.data.domain && res.data.domain !== '') {
         setDomain(res.data)
         if (!res.data.domain.includes('upviser.cl')) {
@@ -25,14 +31,20 @@ export default function Page () {
   }
 
   useEffect(() => {
-    getDomain()
-  }, [])
+    if (session?.tenantId) {
+      getDomain()
+    }
+  }, [session?.tenantId])
 
   const handleSubmit = async () => {
     if (!loading) {
       setLoading(true)
       setError('')
-      const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/domain`, domain)
+      const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/domain`, domain, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       if (res.data.domain) {
         await axios.post(`${process.env.NEXT_PUBLIC_MAIN_API_URL}/user`, { api: process.env.NEXT_PUBLIC_API_URL, senderEmail: `${domain.email}@${domain.domain}` })
         setRes(res.data)

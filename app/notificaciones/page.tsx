@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import io from 'socket.io-client'
+import { useSession } from 'next-auth/react'
 
 const socket = io(`${process.env.NEXT_PUBLIC_API_URL}`, {
   transports: ['websocket']
@@ -17,19 +18,28 @@ export default function Page () {
   const [notifications, setNotifications] = useState<INotification[]>()
 
   const pathname = usePathname()
+  const { data: session } = useSession()
 
   const getNotifications = async () => {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/notifications`)
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/notifications`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setNotifications(response.data)
   }
 
   useEffect(() => {
-    getNotifications()
-  }, [])
+    if (session?.tenantId) {
+      getNotifications()
+    }
+  }, [session?.tenantId])
 
   useEffect(() => {
-    getNotifications()
-  }, [pathname])
+    if (session?.tenantId) {
+      getNotifications()
+    }
+  }, [pathname, session?.tenantId])
 
   return (
     <>
@@ -54,7 +64,11 @@ export default function Page () {
                       const createdAt = new Date(notification.createdAt!)
                       return (
                         <Link href={notification.url} key={notification._id} className='flex gap-4 justify-between transition-colors duration-150 hover:bg-neutral-100 p-2 rounded-md dark:hover:bg-neutral-700' onClick={async () => {
-                          await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/notifications/${notification._id}`)
+                          await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/notifications/${notification._id}`, {}, {
+                            headers: {
+                              'x-tenant-id': session?.tenantId
+                            }
+                          })
                           socket.emit('newNotification', true)
                           getNotifications()
                         }}>

@@ -50,7 +50,14 @@ export const Navbar: React.FC<PropsWithChildren> = ({ children }) => {
   const pathname = usePathname()
 
   useEffect(() => {
+    // Rutas públicas que no requieren autenticación
+    const publicRoutes = ['/registro', '/ingresar'];
+    
     if (session === null) {
+      if (publicRoutes.includes(pathname)) {
+        setLoading(false);
+        return;
+      }
       router.push('/ingresar');
     } else if (session !== undefined) {
       if (pathname === '/configuracion-usuario') return setLoading(false);

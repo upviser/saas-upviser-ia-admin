@@ -8,6 +8,7 @@ import { useEffect, useState } from "react"
 import { BiArrowBack } from "react-icons/bi"
 import Image from 'next/image'
 import { useRouter } from "next/navigation"
+import { useSession } from 'next-auth/react'
 
 export default function Page ({ params }: { params: { id: string } }) {
 
@@ -23,23 +24,44 @@ export default function Page ({ params }: { params: { id: string } }) {
   const [suscription, setSuscription] = useState<any>()
 
   const router = useRouter()
+  const { data: session } = useSession()
 
   const getPay = async () => {
     setLoading(true)
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/sells/${params.id}`)
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/sells/${params.id}`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     if (!response.data._id) {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/pay/${params.id}`)
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/pay/${params.id}`, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       setPay(res.data)
       if (res.data.service) {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/service/${res.data.service}`)
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/service/${res.data.service}`, {
+          headers: {
+            'x-tenant-id': session?.tenantId
+          }
+        })
         setService(response.data)
       }
       if (res.data.funnel) {
-        const response2 = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/funnel/${res.data.funnel}`)
+        const response2 = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/funnel/${res.data.funnel}`, {
+          headers: {
+            'x-tenant-id': session?.tenantId
+          }
+        })
         setFunnel(response2.data)
       }
       if (res.data.suscriptionId && res.data.suscriptionId !== '') {
-        const resp = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/payment`)
+        const resp = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/payment`, {
+          headers: {
+            'x-tenant-id': session?.tenantId
+          }
+        })
         const resp2 = await axios.get(`https://api.mercadopago.com/preapproval/${res.data.suscriptionId}`, {
           headers: {
             Authorization: `Bearer ${resp.data.suscription.accessToken}`
@@ -55,11 +77,17 @@ export default function Page ({ params }: { params: { id: string } }) {
   }
 
   useEffect(() => {
-    getPay()
-  }, [])
+    if (session?.tenantId) {
+      getPay()
+    }
+  }, [params.id, session?.tenantId])
 
   const getSell = async () => {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/sells/${params.id}`)
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/sells/${params.id}`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setSell(response.data)
   }
 
@@ -68,7 +96,11 @@ export default function Page ({ params }: { params: { id: string } }) {
     if (!loading) {
       setLoading(true)
       const updatedSell = {...sell, state: 'Cancelado'}
-      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/sells/${sell?._id}`, {sell: updatedSell})
+      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/sells/${sell?._id}`, {sell: updatedSell}, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       router.push('/ventas')
       setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
       getSell()

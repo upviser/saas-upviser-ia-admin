@@ -4,6 +4,7 @@ import axios from 'axios'
 import Head from 'next/head'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
 import { BiArrowBack } from 'react-icons/bi'
 import Image from 'next/image'
 import { Bloque1, Bloque2, Bloque3, Bloque4, Bloque5, Call, Contact, Layout, Lead1, PopupNewCall, PopupNewForm, PopupNewPage, PopupPagesBlocks, Slider, Subscription, Video, PopupDeleteFunnel, PopupDeletePage, Bloque7, Checkout, Calls, Lead2, Services, Plans, Faq, Blocks, Reviews, Form, Lead3, Table, SliderImages, Categories, Products, PageProduct, Categories2, SliderProducts, PopupDeleteService } from '@/components/design'
@@ -131,17 +132,29 @@ export default function Page () {
   const [checkoutPage, setCheckoutPage] = useState({ bgColor: '#ffffff', textColor: '#111111', detailsColor: '#ffffff' })
   const [design, setDesign] = useState<Design>()
 
+  const { data: session } = useSession()
+
   const getStoreData = async () => {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/store-data`)
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/store-data`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setStoreData(response.data)
   }
 
   useEffect(() => {
-    getStoreData()
-  }, [])
+    if (session?.tenantId) {
+      getStoreData()
+    }
+  }, [session?.tenantId])
 
   const getDesign = async () => {
-    const { data }: { data: Design } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/design`)
+    const { data }: { data: Design } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/design`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setDesign(data)
     setId(data._id)
     if (data.pages) {
@@ -161,91 +174,147 @@ export default function Page () {
   }
 
   useEffect(() => {
-    getDesign()
-  }, [])
+    if (session?.tenantId) {
+      getDesign()
+    }
+  }, [session?.tenantId])
 
   const getFunnels = async () => {
     setLoading(true)
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/funnels`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/funnels`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setFunnels(res.data)
     setLoading(false)
   }
 
   useEffect(() => {
-    getFunnels()
-  }, [])
+    if (session?.tenantId) {
+      getFunnels()
+    }
+  }, [session?.tenantId])
 
   const getCategories = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/categories`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/categories`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setCategories(res.data)
   }
 
   useEffect(() => {
-    getCategories()
-  }, [])
+    if (session?.tenantId) {
+      getCategories()
+    }
+  }, [session?.tenantId])
 
   const getProducts = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setProductsOrder(res.data)
   }
 
   useEffect(() => {
-    getProducts()
-  }, [])
+    if (session?.tenantId) {
+      getProducts()
+    }
+  }, [session?.tenantId])
 
   const getForms = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/forms`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/forms`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setForms(res.data)
   }
 
   useEffect(() => {
-    getForms()
-  }, [])
+    if (session?.tenantId) {
+      getForms()
+    }
+  }, [session?.tenantId])
 
   const getCalls = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/calls`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/calls`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setCalls(res.data)
   }
 
   useEffect(() => {
-    getCalls()
-  }, [])
+    if (session?.tenantId) {
+      getCalls()
+    }
+  }, [session?.tenantId])
 
   const getClientData = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-data`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-data`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setClientData(res.data)
   }
 
   useEffect(() => {
-    getClientData()
-  }, [])
+    if (session?.tenantId) {
+      getClientData()
+    }
+  }, [session?.tenantId])
 
   const getTags = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-tag`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-tag`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setTags(res.data)
   }
 
   useEffect(() => {
-    getTags()
-  }, [])
+    if (session?.tenantId) {
+      getTags()
+    }
+  }, [session?.tenantId])
 
   const getServices = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/services`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/services`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setServices(res.data)
   }
 
   useEffect(() => {
-    getServices()
-  }, [])
+    if (session?.tenantId) {
+      getServices()
+    }
+  }, [session?.tenantId])
 
   const getStyle = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/style`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/style`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setStyle(res.data)
   }
 
   useEffect(() => {
-    getStyle()
-  }, [])
+    if (session?.tenantId) {
+      getStyle()
+    }
+  }, [session?.tenantId])
 
   const getPage = () => {
     const currentUrl = window.location.href
@@ -272,7 +341,11 @@ export default function Page () {
     if (index < pages.length - 1) {
       const updatedPages = moveItem(index, index + 1)
       setPages(updatedPages)
-      axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { pages: updatedPages })
+      axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { pages: updatedPages }, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
     }
   };
 
@@ -280,7 +353,11 @@ export default function Page () {
     if (index > 0) {
       const updatedPages = moveItem(index, index - 1)
       setPages(updatedPages)
-      axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { pages: updatedPages })
+      axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { pages: updatedPages }, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
     }
   }
 
@@ -396,7 +473,11 @@ export default function Page () {
                                     const newPages = [...pages]
                                     newPages[index].header = e.target.checked
                                     setPages(newPages)
-                                    await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { pages: newPages })
+                                    await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { pages: newPages }, {
+                                      headers: {
+                                        'x-tenant-id': session?.tenantId
+                                      }
+                                    })
                                   }} />
                                   <p className='my-auto'>Menu</p>
                                 </div>
@@ -408,7 +489,11 @@ export default function Page () {
                                           const newPages = [...pages]
                                           newPages[index].button = e.target.checked
                                           setPages(newPages)
-                                          await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { pages: newPages })
+                                          await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { pages: newPages }, {
+                                      headers: {
+                                        'x-tenant-id': session?.tenantId
+                                      }
+                                    })
                                         }} />
                                         <p className='my-auto'>Boton</p>
                                       </div>
@@ -635,7 +720,8 @@ export default function Page () {
                             const { data } = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/image`, formData, {
                               headers: {
                                 accept: 'application/json',
-                                'Accept-Language': 'en-US,en;q=0.8'
+                                'Accept-Language': 'en-US,en;q=0.8',
+                                'x-tenant-id': session?.tenantId
                               }
                             })
                             const oldPages = [...pages]
@@ -893,7 +979,8 @@ export default function Page () {
                                   const { data } = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/image`, formData, {
                                     headers: {
                                       accept: 'application/json',
-                                      'Accept-Language': 'en-US,en;q=0.8'
+                                      'Accept-Language': 'en-US,en;q=0.8',
+                                      'x-tenant-id': session?.tenantId
                                     }
                                   })
                                   const oldFunnels = [...funnels!]
@@ -994,7 +1081,8 @@ export default function Page () {
                                   const { data } = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/image`, formData, {
                                     headers: {
                                       accept: 'application/json',
-                                      'Accept-Language': 'en-US,en;q=0.8'
+                                      'Accept-Language': 'en-US,en;q=0.8',
+                                      'x-tenant-id': session?.tenantId
                                     }
                                   })
                                   const oldServices = [...services]
@@ -1212,7 +1300,11 @@ export default function Page () {
                                       const newPages = [...pages]
                                       newPages[index].header = e.target.checked
                                       setPages(newPages)
-                                      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { pages: newPages })
+                                      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { pages: newPages }, {
+                                      headers: {
+                                        'x-tenant-id': session?.tenantId
+                                      }
+                                    })
                                     }} />
                                     <p className='my-auto text-sm'>Menu</p>
                                   </div>
@@ -1224,7 +1316,11 @@ export default function Page () {
                                             const newPages = [...pages]
                                             newPages[index].button = e.target.checked
                                             setPages(newPages)
-                                            await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { pages: newPages })
+                                            await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { pages: newPages }, {
+                                      headers: {
+                                        'x-tenant-id': session?.tenantId
+                                      }
+                                    })
                                           }} />
                                           <p className='my-auto text-sm'>Boton</p>
                                         </div>

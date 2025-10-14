@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
+import { useSession } from 'next-auth/react';
 
 export default function Page () {
 
@@ -17,15 +18,22 @@ export default function Page () {
   const [error, setError] = useState('')
 
   const router = useRouter()
+  const { data: session } = useSession()
 
   const getServices = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/services`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/services`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setServices(res.data)
   }
 
   useEffect(() => {
-    getServices()
-  }, [])
+    if (session?.tenantId) {
+      getServices()
+    }
+  }, [session?.tenantId])
 
   const sellSubmit = async () => {
     if (!loading) {
@@ -41,8 +49,16 @@ export default function Page () {
         setLoading(false)
         return
       }
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/pay`, pay)
-      await axios.post(`${process.env.ENXT_PUBLIC_API_URL}/client`, { ...pay, services: [{ service: pay.service, step: pay.stepService, plan: pay.plan, price: pay.price, payStatus: state }] })
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/pay`, pay, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
+      await axios.post(`${process.env.ENXT_PUBLIC_API_URL}/client`, { ...pay, services: [{ service: pay.service, step: pay.stepService, plan: pay.plan, price: pay.price, payStatus: state }] }, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       router.push('/ventas')
     }
   }

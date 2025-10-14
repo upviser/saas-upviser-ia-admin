@@ -5,6 +5,7 @@ import axios from 'axios'
 import Head from 'next/head'
 import { useRouter } from 'next/navigation'
 import React, { ChangeEvent, useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
 
 export default function Page () {
 
@@ -19,17 +20,24 @@ export default function Page () {
   const [error, setError] = useState('')
 
   const router = useRouter()
+  const { data: session } = useSession()
 
   const getPolitics = async () => {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/politics`)
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/politics`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     if (response.data) {
       setPolitics(response.data)
     }
   }
 
   useEffect(() => {
-    getPolitics()
-  }, [])
+    if (session?.tenantId) {
+      getPolitics()
+    }
+  }, [session?.tenantId])
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setPolitics({ ...politics, [e.target.name]: e.target.value })
@@ -40,7 +48,11 @@ export default function Page () {
       setLoading(true)
       setError('')
       if (politics.privacy !== '' || politics.terms !== '') {
-        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/politics`, politics)
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/politics`, politics, {
+          headers: {
+            'x-tenant-id': session?.tenantId
+          }
+        })
       } else {
         setError('Debes llenar al menos una politica')
       }

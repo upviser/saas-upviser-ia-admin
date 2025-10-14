@@ -10,5 +10,15 @@ declare module "next-auth" {
       permissions?: string[]
       plan: string
     };
+    tenantId: string;
+  }
+
+  interface User {
+    _id: string;
+    email: string;
+    tenantId: string;
+    type: string;
+    permissions?: string[];
+    plan: string;
   }
 }

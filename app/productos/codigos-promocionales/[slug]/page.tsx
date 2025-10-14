@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { BiArrowBack } from 'react-icons/bi'
+import { useSession } from 'next-auth/react'
 
 export default function Page ({ params }: { params: { slug: string } }) {
 
@@ -18,18 +19,25 @@ export default function Page ({ params }: { params: { slug: string } }) {
   const [loading, setLoading] = useState(false)
 
   const router = useRouter()
+  const { data: session } = useSession()
 
   useEffect(() => {
     const getPromotionalCode = async () => {
-      const {data} = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/promotional-code/${params.slug}`)
+      const {data} = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/promotional-code/${params.slug}`, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       setCodeInfo(data)
       if (data.minimumAmount !== 0) {
         setMinimunPrice(true)
       }
     }
 
-    getPromotionalCode()
-  }, [params.slug])
+    if (session?.tenantId) {
+      getPromotionalCode()
+    }
+  }, [params.slug, session?.tenantId])
 
   const inputChange = (e: any) => {
     setCodeInfo({...codeInfo, [e.target.name]: e.target.value})
@@ -39,7 +47,11 @@ export default function Page ({ params }: { params: { slug: string } }) {
     e.preventDefault()
     if (!submitLoading) {
       setSubmitLoading(true)
-      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/promotional-code/${params.slug}`, codeInfo)
+      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/promotional-code/${params.slug}`, codeInfo, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       router.push('/productos/codigos-promocionales')
       setSubmitLoading(false)
     }
@@ -49,7 +61,11 @@ export default function Page ({ params }: { params: { slug: string } }) {
     e.preventDefault()
     if (!loading) {
       setLoading(true)
-      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/products/${codeInfo?._id}`)
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/products/${codeInfo?._id}`, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       router.refresh()
       setLoading(false)
     }

@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import { BiArrowBack } from 'react-icons/bi'
+import { useSession } from 'next-auth/react'
 
 export default function Page() {
 
@@ -48,82 +49,131 @@ export default function Page() {
   const [domain, setDomain] = useState<any>()
 
   const router = useRouter()
+  const { data: session } = useSession()
 
   const getClientTags = async () => {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-tag`)
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-tag`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     if (response.data) {
       setClientTags(response.data)
     }
   }
 
   useEffect(() => {
-    getClientTags()
-  }, [])
+    if (session?.tenantId) {
+      getClientTags()
+    }
+  }, [session?.tenantId])
 
   const getStoreData = async () => {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/store-data`)
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/store-data`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     if (response.data) {
       setStoreData(response.data)
     }
   }
 
   useEffect(() => {
-    getStoreData()
-  }, [])
+    if (session?.tenantId) {
+      getStoreData()
+    }
+  }, [session?.tenantId])
 
   const getClientData = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-data`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-data`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setClientData(res.data)
   }
 
   useEffect(() => {
-    getClientData()
-  }, [])
+    if (session?.tenantId) {
+      getClientData()
+    }
+  }, [session?.tenantId])
 
   const getForms = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/forms`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/forms`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setForms(res.data)
   }
 
   useEffect(() => {
-    getForms()
-  }, [])
+    if (session?.tenantId) {
+      getForms()
+    }
+  }, [session?.tenantId])
 
   const getCalls = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/calls`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/calls`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setCalls(res.data)
   }
 
   useEffect(() => {
-    getCalls()
-  }, [])
+    if (session?.tenantId) {
+      getCalls()
+    }
+  }, [session?.tenantId])
 
   const getServices = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/services`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/services`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setServices(res.data)
   }
 
   useEffect(() => {
-    getServices()
-  }, [])
+    if (session?.tenantId) {
+      getServices()
+    }
+  }, [session?.tenantId])
 
   const getFunnels = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/funnels`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/funnels`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setFunnels(res.data)
   }
 
   useEffect(() => {
-    getFunnels()
-  }, [])
+    if (session?.tenantId) {
+      getFunnels()
+    }
+  }, [session?.tenantId])
 
   const getDomain = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/domain`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/domain`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setDomain(res.data)
   }
 
   useEffect(() => {
-    getDomain()
-  }, [])
+    if (session?.tenantId) {
+      getDomain()
+    }
+  }, [session?.tenantId])
 
   const handleSubmit = async (e: any) => {
     e.preventDefault()
@@ -135,7 +185,11 @@ export default function Page() {
         return
       }
       setLoading(true)
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/automatization`, { ...automatization, date: new Date() })
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/automatization`, { ...automatization, date: new Date() }, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       router.push('/automatizaciones')
     }
   }

@@ -18,7 +18,11 @@ export default function Page () {
     const handleSubmit = async () => {
         if (!loading) {
             setLoading(true)
-            const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login`, user)
+            const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login`, user, {
+                headers: {
+                    'x-tenant-id': session?.tenantId
+                }
+            })
             if (res.data.message) {
                 setError(res.data.message)
             } else {

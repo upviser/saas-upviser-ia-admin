@@ -32,7 +32,11 @@ export default function Page () {
             e.preventDefault()
             if (!loading) {
               setLoading(true)
-              await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login`, userData)
+              await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login`, userData, {
+                headers: {
+                  'x-tenant-id': session?.tenantId
+                }
+              })
               await signOut()
             }
           }} config="w-40" submitLoading={loading} textButton="Guardar datos" color="main" />

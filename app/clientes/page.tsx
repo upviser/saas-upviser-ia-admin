@@ -5,6 +5,7 @@ import axios from 'axios'
 import Head from 'next/head'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
 
 export default function Page () {
 
@@ -14,28 +15,41 @@ export default function Page () {
   const [selectedTag, setSelectedTag] = useState('')
 
   const router = useRouter()
+  const { data: session } = useSession()
 
   const getClients = async () => {
     setLoading(true)
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/clients`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/clients`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setClients(res.data)
     setLoading(false)
   }
 
   useEffect(() => {
-    getClients()
-  }, [])
+    if (session?.tenantId) {
+      getClients()
+    }
+  }, [session?.tenantId])
 
   const getClientsTags = async () => {
     setLoading(true)
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-tag`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-tag`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setClientsTags(res.data)
     setLoading(false)
   }
 
   useEffect(() => {
-    getClientsTags()
-  }, [])
+    if (session?.tenantId) {
+      getClientsTags()
+    }
+  }, [session?.tenantId])
 
   return (
     <>

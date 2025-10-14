@@ -5,6 +5,7 @@ import { PopupNewUser } from "@/components/user"
 import { IUser } from "@/interfaces"
 import axios from "axios"
 import { useEffect, useState } from "react"
+import { useSession } from 'next-auth/react'
 
 export default function Page() {
 
@@ -15,23 +16,37 @@ export default function Page() {
   const [shopLogin, setShopLogin] = useState<any>()
   const [loading, setLoading] = useState(false)
 
+  const { data: session } = useSession()
+
   const getUsers = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/accounts`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/accounts`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setUsers(res.data)
   }
 
   useEffect(() => {
-    getUsers()
-  }, [])
+    if (session?.tenantId) {
+      getUsers()
+    }
+  }, [session?.tenantId])
 
   const getShopLogin = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setShopLogin(res.data)
   }
 
   useEffect(() => {
-    getShopLogin()
-  }, [])
+    if (session?.tenantId) {
+      getShopLogin()
+    }
+  }, [session?.tenantId])
 
   return (
     <>
@@ -41,7 +56,11 @@ export default function Page() {
         <ButtonRed action={async () => {
           if (!loading) {
             setLoading(true)
-            await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/shop-login/${user?._id}`)
+            await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/shop-login/${user?._id}`, {
+              headers: {
+                'x-tenant-id': session?.tenantId
+              }
+            })
             getUsers()
             setPopup2({ ...popup2, view: 'flex', opacity: 'opacity-0' })
             setTimeout(() => {

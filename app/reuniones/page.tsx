@@ -36,61 +36,101 @@ export default function CallsPage () {
 
   const getMeetings = async () => {
     setLoading(true)
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/meetings`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/meetings`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setMeetings(res.data)
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/calls`)
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/calls`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setCalls(response.data)
     setLoading(false)
   }
 
   useEffect(() => {
-    getMeetings()
-  }, [])
+    if (session?.tenantId) {
+      getMeetings()
+    }
+  }, [session?.tenantId])
 
   const getTags = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-tag`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-tag`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setTags(res.data)
   }
 
   useEffect(() => {
-    getTags()
-  }, [])
+    if (session?.tenantId) {
+      getTags()
+    }
+  }, [session?.tenantId])
 
   const getFunnels = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/funnels`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/funnels`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setFunnels(res.data)
   }
 
   useEffect(() => {
-    getFunnels()
-  }, [])
+    if (session?.tenantId) {
+      getFunnels()
+    }
+  }, [session?.tenantId])
 
   const getClientData = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-data`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-data`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setClientData(res.data)
   }
 
   useEffect(() => {
-    getClientData()
-  }, [])
+    if (session?.tenantId) {
+      getClientData()
+    }
+  }, [session?.tenantId])
 
   const getCalendars = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/calendar`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/calendar`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setCalendars(res.data)
   }
 
   useEffect(() => {
-    getCalendars()
-  }, [])
+    if (session?.tenantId) {
+      getCalendars()
+    }
+  }, [session?.tenantId])
 
   const getStoreData = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/store-data`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/store-data`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setStoreData(res.data)
   }
 
   useEffect(() => {
-    getStoreData()
-  }, [])
+    if (session?.tenantId) {
+      getStoreData()
+    }
+  }, [session?.tenantId])
 
   return (
     <>

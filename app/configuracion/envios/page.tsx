@@ -5,6 +5,7 @@ import axios from 'axios'
 import Head from 'next/head'
 import { usePathname, useRouter } from 'next/navigation'
 import React, { ChangeEvent, useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
 
 export default function Page () {
 
@@ -14,21 +15,32 @@ export default function Page () {
 
   const pathname = usePathname()
   const router = useRouter()
+  const { data: session } = useSession()
 
   const getChilexpress = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chilexpress`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chilexpress`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setChilexpress(res.data)
   }
 
   useEffect(() => {
-    getChilexpress()
-  }, [])
+    if (session?.tenantId) {
+      getChilexpress()
+    }
+  }, [session?.tenantId])
 
   const handleSubmit = async () => {
     if (!loading) {
       setLoading(true)
       setError('')
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/chilexpress`, chilexpress)
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/chilexpress`, chilexpress, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       setLoading(false)
     }
   }
