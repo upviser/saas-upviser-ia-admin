@@ -87,7 +87,7 @@ export default function Page () {
 
         await apiClient.post('/create-default-design', { tenantId })
 
-        await apiClient.post('/domain', { domain: `${loginData.subdomain}.upviser.cl`, tenantId: tenantId })
+        await apiClient.put('/domain', { domain: `${loginData.subdomain}.upviser.cl`, tenantId: tenantId })
         
         const res = await signIn('credentials', {
           email: loginData.email,
