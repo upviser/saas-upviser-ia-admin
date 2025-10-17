@@ -1047,7 +1047,11 @@ export const MenuDesign: React.FC<Props> = ({ domain, pages, part, type, setType
               <ButtonSubmit action={async () => {
                 if (!loading) {
                   setLoading(true)
-                  await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/style`, style)
+                  await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/style`, style, {
+                    headers: {
+                      'x-tenant-id': session?.tenantId
+                    }
+                  })
                   setLoading(false)
                 }
               }} color='main' submitLoading={loading} textButton='Guardar' config='w-full' />
