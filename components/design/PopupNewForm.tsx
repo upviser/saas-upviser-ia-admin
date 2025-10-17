@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Button, Button2, ButtonSubmit2, Input, Select, Spinner2 } from '../ui'
 import { IClientData, IForm, IFunnel, ITag } from '@/interfaces'
 import { IoMdClose } from 'react-icons/io'
+import { useSession } from 'next-auth/react'
 
 interface Props {
   popupForm: { view: string, opacity: string, mouse: boolean }
@@ -30,6 +31,8 @@ export const PopupNewForm: React.FC<Props> = ({ popupForm, setPopupForm, titleFo
   const [loadingNewForm, setLoadingNewForm] = useState(false)
   const [newTag, setNewTag] = useState('')
   const [loadingTag, setLoadingTag] = useState(false)
+
+  const { data: session } = useSession()
 
   const popupRef = useRef<HTMLFormElement | null>(null);
 
@@ -70,7 +73,11 @@ export const PopupNewForm: React.FC<Props> = ({ popupForm, setPopupForm, titleFo
                 setLoadingNewForm(false)
               }
             } else {
-              await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/form/${newForm._id}`, newForm)
+              await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/form/${newForm._id}`, newForm, {
+                headers: {
+                  'x-tenant-id': session?.tenantId
+                }
+              })
               getForms()
               setPopupForm({ ...popupForm, view: 'flex', opacity: 'opacity-0' })
               setTimeout(() => {

@@ -73,7 +73,11 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
             setError('')
             if (titleMeeting === 'Crear reunion') {
               if (newCall.nameMeeting !== '') {
-                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/call`, newCall)
+                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/call`, newCall, {
+                  headers: {
+                    'x-tenant-id': session?.tenantId
+                  }
+                })
                 getCalls()
                 setPopupCall({ ...popupCall, view: 'flex', opacity: 'opacity-0' })
                 setTimeout(() => {
@@ -85,7 +89,11 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
                 setLoadingNewCall(false)
               }
             } else {
-              await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/call/${newCall._id}`, newCall)
+              await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/call/${newCall._id}`, newCall, {
+                headers: {
+                  'x-tenant-id': session?.tenantId
+                }
+              })
               getCalls()
               setPopupCall({ ...popupCall, view: 'flex', opacity: 'opacity-0' })
               setTimeout(() => {

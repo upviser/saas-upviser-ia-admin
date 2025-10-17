@@ -53,7 +53,11 @@ export const PopupNewFunnel: React.FC<Props> = ({ popup, setPopup, getFunnels, n
             setError('')
             if (title === 'Nuevo embudo') {
               if (newFunnel.funnel !== '' && newFunnel.steps[0].step !== '' && newFunnel.steps[0].slug !== '') {
-                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/funnel`, newFunnel)
+                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/funnel`, newFunnel, {
+                  headers: {
+                    'x-tenant-id': session?.tenantId
+                  }
+                })
                 setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
                 getFunnels()
                 setTimeout(() => {
@@ -67,7 +71,11 @@ export const PopupNewFunnel: React.FC<Props> = ({ popup, setPopup, getFunnels, n
               }
             } else {
               if (newFunnel.funnel !== '' && newFunnel.steps[0].step !== '' && newFunnel.steps[0].slug !== '') {
-                await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/funnel/${selectFunnel?._id}`, newFunnel)
+                await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/funnel/${selectFunnel?._id}`, newFunnel, {
+                  headers: {
+                    'x-tenant-id': session?.tenantId
+                  }
+                })
                 setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
                 getFunnels()
                 setTimeout(() => {

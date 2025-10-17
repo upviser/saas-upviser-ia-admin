@@ -39,7 +39,7 @@ export const Bloque1: React.FC<Props> = ({ edit, pages, setPages, design, index,
   const [errorImage, setErrorImage] = useState('')
 
   return (
-    <div className="w-full flex py-24 px-2" style={{ background: `${design.info.typeBackground === 'Degradado' ? design.info.background : design.info.typeBackground === 'Color' ? design.info.background : ''}` }}>
+    <div className="w-full flex py-24 px-2" style={{ background: `${design.info.typeBackground === 'Degradado' ? design.info.background : design.info.typeBackground === 'Color' ? design.info.background : ''}`, backgroundImage: design.info.typeBackground === 'Imagen' ? `url("${design.info.background}")` : '' }}>
       <div className={`${responsive === '400px' ? 'flex-col gap-4' : 'flex-row'} w-full flex max-w-[1280px] m-auto flex-wrap`}>
         {
           edit !== 'Bloque 1'
@@ -179,7 +179,7 @@ export const Bloque1: React.FC<Props> = ({ edit, pages, setPages, design, index,
                                   setErrorImage('Ha ocurrido un error al subir la imagen, intentalo nuevamente.')
                                 }
                               }
-                            }} value={design.info.background} className='m-auto w-fit text-sm block file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-main/60 file:text-white hover:file:bg-main/40' />
+                            }} className='m-auto w-fit text-sm block file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-main/60 file:text-white hover:file:bg-main/40' />
                           </>
                         )
                         : ''

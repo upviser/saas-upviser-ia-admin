@@ -82,8 +82,8 @@ export default function Page () {
                 <div className='flex flex-col gap-2'>
                   <p className='text-sm'>Correo</p>
                   <div className='flex gap-2'>
-                    <Input change={(e: ChangeEvent<HTMLInputElement>) => setDomain({ ...domain, email: e.target.value })} value={domain.email.replace(domain.domain, '')} placeholder='Correo' config='w-fit' />
-                    <p className='my-auto'>@{domain.domain}</p>
+                    <Input change={(e: ChangeEvent<HTMLInputElement>) => setDomain({ ...domain, email: e.target.value })} value={domain.email.replace(domain.domain.includes('upviser.cl') ? '@emails.upviser.cl' : `@${domain.domain}`, '')} placeholder='Correo' config='w-fit' />
+                    <p className='my-auto'>@{domain.domain.includes('upviser.cl') ? 'emails.upviser.cl' : domain.domain}</p>
                   </div>
                 </div>
               </div>

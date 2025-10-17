@@ -52,6 +52,13 @@ export interface IStepService {
     metaDescription?: string
     image?: string
     design?: { content: string, meetings?: string[], meeting?: string, form?: string, service?: { service: string, plan?: string }, services?: { service: string, url: string }[], info: IInfoService }[]
+    backgroundType?: string
+    bgColor?: string
+    bgColor1?: string
+    bgColor2?: string
+    bgType?: string
+    bgAngle?: string
+    bgImage?: string
 }
 
 export interface IInfoService {

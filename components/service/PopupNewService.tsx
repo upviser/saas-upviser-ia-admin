@@ -66,9 +66,17 @@ export const PopupNewService: React.FC<Props> = ({ popupService, setPopupService
                 setLoadingService(false)
                 return
               }
-              await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/service`, newService)
+              await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/service`, newService, {
+                headers: {
+                  'x-tenant-id': session?.tenantId
+                }
+              })
             } else {
-              await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/service/${newService._id}`, newService)
+              await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/service/${newService._id}`, newService, {
+                headers: {
+                  'x-tenant-id': session?.tenantId
+                }
+              })
             }
             getServices()
             setPopupService({ ...popupService, view: 'flex', opacity: 'opacity-0' })

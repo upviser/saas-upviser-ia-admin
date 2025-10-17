@@ -54,7 +54,7 @@ export const Navbar: React.FC<PropsWithChildren> = ({ children }) => {
     const publicRoutes = ['/registro', '/ingresar'];
     
     if (session === null) {
-      if (publicRoutes.includes(pathname)) {
+      if (publicRoutes.includes(pathname) || pathname.includes('propuesta-diseno')) {
         setLoading(false);
         return;
       }

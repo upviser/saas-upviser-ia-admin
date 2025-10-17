@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useRef } from 'react'
 import { ButtonSubmit, Input } from '../ui'
 import { IPage } from '@/interfaces'
+import { useSession } from 'next-auth/react'
 
 interface Props {
     popupPage: any
@@ -19,6 +20,7 @@ interface Props {
 
 export const PopupNewPage: React.FC<Props> = ({ popupPage, setPopupPage, setLoading, getDesign, loading, setNewPage, newPage, pages, header, error, setError }) => {
 
+  const { data: session } = useSession()
   const popupRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -61,7 +63,11 @@ export const PopupNewPage: React.FC<Props> = ({ popupPage, setPopupPage, setLoad
               if (newPage.page !== '' && newPage.slug !== '') {
                 const updatePages = [...pages]
                 updatePages.push(newPage)
-                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/design`, { pages: updatePages, header: header })
+                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/design`, { pages: updatePages, header: header }, {
+                  headers: {
+                    'x-tenant-id': session?.tenantId
+                  }
+                })
                 setPopupPage({ ...popupPage, view: 'flex', opacity: 'opacity-0' })
                 getDesign()
                 setTimeout(() => {
