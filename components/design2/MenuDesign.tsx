@@ -189,7 +189,7 @@ export const MenuDesign: React.FC<Props> = ({ domain, pages, part, type, setType
                         const oldPages = [...pages]
                         oldPages[i].bgColor = e.target.value
                         setPages(oldPages)
-                      }} />
+                      }} value={page.bgColor} />
                     )
                     : ''
                 }
@@ -202,18 +202,18 @@ export const MenuDesign: React.FC<Props> = ({ domain, pages, part, type, setType
                           const oldPages = [...pages]
                           oldPages[i].bgColor1 = e.target.value
                           setPages(oldPages)
-                        }} />
+                        }} value={page.bgColor1} />
                         <p>Color 2</p>
                         <input type="color" onChange={(e: any) => {
                           const oldPages = [...pages]
                           oldPages[i].bgColor2 = e.target.value
                           setPages(oldPages)
-                        }} />
+                        }} value={page.bgColor2} />
                         <Select change={(e: any) => {
                           const oldPages = [...pages]
                           oldPages[i].bgType = e.target.value
                           setPages(oldPages)
-                        }}>
+                        }} value={page.bgType}>
                           <option>Lineal</option>
                           <option>Radial</option>
                         </Select>
@@ -625,7 +625,7 @@ export const MenuDesign: React.FC<Props> = ({ domain, pages, part, type, setType
                               const oldFunnels = [...funnels!]
                               oldFunnels.find(funnel => funnel.funnel === part)!.steps.find(st => st.step === step)!.bgColor = e.target.value
                               setFunnels(oldFunnels)
-                            }} />
+                            }} value={funnels.find(funnel => funnel.funnel === part)!.steps.find(st => st.step === step)?.bgColor} />
                           )
                           : ''
                       }
@@ -638,18 +638,18 @@ export const MenuDesign: React.FC<Props> = ({ domain, pages, part, type, setType
                                 const oldFunnels = [...funnels!]
                                 oldFunnels.find(funnel => funnel.funnel === part)!.steps.find(st => st.step === step)!.bgColor1 = e.target.value
                                 setFunnels(oldFunnels)
-                              }} />
+                              }} value={funnels.find(funnel => funnel.funnel === part)!.steps.find(st => st.step === step)?.bgColor1} />
                               <p>Color 2</p>
                               <input type="color" onChange={(e: any) => {
                                 const oldFunnels = [...funnels!]
-                              oldFunnels.find(funnel => funnel.funnel === part)!.steps.find(st => st.step === step)!.bgColor2 = e.target.value
-                              setFunnels(oldFunnels)
-                              }} />
+                                oldFunnels.find(funnel => funnel.funnel === part)!.steps.find(st => st.step === step)!.bgColor2 = e.target.value
+                                setFunnels(oldFunnels)
+                              }} value={funnels.find(funnel => funnel.funnel === part)!.steps.find(st => st.step === step)?.bgColor2} />
                               <Select change={(e: any) => {
                                 const oldFunnels = [...funnels!]
-                              oldFunnels.find(funnel => funnel.funnel === part)!.steps.find(st => st.step === step)!.bgType = e.target.value
-                              setFunnels(oldFunnels)
-                              }}>
+                                oldFunnels.find(funnel => funnel.funnel === part)!.steps.find(st => st.step === step)!.bgType = e.target.value
+                                setFunnels(oldFunnels)
+                              }} value={funnels.find(funnel => funnel.funnel === part)!.steps.find(st => st.step === step)?.bgType}>
                                 <option>Lineal</option>
                                 <option>Radial</option>
                               </Select>
@@ -833,7 +833,7 @@ export const MenuDesign: React.FC<Props> = ({ domain, pages, part, type, setType
                               const oldServices = [...services]
                               oldServices.find(service => service.name === part)!.steps.find(st => st.step === step)!.bgColor = e.target.value
                               setServices(oldServices)
-                            }} />
+                            }} value={services.find((service, index) => service.name === part)!.steps.find((st, i) => st.step === step)?.bgColor} />
                           )
                           : ''
                       }
@@ -846,18 +846,18 @@ export const MenuDesign: React.FC<Props> = ({ domain, pages, part, type, setType
                                 const oldServices = [...services]
                                 oldServices.find(service => service.name === part)!.steps.find(st => st.step === step)!.bgColor1 = e.target.value
                                 setServices(oldServices)
-                              }} />
+                              }} value={services.find((service, index) => service.name === part)!.steps.find((st, i) => st.step === step)?.bgColor1} />
                               <p>Color 2</p>
                               <input type="color" onChange={(e: any) => {
                                 const oldServices = [...services]
                                 oldServices.find(service => service.name === part)!.steps.find(st => st.step === step)!.bgColor2 = e.target.value
                                 setServices(oldServices)
-                              }} />
+                              }} value={services.find((service, index) => service.name === part)!.steps.find((st, i) => st.step === step)?.bgColor2} />
                               <Select change={(e: any) => {
                                 const oldServices = [...services]
                                 oldServices.find(service => service.name === part)!.steps.find(st => st.step === step)!.bgType = e.target.value
                                 setServices(oldServices)
-                              }}>
+                              }} value={services.find((service, index) => service.name === part)!.steps.find((st, i) => st.step === step)?.bgType}>
                                 <option>Lineal</option>
                                 <option>Radial</option>
                               </Select>

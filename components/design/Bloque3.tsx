@@ -87,7 +87,7 @@ export const Bloque3: React.FC<Props> = ({ edit, design, index, pages, setPages,
                         }
                         {
                           design.info.button2 && design.info.button2 !== '' && design.info.buttonLink2 && design.info.buttonLink2 !== ''
-                            ? <ButtonDesign2 style={style} text={design.info.button2} config='m-auto' design={design} />
+                            ? <button className={`m-auto w-fit px-6 h-10 border`} style={{ borderRadius: style?.form === 'Redondeadas' ? `${style?.borderButton}px` : '', border: `1px solid ${style.borderColor}`, color: design.info.textColor }}>{design.info.button2}</button>
                             : ''
                         }
                       </div>

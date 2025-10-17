@@ -80,7 +80,7 @@ export const Page2: React.FC<Props> = ({ page, responsive, setResponsive, edit, 
                         </div>
                       </div>
                       <div className="overflow-y-auto" style={{ height: 'calc(100% - 75px)' }}>
-                      <div style={{ background: page.backgroundType === 'Color' ? page.bgColor : page.backgroundType === 'Degradado' ? `${page.bgType === 'Lineal' ? 'linear' : 'radial'}-gradient(${page.bgType === 'Lineal' ? `${page.bgAngle}deg` : 'circle'}, ${page.bgColor1}, ${page.bgColor2})` : '', backgroundImage: page.backgroundType === 'Imagen' ? `url("${page.bgImage}")` : '', backgroundSize: 'cover' }}>
+                      <div style={{ background: page.backgroundType === 'Color' ? page.bgColor : page.backgroundType === 'Degradado' ? `${page.bgType === 'Lineal' ? 'linear' : 'radial'}-gradient(${page.bgType === 'Lineal' ? `${page.bgAngle}deg` : 'circle'}, ${page.bgColor1}, ${page.bgColor2})` : `url("${page.bgImage}")`, backgroundSize: 'cover' }}>
                         <Layout edit={edit} setEdit={setEdit} setHeader={setHeader} header={header} setPart={setPart} pages={pages} storeData={storeData} responsive={responsive} style={style} footer={footer} setFooter={setFooter}>
                           <div className='flex flex-col gap-4'>
                             {
@@ -146,7 +146,7 @@ export const Page2: React.FC<Props> = ({ page, responsive, setResponsive, edit, 
                                                                                               ? <Table edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} services={services} responsive={responsive} pageNeed={pages} funnels={funnels} setFunnels={setFunnels} style={style} />
                                                                                               : ''
                                     }
-                                    <div className='m-auto mt-2 mb-6 flex gap-4 w-fit'>
+                                    <div className='m-auto mt-2 mb-6 flex gap-4 w-fit bg-white'>
                                       <p className='my-auto font-medium'>{design.content}</p>
                                       {
                                         edit === design.content
