@@ -472,7 +472,7 @@ export const Contact: React.FC<Props> = ({ edit, design, pages, setPages, index,
                   }} className={`${responsive === '400px' ? 'text-base' : 'text-lg'} p-1.5 h-20 rounded border bg-transparent`} style={{ color: design.info.textColor }} />
                 </div>
                 <div className="w-1/2 pl-4">
-                <div className={`p-8 flex flex-col bg-white gap-4`} style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', boxShadow: style.design === 'Sombreado' ? '0px 3px 20px 3px #11111110' : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', backgroundColor: design.info.image }}>
+                <div className={`p-8 flex flex-col gap-4`} style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', boxShadow: style.design === 'Sombreado' ? '0px 3px 20px 3px #11111110' : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', backgroundColor: design.info.image, color: design.info.textColor }}>
                   <input type='text' placeholder='Titulo del formulario' value={design.info.titleForm} onChange={(e: any) => {
                     if (inde !== undefined) {
                       const oldFunnels = [...funnels!]

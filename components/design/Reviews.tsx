@@ -37,13 +37,13 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
     const [errorImage, setErrorImage] = useState('')
   
     return (
-    <div className="w-full flex py-24 px-4" style={{ background: `${design.info.typeBackground === 'Degradado' ? design.info.background : design.info.typeBackground === 'Color' ? design.info.background : ''}` }}>
+    <div className="w-full flex py-24 px-4" style={{ background: `${design.info.typeBackground === 'Degradado' ? design.info.background : design.info.typeBackground === 'Color' ? design.info.background : ''}`, color: design.info.textColor }}>
       <div className={`w-full flex flex-col gap-4 max-w-[1280px] m-auto`}>
         {
           edit === 'Reseñas'
             ? (
               <>
-                <div className='flex flex-col gap-2 w-fit m-auto p-6 bg-white rounded-xl border border-black/5 shadow-md'>
+                <div className='flex flex-col gap-2 w-fit m-auto p-6 bg-white rounded-xl border text-black border-black/5 shadow-md'>
                 <div className='flex flex-col gap-2'>
                     <p className='m-auto font-medium'>Tipo fondo</p>
                     <Select change={(e: any) => {
@@ -331,6 +331,32 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                         }
                       }} value={design.info.textColor} className='m-auto' />
                   </div>
+                  <div className='flex flex-col gap-2'>
+                    <p className='font-medium m-auto'>Color reseña</p>
+                    <input type='color' onChange={(e: any) => {
+                      if (inde !== undefined) {
+                        const oldFunnels = [...funnels!]
+                        oldFunnels[inde].steps[ind].design![index].info.image = e.target.value
+                        setFunnels(oldFunnels)
+                      } else if (indx !== undefined) {
+                        const oldServices = [...services!]
+                        oldServices[indx].steps[ind].design![index].info.image = e.target.value
+                        setServices(oldServices)
+                      } else if (inx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inx].design[index].info.image = e.target.value
+                        setPages(oldPages)
+                      } else if (inxx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inxx].design[index].info.image = e.target.value
+                        setPages(oldPages)
+                      } else {
+                        const oldPages = [...pages]
+                        oldPages[ind].design[index].info.image = e.target.value
+                        setPages(oldPages)
+                      }
+                    }} value={design.info.image} className='m-auto' />
+                  </div>
                 </div>
                 <textarea placeholder='Titulo' value={design.info.title} onChange={(e: any) => {
                     if (inde !== undefined) {
@@ -384,7 +410,7 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                       <div className='flex gap-6 justify-around flex-wrap'>
                         {
                           design.info.reviews?.map((review, i) => (
-                            <div key={i} className={`${style.design === 'Borde' ? 'border' : ''} flex flex-col gap-4 p-6 w-full max-w-96 bg-white`} style={{ boxShadow: style.design === 'Sombreado' ? '0px 3px 20px 3px #11111110' : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '' }}>
+                            <div key={i} className={`flex flex-col gap-4 p-6 w-full max-w-96 bg-white`} style={{ border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', boxShadow: style.design === 'Sombreado' ? '0px 3px 20px 3px #11111110' : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', backgroundColor: design.info.image }}>
                               <div className='flex flex-col gap-2'>
                                 <p>Estrellas</p>
                                 <div className='flex gap-2 flex-wrap'>
@@ -652,7 +678,7 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                                   oldPages[ind].design[index].info.reviews![i].review = e.target.value
                                   setPages(oldPages)
                                 }
-                              }} value={review.review} placeholder='Reseña' className='p-1.5 border text-center bg-white' />
+                              }} value={review.review} placeholder='Reseña' className='p-1.5 border text-center' />
                               <input type='text' onChange={(e: any) => {
                                 if (inde !== undefined) {
                                   const oldFunnels = [...funnels!]
@@ -675,7 +701,7 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                                   oldPages[ind].design[index].info.reviews![i].name = e.target.value
                                   setPages(oldPages)
                                 }
-                              }} placeholder='Nombre' value={review.name} className='p-1.5 border bg-white' />
+                              }} placeholder='Nombre' value={review.name} className='p-1.5 border' />
                               <Button2Red action={(e: any) => {
                                 if (inde !== undefined) {
                                   const oldFunnels = [...funnels!]

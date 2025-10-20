@@ -136,13 +136,13 @@ export const Lead3: React.FC<Props> = ({ edit, pages, setPages, design, index, i
           }} className='my-auto'>Cancelar</button>
         </div>
       </Popup>
-      <div className="w-full flex py-24 px-4" style={{ background: `${design.info.typeBackground === 'Degradado' ? design.info.background : design.info.typeBackground === 'Color' ? design.info.background : ''}` }}>
+      <div className="w-full flex py-24 px-4" style={{ background: `${design.info.typeBackground === 'Degradado' ? design.info.background : design.info.typeBackground === 'Color' ? design.info.background : ''}`, color: design.info.textColor }}>
         <div className={`w-full flex flex-col gap-4 max-w-[1280px] m-auto`}>
           {
             edit === 'Lead 3'
               ? (
                 <>
-                  <div className='flex flex-col gap-2 w-fit m-auto p-6 bg-white rounded-xl border border-black/5 shadow-md'>
+                  <div className='flex flex-col gap-2 w-fit m-auto p-6 bg-white text-black rounded-xl border border-black/5 shadow-md'>
                     <div className='flex flex-col gap-2'>
                       <p className='m-auto font-medium'>Tipo fondo</p>
                       <Select change={(e: any) => {
@@ -723,7 +723,7 @@ export const Lead3: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                                 oldPages[ind].design[index].form = e.target.value
                                 setPages(oldPages)
                               }
-                            }} value={design.form} config='text-black bg-transparent dark:border-neutral-100'>
+                            }} value={design.form} config='bg-transparent dark:border-neutral-100'>
                               <option>Seleccionar formulario</option>
                               {
                                 forms?.map(form => (

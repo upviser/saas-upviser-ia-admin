@@ -37,7 +37,7 @@ export const Faq: React.FC<Props> = ({ edit, pages, setPages, design, index, ind
   const [errorImage, setErrorImage] = useState('')
   
   return (
-    <div className="w-full flex py-24 px-4" style={{ background: `${design.info.typeBackground === 'Degradado' ? design.info.background : design.info.typeBackground === 'Color' ? design.info.background : ''}` }}>
+    <div className="w-full flex py-24 px-4" style={{ background: `${design.info.typeBackground === 'Degradado' ? design.info.background : design.info.typeBackground === 'Color' ? design.info.background : ''}`, color: design.info.textColor }}>
       <div className={`w-full flex flex-col gap-4 max-w-[1280px] m-auto`}>
         {
           edit === 'Preguntas frecuentes'

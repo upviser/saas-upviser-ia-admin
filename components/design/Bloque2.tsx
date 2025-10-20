@@ -507,7 +507,7 @@ export const Bloque2: React.FC<Props> = ({ edit, design, pages, setPages, index,
                       setPages(oldPages)
                     }
                   }} className={`${responsive === '400px' ? 'text-base' : 'text-lg'} p-1.5 rounded border bg-transparent`} style={{ color: design.info.textColor }} />
-                  <div className='flex gap-4'>
+                  <div className='flex gap-4' style={{ color: design.info.textColor }}>
                     <div className='w-fit text-white py-2 px-6' style={{ backgroundColor: style.primary, color: style.button, borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }}>
                       <input type='text' placeholder='Boton' value={design.info.button} onChange={(e: any) => {
                         if (inde !== undefined) {

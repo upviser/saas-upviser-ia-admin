@@ -475,7 +475,7 @@ export const Call: React.FC<Props> = ({ edit, pages, setPages, design, index, in
                           oldPages[ind].design[index].info.video = e.target.value
                           setPages(oldPages)
                         }
-                      }} config='text-black bg-transparent dark:border-neutral-100' value={design.info.video}>
+                      }} config='bg-transparent dark:border-neutral-100' value={design.info.video}>
                         <option>Sin logo</option>
                         <option>Logo</option>
                         <option>Logo blanco</option>
@@ -492,7 +492,7 @@ export const Call: React.FC<Props> = ({ edit, pages, setPages, design, index, in
                           ? (
                             <>
                               <p>Seleccionar llamada</p>
-                              <Select value={design.meeting} config='text-black bg-transparent dark:border-neutral-100' change={(e: any) => {
+                              <Select value={design.meeting} config='bg-transparent dark:border-neutral-100' change={(e: any) => {
                                 if (inde !== undefined) {
                                   const oldFunnels = [...funnels!]
                                   oldFunnels[inde].steps[ind].design![index].meeting = e.target.value

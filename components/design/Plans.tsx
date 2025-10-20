@@ -50,7 +50,7 @@ export const Plans: React.FC<Props> = ({ edit, pages, setPages, design, index, i
   const { data: session } = useSession()
   
   return (
-    <div className="w-full flex py-24 px-4" style={{ background: `${design.info.typeBackground === 'Degradado' ? design.info.background : design.info.typeBackground === 'Color' ? design.info.background : ''}` }}>
+    <div className="w-full flex py-24 px-4" style={{ background: `${design.info.typeBackground === 'Degradado' ? design.info.background : design.info.typeBackground === 'Color' ? design.info.background : ''}`, color: design.info.textColor }}>
       <div className={`w-full flex flex-col gap-4 max-w-[1280px] m-auto`}>
         {
           edit === 'Planes'
@@ -473,6 +473,29 @@ export const Plans: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                   <option>Completar formulario</option>
                   <option>Agendar llamada</option>
                 </Select>
+                <Input change={(e: any) => {
+                  if (inde !== undefined) {
+                    const oldFunnels = [...funnels!]
+                    oldFunnels[inde].steps[ind].design![index].info.button = e.target.value
+                    setFunnels(oldFunnels)
+                  } else if (indx !== undefined) {
+                    const oldServices = [...services!]
+                    oldServices[indx].steps[ind].design![index].info.button = e.target.value
+                    setServices(oldServices)
+                  } else if (inx !== undefined) {
+                    const oldPages = [...pages]
+                    oldPages[inx].design[index].info.button = e.target.value
+                    setPages(oldPages)
+                  } else if (inxx !== undefined) {
+                    const oldPages = [...pages]
+                    oldPages[inxx].design[index].info.button = e.target.value
+                    setPages(oldPages)
+                  } else {
+                    const oldPages = [...pages]
+                    oldPages[ind].design[index].info.button = e.target.value
+                    setPages(oldPages)
+                  }
+                }} placeholder='Texto boton' value={design.info.button} config='w-fit m-auto' />
                 {
                   design.info.video === 'Agendar llamada'
                     ? (
@@ -864,7 +887,7 @@ export const Plans: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                                   )
                                   : ''
                               }
-                              <ButtonDesign style={style} text='Me interesa este plan' config='w-full' />
+                              <ButtonDesign style={style} text={design.info.button} config='w-full' />
                             </div>
                           ))
                         }
@@ -930,7 +953,7 @@ export const Plans: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                                     : ''
                                 }
                               </div>
-                              <ButtonDesign style={style} text='Me interesa este plan' config='w-full' />
+                              <ButtonDesign style={style} text={design.info.button} config='w-full' />
                             </div>
                           ))
                         }

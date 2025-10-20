@@ -490,7 +490,7 @@ export const Bloque5: React.FC<Props> = ({ edit, design, pages, setPages, index,
                         setPages(oldPages)
                       }
                     }} className={`${responsive === '400px' ? 'text-base' : 'text-lg'} p-1.5 rounded border bg-transparent text-center`} style={{ color: design.info.textColor }} />
-                    <div className='flex gap-4 m-auto'>
+                    <div className='flex gap-4 m-auto' style={{ color: design.info.textColor }}>
                       <div className='w-fit text-white py-2 px-6' style={{ backgroundColor: style.primary, color: style.button, borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }}>
                         <input type='text' placeholder='Boton' value={design.info.button} onChange={(e: any) => {
                           if (inde !== undefined) {
@@ -612,8 +612,8 @@ export const Bloque5: React.FC<Props> = ({ edit, design, pages, setPages, index,
                         setPages(oldPages)
                       }
                     }} className={`${responsive === '400px' ? 'text-base' : 'text-lg'} p-1.5 rounded border bg-transparent text-center`} style={{ color: design.info.textColor }} />
-                    <div className='flex gap-4 m-auto'>
-                    <div className='w-fit text-white py-2 px-6' style={{ backgroundColor: style.primary, color: style.button, borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }}>
+                    <div className='flex gap-4 m-auto' style={{ color: design.info.textColor }}>
+                      <div className='w-fit text-white py-2 px-6' style={{ backgroundColor: style.primary, color: style.button, borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }}>
                         <input type='text' placeholder='Boton' value={design.info.button2} onChange={(e: any) => {
                           if (inde !== undefined) {
                             const oldFunnels = [...funnels!]

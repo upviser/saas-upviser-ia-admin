@@ -475,7 +475,7 @@ export const Bloque3: React.FC<Props> = ({ edit, design, index, pages, setPages,
                     setPages(oldPages)
                   }
                 }} className={`${responsive === '400px' ? 'text-base' : 'text-lg'} text-center p-1.5 rounded border bg-transparent`} style={{ color: design.info.textColor }} />
-                <div className='flex gap-4 m-auto'>
+                <div className='flex gap-4 m-auto' style={{ color: design.info.textColor }}>
                   <div className='w-fit text-white py-2 px-6' style={{ backgroundColor: style.primary, color: style.button, borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }}>
                     <input type='text' placeholder='Boton' value={design.info.button} onChange={(e: any) => {
                       if (inde !== undefined) {
@@ -550,7 +550,7 @@ export const Bloque3: React.FC<Props> = ({ edit, design, index, pages, setPages,
                     <option>Abrir Whatsapp</option>
                   </select>
                 </div>
-                <div className='flex gap-4 m-auto'>
+                <div className='flex gap-4 m-auto' style={{ color: design.info.textColor }}>
                   <div className='w-fit py-2 px-6' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '', border: `1px solid ${style.borderColor}` }}>
                     <input type='text' placeholder='Boton' value={design.info.button2} onChange={(e: any) => {
                       if (inde !== undefined) {

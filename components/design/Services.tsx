@@ -38,13 +38,13 @@ export const Services: React.FC<Props> = ({ edit, pages, setPages, design, index
     const [errorImage, setErrorImage] = useState('')
   
   return (
-    <div className="w-full flex py-24 px-4" style={{ background: `${design.info.typeBackground === 'Degradado' ? design.info.background : design.info.typeBackground === 'Color' ? design.info.background : ''}` }}>
+    <div className="w-full flex py-24 px-4" style={{ background: `${design.info.typeBackground === 'Degradado' ? design.info.background : design.info.typeBackground === 'Color' ? design.info.background : ''}`, color: design.info.textColor }}>
       <div className={`w-full flex flex-col gap-4 max-w-[1280px] m-auto`}>
         {
           edit === 'Servicios'
             ? (
               <>
-                <div className='flex flex-col gap-2 w-fit m-auto p-6 bg-white rounded-xl border border-black/5 shadow-md'>
+                <div className='flex flex-col gap-2 w-fit m-auto p-6 bg-white text-black rounded-xl border border-black/5 shadow-md'>
                   <div className='flex flex-col gap-2'>
                     <p className='m-auto font-medium'>Tipo fondo</p>
                     <Select change={(e: any) => {
@@ -332,6 +332,32 @@ export const Services: React.FC<Props> = ({ edit, pages, setPages, design, index
                       }
                     }} value={design.info.textColor} className='m-auto' />
                   </div>
+                  <div className='flex flex-col gap-2'>
+                    <p className='font-medium m-auto'>Color servicios</p>
+                    <input type='color' onChange={(e: any) => {
+                      if (inde !== undefined) {
+                        const oldFunnels = [...funnels!]
+                        oldFunnels[inde].steps[ind].design![index].info.image = e.target.value
+                        setFunnels(oldFunnels)
+                      } else if (indx !== undefined) {
+                        const oldServices = [...services!]
+                        oldServices[indx].steps[ind].design![index].info.image = e.target.value
+                        setServices(oldServices)
+                      } else if (inx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inx].design[index].info.image = e.target.value
+                        setPages(oldPages)
+                      } else if (inxx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inxx].design[index].info.image = e.target.value
+                        setPages(oldPages)
+                      } else {
+                        const oldPages = [...pages]
+                        oldPages[ind].design[index].info.image = e.target.value
+                        setPages(oldPages)
+                      }
+                    }} value={design.info.image} className='m-auto' />
+                  </div>
                 </div>
                 <textarea placeholder='Titulo' value={design.info.title} onChange={(e: any) => {
                   if (inde !== undefined) {
@@ -415,7 +441,7 @@ export const Services: React.FC<Props> = ({ edit, pages, setPages, design, index
                         const serviceFind = services?.find(servi => servi._id === service.service)
                         if (serviceFind) {
                           return (
-                            <div key={service.service} className={`${style.design === 'Borde' ? 'border' : ''} flex flex-col gap-2 p-4 w-[350px] min-h-60 justify-center`} style={{ boxShadow: style.design === 'Sombreado' ? '0px 3px 20px 3px #11111110' : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '' }}>
+                            <div key={service.service} className={`flex flex-col gap-2 p-4 w-[350px] min-h-60 justify-center`} style={{ border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', boxShadow: style.design === 'Sombreado' ? '0px 3px 20px 3px #11111110' : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', backgroundColor: design.info.image }}>
                               <p className='font-medium text-2xl text-center text-main'>{serviceFind.name}</p>
                               <p className='text-center'>{serviceFind.description}</p>
                               <Select change={(e: any) => {
@@ -520,7 +546,7 @@ export const Services: React.FC<Props> = ({ edit, pages, setPages, design, index
                         const serviceFind = services?.find(servi => servi._id === service.service)
                         if (serviceFind) {
                           return (
-                            <div key={service.service} className={`${style.design === 'Borde' ? 'border' : ''} flex flex-col gap-2 p-4 w-[350px] h-60 justify-center`} style={{ boxShadow: style.design === 'Sombreado' ? '0px 3px 20px 3px #11111110' : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '' }}>
+                            <div key={service.service} className={`flex flex-col gap-2 p-4 w-[350px] h-60 justify-center`} style={{ boxShadow: style.design === 'Sombreado' ? '0px 3px 20px 3px #11111110' : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', backgroundColor: design.info.image }}>
                               {
                                 index === 0
                                 ? (

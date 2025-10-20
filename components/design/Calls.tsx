@@ -295,6 +295,32 @@ export const Calls: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                             )
                             : ''
                         }
+                        <div className='flex flex-col gap-2'>
+                          <p className='font-medium m-auto'>Color texto</p>
+                          <input type='color' onChange={(e: any) => {
+                            if (inde !== undefined) {
+                              const oldFunnels = [...funnels!]
+                              oldFunnels[inde].steps[ind].design![index].info.textColor = e.target.value
+                              setFunnels(oldFunnels)
+                            } else if (indx !== undefined) {
+                              const oldServices = [...services!]
+                              oldServices[indx].steps[ind].design![index].info.textColor = e.target.value
+                              setServices(oldServices)
+                            } else if (inx !== undefined) {
+                              const oldPages = [...pages]
+                              oldPages[inx].design[index].info.textColor = e.target.value
+                              setPages(oldPages)
+                            } else if (inxx !== undefined) {
+                              const oldPages = [...pages]
+                              oldPages[inxx].design[index].info.textColor = e.target.value
+                              setPages(oldPages)
+                            } else {
+                              const oldPages = [...pages]
+                              oldPages[ind].design[index].info.textColor = e.target.value
+                              setPages(oldPages)
+                            }
+                          }} value={design.info.textColor} className='m-auto' />
+                        </div>
                       </div>
                       <div className='flex flex-col gap-2 p-6 bg-white rounded-xl shadow-md border border-black/5 w-fit'>
                         <p>Elije las llamadas que quieres mostrar</p>

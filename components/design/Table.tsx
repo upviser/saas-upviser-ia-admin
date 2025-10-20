@@ -37,13 +37,13 @@ export const Table: React.FC<Props> = ({ edit, pages, setPages, design, index, i
   const [errorImage, setErrorImage] = useState('')
   
   return (
-    <div className="w-full flex py-24 px-4" style={{ background: `${design.info.typeBackground === 'Degradado' ? design.info.background : design.info.typeBackground === 'Color' ? design.info.background : ''}` }}>
+    <div className="w-full flex py-24 px-4" style={{ background: `${design.info.typeBackground === 'Degradado' ? design.info.background : design.info.typeBackground === 'Color' ? design.info.background : ''}`, color: design.info.textColor }}>
       <div className={`w-full flex flex-col gap-4 max-w-[1280px] m-auto`}>
         {
           edit === 'Tabla comparativa'
             ? (
               <>
-                <div className='flex flex-col gap-2 w-fit m-auto p-6 bg-white rounded-xl border border-black/5 shadow-md'>
+                <div className='flex flex-col gap-2 w-fit m-auto p-6 bg-white text-black rounded-xl border border-black/5 shadow-md'>
                   <div className='flex flex-col gap-2'>
                     <p className='m-auto font-medium'>Tipo fondo</p>
                     <Select change={(e: any) => {
