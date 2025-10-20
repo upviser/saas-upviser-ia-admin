@@ -6,6 +6,7 @@ import axios from 'axios'
 import { NumberFormat } from '@/utils'
 import { ButtonDesign } from './ButtonDesign'
 import { IoMdClose } from 'react-icons/io'
+import { useSession } from 'next-auth/react'
 
 interface Props {
     edit: any
@@ -45,6 +46,8 @@ export const Plans: React.FC<Props> = ({ edit, pages, setPages, design, index, i
   const [errorImage, setErrorImage] = useState('')
   const [newData, setNewData] = useState('')
   const [loadingNewData, setLoadingNewData] = useState(false)
+
+  const { data: session } = useSession()
   
   return (
     <div className="w-full flex py-24 px-4" style={{ background: `${design.info.typeBackground === 'Degradado' ? design.info.background : design.info.typeBackground === 'Color' ? design.info.background : ''}` }}>
@@ -765,7 +768,11 @@ export const Plans: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                                               e.preventDefault()
                                               if (!loadingNewData) {
                                                 setLoadingNewData(true)
-                                                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client-data`, { data: newData })
+                                                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client-data`, { data: newData }, {
+                                                  headers: {
+                                                    'x-tenant-id': session?.tenantId
+                                                  }
+                                                })
                                                 setNewData('')
                                                 getClientData()
                                                 setLoadingNewData(false)
