@@ -400,6 +400,32 @@ export const Lead1: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                       <option>Sin logo</option>
                     </Select>
                   </div>
+                  <div className='flex flex-col gap-2'>
+                    <p className='font-medium m-auto'>Color formulario</p>
+                    <input type='color' onChange={(e: any) => {
+                      if (inde !== undefined) {
+                        const oldFunnels = [...funnels!]
+                        oldFunnels[inde].steps[ind].design![index].info.image = e.target.value
+                        setFunnels(oldFunnels)
+                      } else if (indx !== undefined) {
+                        const oldServices = [...services!]
+                        oldServices[indx].steps[ind].design![index].info.image = e.target.value
+                        setServices(oldServices)
+                      } else if (inx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inx].design[index].info.image = e.target.value
+                        setPages(oldPages)
+                      } else if (inxx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inxx].design[index].info.image = e.target.value
+                        setPages(oldPages)
+                      } else {
+                        const oldPages = [...pages]
+                        oldPages[ind].design[index].info.image = e.target.value
+                        setPages(oldPages)
+                      }
+                    }} value={design.info.image} className='m-auto' />
+                  </div>
                 </div>
               </div>
               {
