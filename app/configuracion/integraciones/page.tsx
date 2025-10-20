@@ -305,7 +305,7 @@ export default function Page () {
                       ? (
                         <Button action={async () => {
                           const state = randomBytes(16).toString('hex')
-                          await axios.put(`${process.env.NEXT_PUBLIC_MAIN_API_URL}/tenant/${session?.tenantId}`, { instagramState: state })
+                          await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/tenant/${session?.tenantId}`, { instagramState: state })
                           window.open(
                             `https://www.instagram.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_IG_APP_ID}&redirect_uri=${process.env.NEXT_PUBLIC_FB_REDIRECT_URI}&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments&state=${encodeURIComponent(state)}`,
                             'Conectar Instagram',
