@@ -59,7 +59,7 @@ export const Pages: React.FC<Props> = ({ domain, pages, setType, setMenu, setPar
       </div>
       <div className='flex flex-col gap-2'>
         {
-          pages.filter(page => page.page !== 'Blog').map((page, index) => {
+          pages.map((page, index) => {
             if (page.page !== 'Tienda' || (page.page === 'Tienda' && productsOrder?.length)) {
               return (
                 <div key={page.slug} className='flex flex-col gap-2'>
