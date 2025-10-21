@@ -246,7 +246,11 @@ export const PopupNewForm: React.FC<Props> = ({ popupForm, setPopupForm, titleFo
                   e.preventDefault()
                   if (!loadingNewData) {
                     setLoadingNewData(true)
-                    await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client-data`, { data: newData })
+                    await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client-data`, { data: newData }, {
+                      headers: {
+                        'x-tenant-id': session?.tenantId
+                      }
+                    })
                     setNewData('')
                     getClientData()
                     setLoadingNewData(false)
