@@ -56,7 +56,7 @@ export const Plans: React.FC<Props> = ({ edit, pages, setPages, design, index, i
           edit === 'Planes'
             ? (
               <>
-                <div className='flex flex-col gap-2 w-fit m-auto p-6 bg-white rounded-xl border border-black/5 shadow-md'>
+                <div className='flex flex-col gap-2 w-fit m-auto p-6 bg-white text-black rounded-xl border border-black/5 shadow-md'>
                   <div className='flex flex-col gap-2'>
                     <p className='m-auto font-medium'>Tipo fondo</p>
                     <Select change={(e: any) => {
