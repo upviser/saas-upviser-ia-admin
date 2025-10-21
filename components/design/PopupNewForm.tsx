@@ -4,6 +4,7 @@ import { Button, Button2, ButtonSubmit2, Input, Select, Spinner2 } from '../ui'
 import { IClientData, IForm, IFunnel, ITag } from '@/interfaces'
 import { IoMdClose } from 'react-icons/io'
 import { useSession } from 'next-auth/react'
+import { CgClose } from 'react-icons/cg'
 
 interface Props {
   popupForm: { view: string, opacity: string, mouse: boolean }
@@ -106,7 +107,15 @@ export const PopupNewForm: React.FC<Props> = ({ popupForm, setPopupForm, titleFo
             {
               newForm.informations.map((information, i) => (
                 <>
-                  <p>Información {i + 1}</p>
+                  <div className="flex gap-4 justify-between">
+                    <p>Información {i + 1}</p>
+                    <button onClick={(e: any) => {
+                      e.preventDefault()
+                      const oldInformations = [...newForm.informations]
+                      oldInformations.splice(i, 1)
+                      setNewForm({ ...newForm, informations: oldInformations })
+                    }}><CgClose /></button>
+                  </div>
                   <p>Icono</p>
                   <div className="flex gap-2 flex-wrap">
                     <button onClick={(e: any) => {
@@ -149,7 +158,15 @@ export const PopupNewForm: React.FC<Props> = ({ popupForm, setPopupForm, titleFo
             {
               newForm.labels.map((label, i) => (
                 <>
-                  <p>Dato {i + 1}</p>
+                  <div className="flex gap-4 justify-between">
+                    <p>Dato {i + 1}</p>
+                    <button onClick={(e: any) => {
+                      e.preventDefault()
+                      const oldLabels = [...newForm.labels]
+                      oldLabels.splice(i, 1)
+                      setNewForm({ ...newForm, labels: oldLabels })
+                    }}><CgClose /></button>
+                  </div>
                   <Input change={(e: any) => {
                     const oldLabels = [...newForm.labels]
                     oldLabels[i].text = e.target.value
