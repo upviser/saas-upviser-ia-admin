@@ -357,7 +357,11 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
                 e.preventDefault()
                 if (!loadingNewData) {
                   setLoadingNewData(true)
-                  await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client-data`, { data: newData })
+                  await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client-data`, { data: newData }, {
+                    headers: {
+                      'x-tenant-id': session?.tenantId
+                    }
+                  })
                   setNewData('')
                   getClientData()
                   setLoadingNewData(false)
@@ -403,7 +407,11 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
                 e.preventDefault()
                 if (!loadingTag) {
                   setLoadingTag(true)
-                  await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client-tag`, { tag: newTag })
+                  await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client-tag`, { tag: newTag }, {
+                    headers: {
+                      'x-tenant-id': session?.tenantId
+                    }
+                  })
                   getTags()
                   setNewTag('')
                   setLoadingTag(false)

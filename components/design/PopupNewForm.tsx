@@ -301,7 +301,11 @@ export const PopupNewForm: React.FC<Props> = ({ popupForm, setPopupForm, titleFo
                 e.preventDefault()
                 if (!loadingTag) {
                   setLoadingTag(true)
-                  await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client-tag`, { tag: newTag })
+                  await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client-tag`, { tag: newTag }, {
+                    headers: {
+                      'x-tenant-id': session?.tenantId
+                    }
+                  })
                   getTags()
                   setNewTag('')
                   setLoadingTag(false)

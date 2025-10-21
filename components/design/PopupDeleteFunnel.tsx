@@ -3,6 +3,7 @@ import { IoMdClose } from 'react-icons/io'
 import { Button, Button2, ButtonSubmit, Input, Spinner2, Textarea } from '../ui'
 import axios from 'axios'
 import { IFunnel } from '@/interfaces'
+import { useSession } from 'next-auth/react'
 
 interface Props {
     popupDeleteFunnel: any
@@ -15,6 +16,8 @@ interface Props {
 export const PopupDeleteFunnel: React.FC<Props> = ({ popupDeleteFunnel, setPopupDeleteFunnel, selectFunnel, setFunnels, getFunnels }) => {
 
   const [loading, setLoading] = useState(false)
+
+  const { data: session } = useSession()
 
   return (
       <div onClick={() => {
@@ -32,7 +35,11 @@ export const PopupDeleteFunnel: React.FC<Props> = ({ popupDeleteFunnel, setPopup
               e.preventDefault()
               if (!loading) {
                 setLoading(true)
-                await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/funnel/${selectFunnel?._id}`)
+                await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/funnel/${selectFunnel?._id}`, {
+                  headers: {
+                    'x-tenant-id': session?.tenantId
+                  }
+                })
                 getFunnels()
                 setPopupDeleteFunnel({ ...popupDeleteFunnel, view: 'flex', opacity: 'opacity-0' })
                 setTimeout(() => {
