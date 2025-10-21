@@ -62,7 +62,11 @@ export const PopupNewForm: React.FC<Props> = ({ popupForm, setPopupForm, titleFo
             if (titleForm === 'Nuevo formulario') {
               if (newForm.nameForm !== '') {
                 console.log(newForm)
-                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/form`, newForm)
+                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/form`, newForm , {
+                  headers: {
+                    'x-tenant-id': session?.tenantId
+                  }
+                })
                 getForms()
                 setPopupForm({ ...popupForm, view: 'flex', opacity: 'opacity-0' })
                 setTimeout(() => {
