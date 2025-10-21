@@ -203,13 +203,13 @@ export const PopupNewForm: React.FC<Props> = ({ popupForm, setPopupForm, titleFo
                         <>
                           {
                             label.datas?.map((data, index) => (
-                              <div key={data} className='flex gap-2'>
+                              <div key={index} className='flex gap-2'>
                                 <Input change={(e: any) => {
                                   e.preventDefault()
                                   const oldLabels = [...newForm.labels]
-                                  oldLabels![i].datas![index] =e.target.value
+                                  oldLabels![i].datas![index] = e.target.value
                                   setNewForm({ ...newForm, labels: oldLabels })
-                                }} placeholder={`Respuesta ${i + 1}`} />
+                                }} value={data} placeholder={`Respuesta ${i + 1}`} />
                                 <button onClick={(e: any) => {
                                   e.preventDefault()
                                   const oldLabels = [...newForm.labels]
