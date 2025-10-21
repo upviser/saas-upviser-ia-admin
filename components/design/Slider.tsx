@@ -260,8 +260,44 @@ export const Slider: React.FC<Props> = ({ design, edit, pages, setPages, index, 
                                   calls?.map(call => <option key={call._id} value={call._id}>Abrir llamada {call.nameMeeting} como popup</option>)
                                 }
                                 <option>Abrir Whatsapp</option>
+                                <option>Url personalizada</option>
                               </select>
                             </div>
+                            {
+                              banner.buttonLink === 'Url personalizada'
+                                ? (
+                                  <Input value={banner.url} change={(e: any) => {
+                                    if (inde !== undefined) {
+                                      const oldFunnels = [...funnels!]
+                                      if (oldFunnels[inde].steps[ind].design![index].info.banner?.length) {
+                                        oldFunnels[inde].steps[ind].design![index].info.banner![i].url = e.target.value
+                                        setFunnels(oldFunnels)
+                                      }
+                                    } else if (indx !== undefined) {
+                                      const oldServices = [...services!]
+                                      if (oldServices[indx].steps[ind].design![index].info.banner?.length) {
+                                        oldServices[indx].steps[ind].design![index].info.banner![i].url = e.target.value
+                                        setServices(oldServices)
+                                      }
+                                    } else if (inx !== undefined) {
+                                      const oldPages = [...pages]
+                                      oldPages[inx].design[index].info.banner![i].url = e.target.value
+                                      setPages(oldPages)
+                                    } else if (inxx !== undefined) {
+                                      const oldPages = [...pages]
+                                      oldPages[inxx].design[index].info.banner![i].url = e.target.value
+                                      setPages(oldPages)
+                                    } else {
+                                      const oldPages = [...pages]
+                                      if (oldPages[ind].design[index].info.banner?.length) {
+                                        oldPages[ind].design[index].info.banner![i].url = e.target.value
+                                        setPages(oldPages)
+                                      }
+                                    }
+                                  }} placeholder='Url personalizada' />
+                                )
+                                : ''
+                            }
                             <input type='file' className='m-auto text-white text-sm block w-full file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-main/40 file:text-white hover:file:bg-main/20' onChange={async (e: any) => {
                               const formData = new FormData();
                               formData.append('image', e.target.files[0]);

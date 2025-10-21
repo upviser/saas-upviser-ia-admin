@@ -44,7 +44,7 @@ export const Blocks: React.FC<Props> = ({ edit, pages, setPages, design, index, 
           edit === 'Bloques'
             ? (
               <>
-                <div className='flex flex-col gap-2 w-fit m-auto p-6 bg-white rounded-xl border border-black/5 shadow-md'>
+                <div className='flex flex-col gap-2 w-fit m-auto p-6 bg-white text-black rounded-xl border border-black/5 shadow-md'>
                   <div className='flex flex-col gap-2'>
                     <p className='m-auto font-medium'>Tipo fondo</p>
                     <Select change={(e: any) => {
@@ -487,8 +487,8 @@ export const Blocks: React.FC<Props> = ({ edit, pages, setPages, design, index, 
                                       setPages(oldPages)
                                     }
                                   }} className='text-sm lg:text-[16px] bg-transparent border border-neutral-500' />
-                                    </div>
-                                    <select value={block.buttonLink} onChange={(e: any) => {
+                                  </div>
+                                  <select value={block.buttonLink} onChange={(e: any) => {
                                     if (inde !== undefined) {
                                       const oldFunnels = [...funnels!]
                                       oldFunnels[inde].steps[ind].design![index].info.blocks![i].buttonLink = e.target.value
@@ -535,7 +535,37 @@ export const Blocks: React.FC<Props> = ({ edit, pages, setPages, design, index, 
                                       calls?.map(call => <option key={call._id} value={call._id}>Abrir llamada {call.nameMeeting} como popup</option>)
                                     }
                                     <option>Abrir Whatsapp</option>
+                                    <option>Url personalizada</option>
                                   </select>
+                                  {
+                                    block.buttonLink === 'Url personalizada'
+                                      ? (
+                                        <Input value={block.url} change={(e: any) => {
+                                          if (inde !== undefined) {
+                                            const oldFunnels = [...funnels!]
+                                            oldFunnels[inde].steps[ind].design![index].info.blocks![i].url = e.target.value
+                                            setFunnels(oldFunnels)
+                                          } else if (indx !== undefined) {
+                                            const oldServices = [...services!]
+                                            oldServices[indx].steps[ind].design![index].info.blocks![i].url = e.target.value
+                                            setServices(oldServices)
+                                          } else if (inx !== undefined) {
+                                            const oldPages = [...pages]
+                                            oldPages[inx].design[index].info.blocks![i].url = e.target.value
+                                            setPages(oldPages)
+                                          } else if (inxx !== undefined) {
+                                            const oldPages = [...pages]
+                                            oldPages[inxx].design[index].info.blocks![i].url = e.target.value
+                                            setPages(oldPages)
+                                          } else {
+                                            const oldPages = [...pages]
+                                            oldPages[ind].design[index].info.blocks![i].url = e.target.value
+                                            setPages(oldPages)
+                                          }
+                                        }} placeholder='Url personalizada' />
+                                      )
+                                      : ''
+                                  }
                                   <input type='file' className='m-auto text-sm block w-full file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-main/60 hover:file:bg-main/40 file:text-white' onChange={async (e: any) => {
                                     const formData = new FormData();
                                     formData.append('image', e.target.files[0]);

@@ -548,7 +548,37 @@ export const Bloque3: React.FC<Props> = ({ edit, design, index, pages, setPages,
                       calls?.map(call => <option key={call._id} value={call._id}>Abrir llamada {call.nameMeeting} como popup</option>)
                     }
                     <option>Abrir Whatsapp</option>
+                    <option>Url personalizada</option>
                   </select>
+                  {
+                    design.info.buttonLink === 'Url personalizada'
+                      ? (
+                        <Input value={design.info.url} change={(e: any) => {
+                          if (inde !== undefined) {
+                            const oldFunnels = [...funnels!]
+                            oldFunnels[inde].steps[ind].design![index].info.url = e.target.value
+                            setFunnels(oldFunnels)
+                          } else if (indx !== undefined) {
+                            const oldServices = [...services!]
+                            oldServices[indx].steps[ind].design![index].info.url = e.target.value
+                            setServices(oldServices)
+                          } else if (inx !== undefined) {
+                            const oldPages = [...pages]
+                            oldPages[inx].design[index].info.url = e.target.value
+                            setPages(oldPages)
+                          } else if (inxx !== undefined) {
+                            const oldPages = [...pages]
+                            oldPages[inxx].design[index].info.url = e.target.value
+                            setPages(oldPages)
+                          } else {
+                            const oldPages = [...pages]
+                            oldPages[ind].design[index].info.url = e.target.value
+                            setPages(oldPages)
+                          }
+                        }} placeholder='Url personalizada' />
+                      )
+                      : ''
+                  }
                 </div>
                 <div className='flex gap-4 m-auto' style={{ color: design.info.textColor }}>
                   <div className='w-fit py-2 px-6' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '', border: `1px solid ${style.borderColor}` }}>
@@ -622,7 +652,37 @@ export const Bloque3: React.FC<Props> = ({ edit, design, index, pages, setPages,
                     {
                       calls?.map(call => <option key={call._id} value={call._id}>Abrir llamada {call.nameMeeting} como popup</option>)
                     }
+                    <option>Url personalizada</option>
                   </select>
+                  {
+                    design.info.buttonLink2 === 'Url personalizada'
+                      ? (
+                        <Input value={design.info.url2} change={(e: any) => {
+                          if (inde !== undefined) {
+                            const oldFunnels = [...funnels!]
+                            oldFunnels[inde].steps[ind].design![index].info.url2 = e.target.value
+                            setFunnels(oldFunnels)
+                          } else if (indx !== undefined) {
+                            const oldServices = [...services!]
+                            oldServices[indx].steps[ind].design![index].info.url2 = e.target.value
+                            setServices(oldServices)
+                          } else if (inx !== undefined) {
+                            const oldPages = [...pages]
+                            oldPages[inx].design[index].info.url2 = e.target.value
+                            setPages(oldPages)
+                          } else if (inxx !== undefined) {
+                            const oldPages = [...pages]
+                            oldPages[inxx].design[index].info.url2 = e.target.value
+                            setPages(oldPages)
+                          } else {
+                            const oldPages = [...pages]
+                            oldPages[ind].design[index].info.url2 = e.target.value
+                            setPages(oldPages)
+                          }
+                        }} placeholder='Url personalizada' />
+                      )
+                      : ''
+                  }
                 </div>
                 {
                   design.info?.image && design.info.image !== ''

@@ -472,7 +472,37 @@ export const Plans: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                   <option>Realizar pago</option>
                   <option>Completar formulario</option>
                   <option>Agendar llamada</option>
+                  <option>Ir a una página</option>
                 </Select>
+                {
+                  design.info.video === 'Ir a una página'
+                    ? (
+                      <Input value={design.info.url} change={(e: any) => {
+                        if (inde !== undefined) {
+                          const oldFunnels = [...funnels!]
+                          oldFunnels[inde].steps[ind].design![index].info.url = e.target.value
+                          setFunnels(oldFunnels)
+                        } else if (indx !== undefined) {
+                          const oldServices = [...services!]
+                          oldServices[indx].steps[ind].design![index].info.url = e.target.value
+                          setServices(oldServices)
+                        } else if (inx !== undefined) {
+                          const oldPages = [...pages]
+                          oldPages[inx].design[index].info.url = e.target.value
+                          setPages(oldPages)
+                        } else if (inxx !== undefined) {
+                          const oldPages = [...pages]
+                          oldPages[inxx].design[index].info.url = e.target.value
+                          setPages(oldPages)
+                        } else {
+                          const oldPages = [...pages]
+                          oldPages[ind].design[index].info.url = e.target.value
+                          setPages(oldPages)
+                        }
+                      }} placeholder='Url personalizada' />
+                    )
+                    : ''
+                }
                 <Input change={(e: any) => {
                   if (inde !== undefined) {
                     const oldFunnels = [...funnels!]
@@ -571,7 +601,9 @@ export const Plans: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                         </div>
                       </>
                     )
-                    : (
+                    : design.info.video === 'Ir a una página'
+                      ? ''
+                      : (
                       <>
                         <p className='m-auto'>Agregar preguntas adicionales al formulario</p>
                           {

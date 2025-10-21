@@ -31,13 +31,7 @@ export default function Page () {
   useEffect(() => {
     const getPlan = () => {
       const planParam = searchParams.get("plan")
-      const limitParam = searchParams.get("limit")
-      if (limitParam === 'Que se limiten') {
-        setLoginData({ ...loginData, plan: planParam ? planParam : '', imagesAI: planParam ? planParam === 'Esencial' ? 20 : planParam === 'Avanzado' ? 40 : planParam === 'Profesional' ? 80 : 0 : 0, videosAI: planParam ? planParam === 'Avanzado' ? 15 : planParam === 'Profesional' ? 30 : 0 : 0, conversationsAI: planParam ? planParam === 'Esencial' ? 250 : planParam === 'Avanzado' ? 600 : planParam === 'Profesional' ? 1500 : 0 : 0, emails: planParam ? planParam === 'Esencial' ? 1500 : planParam === 'Avanzado' ? 3500 : planParam === 'Profesional' ? 8000 : 0 : 0, textAI: planParam ? planParam === 'Esencial' ? 100 : planParam === 'Avanzado' ? 200 : planParam === 'Profesional' ? 400 : 0 : 0 })
-      } else if (limitParam === 'Que sigan funcionando') {
-        setLoginData({ ...loginData, plan: planParam ? planParam : '', imagesAI: planParam ? planParam === 'Esencial' ? 20 : planParam === 'Avanzado' ? 40 : planParam === 'Profesional' ? 80 : 0 : 0, videosAI: planParam ? planParam === 'Avanzado' ? 15 : planParam === 'Profesional' ? 30 : 0 : 0, conversationsAI: planParam ? planParam === 'Esencial' ? 250 : planParam === 'Avanzado' ? 600 : planParam === 'Profesional' ? 1500 : 0 : 0, emails: planParam ? planParam === 'Esencial' ? 1500 : planParam === 'Avanzado' ? 3500 : planParam === 'Profesional' ? 8000 : 0 : 0, textAI: planParam ? planParam === 'Esencial' ? 100 : planParam === 'Avanzado' ? 200 : planParam === 'Profesional' ? 400 : 0 : 0, imagesAIAdd: 0, videosAIAdd: 0, textAIAdd: 0, conversationsAIAdd: 0, emailsAdd: 0 })
-      }
-      
+      setLoginData({ ...loginData, plan: planParam ? planParam : '', imagesAI: planParam ? planParam === 'Prueba' ? 20 : 0 : 0, videosAI: 0, conversationsAI: planParam ? planParam === 'Prueba' ? 250 : 0 : 0, emails: planParam ? planParam === 'Prueba' ? 1500 : 0 : 0, textAI: planParam ? planParam === 'Esencial' ? 100 : 0 : 0 })
     }
 
     getPlan()
