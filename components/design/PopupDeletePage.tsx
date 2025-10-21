@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { ButtonSubmit } from '../ui'
 import axios from 'axios'
 import { IPage } from '@/interfaces'
+import { useSession } from 'next-auth/react'
 
 interface Props {
     popupDeletePage: any
@@ -17,6 +18,8 @@ interface Props {
 export const PopupDeletePage: React.FC<Props> = ({ popupDeletePage, setPopupDeletePage, getPages, page, pages, header, color, popupWeb }) => {
 
   const [loading, setLoading] = useState(false)
+
+  const { data: session } = useSession()
 
   return (
     <div onClick={() => {
@@ -35,7 +38,11 @@ export const PopupDeletePage: React.FC<Props> = ({ popupDeletePage, setPopupDele
               if (!loading) {
                 setLoading(true)
                 const newPages = pages?.filter(pag => pag._id !== page?._id)
-                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/design`, { header: header, pages: newPages, color: color, popup: popupWeb })
+                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/design`, { header: header, pages: newPages, color: color, popup: popupWeb }, {
+                  headers: {
+                    'x-tenant-id': session?.tenantId
+                  }
+                })
                 getPages()
                 setPopupDeletePage({ ...popupDeletePage, view: 'flex', opacity: 'opacity-0' })
                 setTimeout(() => {
