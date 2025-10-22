@@ -277,7 +277,10 @@ export default function Page () {
                               : ''
                           }
                         </div>
-                        <Button config='w-full' action={(e: any) => {
+                        {
+                          session?.user.plan === 'Prueba'
+                            ? (
+                              <Button config='w-full' action={(e: any) => {
                                 e.preventDefault()
                                 setPlan(plan)
                                 initializationRef.current.amount = typePrice === 'Mensual' ? Number(plan.price) / 100 * 119 : Number(plan.anualPrice) / 100 * 119
@@ -286,6 +289,21 @@ export default function Page () {
                                   setPopup({ ...popup, view: 'flex', opacity: 'opacity-1' })
                                 }, 10);
                               }}>Seleccionar plan</Button>
+                            )
+                            : session?.user.plan === plan.name
+                              ? <Button config='w-full'>Plan actual</Button>
+                              : (
+                                <Button config='w-full' action={(e: any) => {
+                                  e.preventDefault()
+                                  setPlan(plan)
+                                  initializationRef.current.amount = typePrice === 'Mensual' ? Number(plan.price) / 100 * 119 : Number(plan.anualPrice) / 100 * 119
+                                  setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
+                                  setTimeout(() => {
+                                    setPopup({ ...popup, view: 'flex', opacity: 'opacity-1' })
+                                  }, 10);
+                                }}>Seleccionar plan</Button>
+                              )
+                        }
                       </div>
                     ))
                   }
