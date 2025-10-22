@@ -8,7 +8,8 @@ declare module "next-auth" {
       email: string;
       type: string
       permissions?: string[]
-      plan: string
+      plan: string,
+      state: boolean
     };
     tenantId: string;
   }

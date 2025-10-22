@@ -60,6 +60,11 @@ export const Navbar: React.FC<PropsWithChildren> = ({ children }) => {
       }
       router.push('/ingresar');
     } else if (session !== undefined) {
+      if (session.user.state === false) {
+        router.push('/configuracion/planes')
+        setLoading(false)
+        return
+      }
       if (pathname === '/configuracion-usuario') return setLoading(false);
       const userPermissions = session.user.permissions || [];
 
@@ -100,7 +105,11 @@ export const Navbar: React.FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     const getStoreData = async () => {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/store-data`)
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/store-data`, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       if (res.data) {
         setStoreData(res.data)
       }
@@ -112,7 +121,11 @@ export const Navbar: React.FC<PropsWithChildren> = ({ children }) => {
   const getNotifications = async () => {
     setLoadingNotifications(true)
     setNotifications([])
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/notifications`)
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/notifications`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     if (response.data.find((notification: any) => notification.view === false)) {
       setNotification(true)
     } else {
@@ -137,7 +150,11 @@ export const Navbar: React.FC<PropsWithChildren> = ({ children }) => {
         if (pathname !== '/mensajes') {
           setMessages(true)
         }
-        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/notification`, {title: 'Nuevo mensaje: Chat web', description: message.message, url: '/mensajes', view: false})
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/notification`, {title: 'Nuevo mensaje: Chat web', description: message.message, url: '/mensajes', view: false}, {
+          headers: {
+            'x-tenant-id': session?.tenantId
+          }
+        })
       }
     })
 

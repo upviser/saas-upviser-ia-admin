@@ -3,8 +3,13 @@ import { Button, Input, Spinner } from '@/components/ui'
 import apiClient from '@/utils/axiosConfig'
 import { generateTenantId } from '@/utils/tenantUtils'
 import { signIn } from 'next-auth/react'
+import Link from 'next/link'
 import { useSearchParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
+import Cookies from 'js-cookie'
+import { IService } from '@/interfaces'
+
+declare const fbq: Function
 
 export default function Page () {
 
@@ -24,6 +29,7 @@ export default function Page () {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [subdomainError, setSubdomainError] = useState('')
+  const [price, setPrice] = useState<any>('')
 
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -32,6 +38,8 @@ export default function Page () {
     const getPlan = () => {
       const planParam = searchParams.get("plan")
       setLoginData({ ...loginData, plan: planParam ? planParam : '', imagesAI: planParam ? planParam === 'Prueba' ? 5 : 0 : 0, videosAI: 0, conversationsAI: planParam ? planParam === 'Prueba' ? 10 : 0 : 0, emails: planParam ? planParam === 'Prueba' ? 30 : 0 : 0, textAI: planParam ? planParam === 'Esencial' ? 10 : 0 : 0 })
+      const priceParam = searchParams.get("price")
+      setPrice(priceParam)
     }
 
     getPlan()
@@ -88,6 +96,17 @@ export default function Page () {
           password: loginData.password,
           redirect: false
         })
+
+        const res2 = await apiClient.get('/services')
+        const service = res2.data.find((service: IService) => service.name === 'Upviser IA')
+
+        const newEventId = new Date().getTime().toString()
+
+        await apiClient.post('/client', { firstName: loginData.firstName, lastName: loginData.lastName, email: loginData.email, phone: loginData.phone && loginData.phone !== '' ? `56${loginData.phone}` : undefined, fbp: Cookies.get('_fbp'), fbc: Cookies.get('_fbc'), pathname: 'https://app.upviser.cl/registro', eventId: newEventId, service: service?._id, stepService: service?.steps[0]?._id })
+
+        if (typeof fbq === 'function') {
+          fbq('track', 'start_trial', { first_name: loginData.firstName, last_name: loginData.lastName, email: loginData.email, phone: loginData.phone && loginData.phone !== '' ? `56${loginData.phone}` : undefined, content_name: service?._id, currency: "clp", value: price, contents: { id: service?._id, item_price: price, quantity: 1 }, fbc: Cookies.get('_fbc'), fbp: Cookies.get('_fbp'), event_source_url: `https://app.upviser.cl/configuracion/planes` }, { eventID: newEventId })
+        }
         
         if (res?.error) {
           setError(res.error)
@@ -109,7 +128,7 @@ export default function Page () {
             ? <p className='w-full p-2 bg-red-600 text-white text-center'>{error}</p>
             : ''
         }
-        <h1 className='text-2xl font-medium'>Crear cuenta principal</h1>
+        <h1 className='text-2xl font-medium'>Comienza gratis</h1>
         <div className='flex flex-col gap-2'>
             <p className='text-sm'>Nombre</p>
             <Input placeholder='Nombre' name='name' change={inputChange} value={loginData.name} />
@@ -145,6 +164,7 @@ export default function Page () {
             Inicia sesión
           </button>
         </div>
+        <p className='text-sm text-gray-600 dark:text-gray-400'>Al continuar, aceptas los <Link className='text-main' target='_blank' href={'https://upviser.cl/terminos-y-condiciones'}>Términos y Condiciones</Link> y la <Link className='text-main' target='_blank' href={'https://upviser.cl/politica-de-privacidad'}>Política de privacidad</Link></p>
         </form>
       
     </div>
