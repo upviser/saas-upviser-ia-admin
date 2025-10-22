@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { useSearchParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import Cookies from 'js-cookie'
-import { IService } from '@/interfaces'
+import { IFunnel, IService } from '@/interfaces'
 
 declare const fbq: Function
 
@@ -30,16 +30,25 @@ export default function Page () {
   const [error, setError] = useState('')
   const [subdomainError, setSubdomainError] = useState('')
   const [price, setPrice] = useState<any>('')
+  const [funnel, setFunnel] = useState<IFunnel>()
+  const [step, setStep] = useState<any>('')
 
   const searchParams = useSearchParams()
   const router = useRouter()
 
   useEffect(() => {
-    const getPlan = () => {
+    const getPlan = async () => {
       const planParam = searchParams.get("plan")
       setLoginData({ ...loginData, plan: planParam ? planParam : '', imagesAI: planParam ? planParam === 'Prueba' ? 5 : 0 : 0, videosAI: 0, conversationsAI: planParam ? planParam === 'Prueba' ? 10 : 0 : 0, emails: planParam ? planParam === 'Prueba' ? 30 : 0 : 0, textAI: planParam ? planParam === 'Esencial' ? 10 : 0 : 0 })
       const priceParam = searchParams.get("price")
       setPrice(priceParam)
+      const funnelParam = searchParams.get("funnel")
+      if (funnelParam) {
+        const res = await apiClient.get(`/funnel/${funnelParam}`)
+        setFunnel(res.data)
+        const stepParam = searchParams.get("step")
+        setStep(stepParam)
+      }
     }
 
     getPlan()
@@ -102,7 +111,11 @@ export default function Page () {
 
         const newEventId = new Date().getTime().toString()
 
-        await apiClient.post('/client', { firstName: loginData.firstName, lastName: loginData.lastName, email: loginData.email, phone: loginData.phone && loginData.phone !== '' ? `56${loginData.phone}` : undefined, fbp: Cookies.get('_fbp'), fbc: Cookies.get('_fbc'), pathname: 'https://app.upviser.cl/registro', eventId: newEventId, service: service?._id, stepService: service?.steps[0]?._id })
+        if (funnel?._id) {
+          await apiClient.post('/client', { firstName: loginData.firstName, lastName: loginData.lastName, email: loginData.email, phone: loginData.phone && loginData.phone !== '' ? `56${loginData.phone}` : undefined, fbp: Cookies.get('_fbp'), fbc: Cookies.get('_fbc'), pathname: 'https://app.upviser.cl/registro', eventId: newEventId, service: service?._id, funnel: funnel._id, stepFunnel: funnel.steps[Number(step)]._id })
+        } else {
+          await apiClient.post('/client', { firstName: loginData.firstName, lastName: loginData.lastName, email: loginData.email, phone: loginData.phone && loginData.phone !== '' ? `56${loginData.phone}` : undefined, fbp: Cookies.get('_fbp'), fbc: Cookies.get('_fbc'), pathname: 'https://app.upviser.cl/registro', eventId: newEventId, service: service?._id })
+        }
 
         if (typeof fbq === 'function') {
           fbq('track', 'start_trial', { first_name: loginData.firstName, last_name: loginData.lastName, email: loginData.email, phone: loginData.phone && loginData.phone !== '' ? `56${loginData.phone}` : undefined, content_name: service?._id, currency: "clp", value: price, contents: { id: service?._id, item_price: price, quantity: 1 }, fbc: Cookies.get('_fbc'), fbp: Cookies.get('_fbp'), event_source_url: `https://app.upviser.cl/configuracion/planes` }, { eventID: newEventId })
