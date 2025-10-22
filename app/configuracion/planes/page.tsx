@@ -290,7 +290,7 @@ export default function Page () {
                                 }, 10);
                               }}>Seleccionar plan</Button>
                             )
-                            : plan.name.includes(session?.user.plan!)
+                            : plan.name.split(' ')[1] === session?.user.plan
                               ? <Button config='w-full'>Plan actual</Button>
                               : (
                                 <Button config='w-full' action={(e: any) => {
