@@ -87,7 +87,7 @@ export default function Page () {
                                 'x-tenant-id': 'tenant_1760490526673_0i0f5snhu'
                             }
                         })
-                        const price = Number(initializationRef.current.amount)
+                        const price = Number(typePrice === 'Mensual' ? initializationRef.current.amount : initializationRef.current.amount * 12)
                         const newEventId = new Date().getTime().toString()
                         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/pay`, { firstName: clientRef.current.firstName, lastName: clientRef.current.lastName, email: clientRef.current.email, phone: clientRef.current.phone, service: service?._id, stepService: service?.steps[1]?._id, typeService: service?.typeService, typePrice: service?.typePrice, plan: plan?._id, price: price, state: 'Pago realizado', fbp: Cookies.get('_fbp'), fbc: Cookies.get('_fbc'), pathname: 'https://app.upviser.cl/configuracion/planes', eventId: newEventId, funnel: clientRef.current.funnels?.length ? clientRef.current.funnels[0].funnel : undefined, step: clientRef.current.funnels?.length ? clientRef.current.funnels[0].step : undefined, suscriptionId: response.id }, {
                             headers: {
@@ -147,7 +147,7 @@ export default function Page () {
         if (typeof initializationRef.current.amount === 'number' && initializationRef.current.amount > 0) {
           return (
             <CardPayment
-              initialization={initializationRef.current}
+              initialization={typePrice === 'Mensual' ? initializationRef.current : { amount: initializationRef.current.amount * 12 }}
               onSubmit={onSubmit}
               onReady={onReady}
               onError={onError}

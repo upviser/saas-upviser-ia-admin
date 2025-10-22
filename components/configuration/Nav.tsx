@@ -8,6 +8,7 @@ import { HiOutlineInformationCircle } from 'react-icons/hi'
 import { MdOutlineIntegrationInstructions, MdOutlineLocalShipping } from 'react-icons/md'
 import { TbWorldWww } from 'react-icons/tb'
 import { HiChevronDown, HiChevronUp } from 'react-icons/hi'
+import { IoPodiumOutline } from 'react-icons/io5'
 
 export const Nav = () => {
   const pathname = usePathname()
@@ -15,6 +16,7 @@ export const Nav = () => {
 
   const menuItems = [
     { href: '/configuracion', label: 'Información del negocio', icon: HiOutlineInformationCircle },
+    { href: '/configuracion/planes', label: 'Planes', icon: IoPodiumOutline },
     { href: '/configuracion/dominio', label: 'Dominio', icon: TbWorldWww },
     { href: '/configuracion/usuarios', label: 'Usuarios', icon: FaUser },
     { href: '/configuracion/pasarela-de-pago', label: 'Pasarela de pago', icon: BsCreditCard },
