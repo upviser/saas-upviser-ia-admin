@@ -103,7 +103,7 @@ export default function Page () {
                                 'x-tenant-id': 'tenant_1760490526673_0i0f5snhu'
                             }
                         })
-                        await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { state: true, subscription: true, dateSubscription: new Date() }, {
+                        await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { state: true, subscription: true, dateSubscription: new Date(), plan: plan?.name, textAI: plan?.name === 'Plan Esencial' ? 100 : plan?.name === 'Plan Avanzado' ? 200 : plan?.name === 'Plan Profesional' ? 400 : 0, imagesAI: plan?.name === 'Plan Esencial' ? 20 : plan?.name === 'Plan Avanzado' ? 40 : plan?.name === 'Plan Profesional' ? 80 : 0, videosAI: plan?.name === 'Plan Avanzado' ? 15 : plan?.name === 'Plan Profesional' ? 30 : 0, conversationsAI: plan?.name === 'Plan Esencial' ? 250 : plan?.name === 'Plan Avanzado' ? 600 : plan?.name === 'Plan Profesional' ? 1500 : 0, emails: plan?.name === 'Plan Esencial' ? 1500 : plan?.name === 'Plan Avanzado' ? 3500 : plan?.name === 'Plan Profesional' ? 8000 : 0 }, {
                             headers: {
                                 'x-tenant-id': 'tenant_1760490526673_0i0f5snhu'
                             }
