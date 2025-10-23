@@ -45,7 +45,11 @@ export default function Page () {
       setPrice(priceParam)
       const funnelParam = searchParams.get("funnel")
       if (funnelParam) {
-        const res = await apiClient.get(`/funnel/${funnelParam}`)
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/funnel/${funnelParam}`, {
+          headers: {
+            'x-tenant-id': process.env.NEXT_PUBLIC_MAIN_TENANT_ID
+          }
+        })
         setFunnel(res.data)
         const stepParam = searchParams.get("step")
         setStep(stepParam)
@@ -119,6 +123,7 @@ export default function Page () {
         console.log(newEventId)
         if (funnel?._id) {
           console.log(funnel)
+          console.log({ firstName: loginData.firstName, lastName: loginData.lastName, email: loginData.email, phone: loginData.phone && loginData.phone !== '' ? `56${loginData.phone}` : undefined, fbp: Cookies.get('_fbp'), fbc: Cookies.get('_fbc'), pathname: 'https://app.upviser.cl/registro', eventId: newEventId, services: [{ service: service?._id }], funnels: [{ funnel: funnel._id, step: funnel.steps[Number(step)]._id }] })
           const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client`, { firstName: loginData.firstName, lastName: loginData.lastName, email: loginData.email, phone: loginData.phone && loginData.phone !== '' ? `56${loginData.phone}` : undefined, fbp: Cookies.get('_fbp'), fbc: Cookies.get('_fbc'), pathname: 'https://app.upviser.cl/registro', eventId: newEventId, services: [{ service: service?._id }], funnels: [{ funnel: funnel._id, step: funnel.steps[Number(step)]._id }] }, {
             headers: {
               'x-tenant-id': process.env.NEXT_PUBLIC_MAIN_TENANT_ID
@@ -127,6 +132,7 @@ export default function Page () {
           console.log(response.data)
         } else {
           console.log('no funnel')
+          console.log({ firstName: loginData.firstName, lastName: loginData.lastName, email: loginData.email, phone: loginData.phone && loginData.phone !== '' ? `56${loginData.phone}` : undefined, fbp: Cookies.get('_fbp'), fbc: Cookies.get('_fbc'), pathname: 'https://app.upviser.cl/registro', eventId: newEventId, service: [{ service: service?._id }] })
           const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client`, { firstName: loginData.firstName, lastName: loginData.lastName, email: loginData.email, phone: loginData.phone && loginData.phone !== '' ? `56${loginData.phone}` : undefined, fbp: Cookies.get('_fbp'), fbc: Cookies.get('_fbc'), pathname: 'https://app.upviser.cl/registro', eventId: newEventId, service: [{ service: service?._id }] }, {
             headers: {
               'x-tenant-id': process.env.NEXT_PUBLIC_MAIN_TENANT_ID
