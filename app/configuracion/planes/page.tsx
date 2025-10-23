@@ -104,8 +104,7 @@ export default function Page () {
                           const funnel: IFunnel = response.data.find((funnel: IFunnel) => funnel._id === funnelsReversed[0].funnel)
                           currentClient.funnels[currentClient.funnels.findIndex(funnel => funnel.funnel === funnelsReversed[0].funnel)].step = funnel.steps[currentClient.funnels.findIndex((funnel, i) => i === currentClient.funnels!.findIndex(funnel => funnel.funnel === funnelsReversed[0].funnel) + 1)]._id!
                         }
-                        currentClient.services![currentClient.services?.findIndex(ser => ser.service === service?._id)!].payStatus = 'Pago realizado'
-                        currentClient.services![currentClient.services?.findIndex(ser => ser.service === service?._id)!].step = service?.steps[service?.steps.find(step => step._id === currentClient.services![0].step) ? service?.steps.findIndex(step => step._id === currentClient.services![0].step) + 1 : 0]._id
+                        currentClient.services = [{ service: service?._id!, payStatus: 'Pago realizado', step: service?.steps[service?.steps.find(step => step._id === currentClient.services![0].step) ? service?.steps.findIndex(step => step._id === currentClient.services![0].step) + 1 : 0]._id }]
                         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/clients`, currentClient, {
                             headers: {
                                 'x-tenant-id': process.env.NEXT_PUBLIC_MAIN_TENANT_ID

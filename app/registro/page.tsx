@@ -45,13 +45,11 @@ export default function Page () {
       setPrice(priceParam)
       const funnelParam = searchParams.get("funnel")
       if (funnelParam) {
-        console.log(funnelParam)
         const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/funnel/${funnelParam}`, {
           headers: {
             'x-tenant-id': process.env.NEXT_PUBLIC_MAIN_TENANT_ID
           }
         })
-        console.log(res.data)
         setFunnel(res.data)
         const stepParam = searchParams.get("step")
         setStep(stepParam)
@@ -135,7 +133,7 @@ export default function Page () {
         }
 
         if (typeof fbq === 'function') {
-          fbq('track', 'start_trial', { first_name: loginData.firstName, last_name: loginData.lastName, email: loginData.email, phone: loginData.phone && loginData.phone !== '' ? `56${loginData.phone}` : undefined, content_name: service?._id, currency: "clp", value: price, contents: { id: service?._id, item_price: price, quantity: 1 }, fbc: Cookies.get('_fbc'), fbp: Cookies.get('_fbp'), event_source_url: `https://app.upviser.cl/configuracion/planes` }, { eventID: newEventId })
+          fbq('track', 'start_trial', { first_name: loginData.name, email: loginData.email, phone: loginData.phone && loginData.phone !== '' ? `56${loginData.phone}` : undefined, content_name: service?._id, currency: "clp", value: price, contents: { id: service?._id, item_price: price, quantity: 1 }, fbc: Cookies.get('_fbc'), fbp: Cookies.get('_fbp'), event_source_url: `https://app.upviser.cl/configuracion/planes` }, { eventID: newEventId })
         }
         
         if (res?.error) {
