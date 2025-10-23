@@ -45,6 +45,7 @@ export default function Page () {
       setPrice(priceParam)
       const funnelParam = searchParams.get("funnel")
       if (funnelParam) {
+        console.log(funnelParam)
         const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/funnel/${funnelParam}`, {
           headers: {
             'x-tenant-id': process.env.NEXT_PUBLIC_MAIN_TENANT_ID
@@ -117,29 +118,20 @@ export default function Page () {
             'x-tenant-id' : process.env.NEXT_PUBLIC_MAIN_TENANT_ID
           }
         })
-        console.log(res2.data)
         const service = res2.data.find((service: IService) => service.name === 'Upviser IA')
-        console.log(service)
         const newEventId = new Date().getTime().toString()
-        console.log(newEventId)
         if (funnel?._id) {
-          console.log(funnel)
-          console.log({ firstName: loginData.name, email: loginData.email, fbp: Cookies.get('_fbp'), fbc: Cookies.get('_fbc'), pathname: 'https://app.upviser.cl/registro', eventId: newEventId, services: [{ service: service?._id }], funnels: [{ funnel: funnel._id, step: funnel.steps[Number(step)]._id }] })
-          const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client`, { firstName: loginData.name, email: loginData.email, fbp: Cookies.get('_fbp'), fbc: Cookies.get('_fbc'), pathname: 'https://app.upviser.cl/registro', eventId: newEventId, services: [{ service: service?._id }], funnels: [{ funnel: funnel._id, step: funnel.steps[Number(step)]._id }] }, {
+          await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/clients`, { firstName: loginData.name, email: loginData.email, fbp: Cookies.get('_fbp'), fbc: Cookies.get('_fbc'), pathname: 'https://app.upviser.cl/registro', eventId: newEventId, services: [{ service: service?._id }], funnels: [{ funnel: funnel._id, step: funnel.steps[Number(step)]._id }] }, {
             headers: {
               'x-tenant-id': process.env.NEXT_PUBLIC_MAIN_TENANT_ID
             }
           })
-          console.log(response.data)
         } else {
-          console.log('no funnel')
-          console.log({ firstName: loginData.name, email: loginData.email, fbp: Cookies.get('_fbp'), fbc: Cookies.get('_fbc'), pathname: 'https://app.upviser.cl/registro', eventId: newEventId, service: [{ service: service?._id }] })
-          const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client`, { firstName: loginData.name, email: loginData.email, fbp: Cookies.get('_fbp'), fbc: Cookies.get('_fbc'), pathname: 'https://app.upviser.cl/registro', eventId: newEventId, service: [{ service: service?._id }] }, {
+          await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/clients`, { firstName: loginData.name, email: loginData.email, fbp: Cookies.get('_fbp'), fbc: Cookies.get('_fbc'), pathname: 'https://app.upviser.cl/registro', eventId: newEventId, service: [{ service: service?._id }] }, {
             headers: {
               'x-tenant-id': process.env.NEXT_PUBLIC_MAIN_TENANT_ID
             }
           })
-          console.log(response.data)
         }
 
         if (typeof fbq === 'function') {
