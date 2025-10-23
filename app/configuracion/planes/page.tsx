@@ -49,7 +49,7 @@ export default function Page () {
   const getClient = async () => {
     const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-email/${session?.user.email}`, {
       headers: {
-        'x-tenant-id': process.env.NEX_PUBLIC_MAIN_TENANT_ID
+        'x-tenant-id': process.env.NEXT_PUBLIC_MAIN_TENANT_ID
       }
     })
     setClient(res.data)
@@ -63,7 +63,7 @@ export default function Page () {
   const getService = async () => {
     const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/services`, {
       headers: {
-        'x-tenant-id': process.env.NEX_PUBLIC_MAIN_TENANT_ID
+        'x-tenant-id': process.env.NEXT_PUBLIC_MAIN_TENANT_ID
       }
     })
     const serviceFind = res.data.find((service: IService) => service.name === 'Upviser IA')
@@ -97,7 +97,7 @@ export default function Page () {
                         if (currentClient.funnels?.length) {
                           const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/funnels`, {
                             headers: {
-                              'x-tenant-id': process.env.NEX_PUBLIC_MAIN_TENANT_ID
+                              'x-tenant-id': process.env.NEXT_PUBLIC_MAIN_TENANT_ID
                             }
                           })
                           const funnelsReversed = currentClient.funnels.toReversed()
@@ -108,14 +108,14 @@ export default function Page () {
                         currentClient.services![currentClient.services?.findIndex(ser => ser.service === service?._id)!].step = service?.steps[service?.steps.find(step => step._id === currentClient.services![0].step) ? service?.steps.findIndex(step => step._id === currentClient.services![0].step) + 1 : 0]._id
                         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/clients`, currentClient, {
                             headers: {
-                                'x-tenant-id': process.env.NEX_PUBLIC_MAIN_TENANT_ID
+                                'x-tenant-id': process.env.NEXT_PUBLIC_MAIN_TENANT_ID
                             }
                         })
                         const price = Number(typePrice === 'Mensual' ? initializationRef.current.amount : initializationRef.current.amount * 12)
                         const newEventId = new Date().getTime().toString()
                         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/pay`, { firstName: clientRef.current.firstName, lastName: clientRef.current.lastName, email: clientRef.current.email, phone: clientRef.current.phone, service: service?._id, stepService: service?.steps[0]?._id, typeService: service?.typeService, typePrice: service?.typePrice, plan: plan?._id, price: price, state: 'Pago realizado', fbp: Cookies.get('_fbp'), fbc: Cookies.get('_fbc'), pathname: 'https://app.upviser.cl/configuracion/planes', eventId: newEventId, funnel: clientRef.current.funnels?.length ? clientRef.current.funnels[0].funnel : undefined, step: clientRef.current.funnels?.length ? clientRef.current.funnels[0].step : undefined, suscriptionId: response.id }, {
                             headers: {
-                                'x-tenant-id': process.env.NEX_PUBLIC_MAIN_TENANT_ID
+                                'x-tenant-id': process.env.NEXT_PUBLIC_MAIN_TENANT_ID
                             }
                         })
                         if (typeof fbq === 'function') {
@@ -124,12 +124,12 @@ export default function Page () {
                         socket.emit('newNotification', { title: 'Nuevo pago recibido:', description: service?.name, url: '/pagos', view: false })
                         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/notification`, { title: 'Nuevo pago recibido:', description: service?.name, url: '/pagos', view: false }, {
                             headers: {
-                                'x-tenant-id': process.env.NEX_PUBLIC_MAIN_TENANT_ID
+                                'x-tenant-id': process.env.NEXT_PUBLIC_MAIN_TENANT_ID
                             }
                         })
                         await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { state: true, subscription: true, dateSubscription: new Date(), plan: plan?.name, textAI: plan?.name === 'Plan Esencial' ? 100 : plan?.name === 'Plan Avanzado' ? 200 : plan?.name === 'Plan Profesional' ? 400 : 0, imagesAI: plan?.name === 'Plan Esencial' ? 20 : plan?.name === 'Plan Avanzado' ? 40 : plan?.name === 'Plan Profesional' ? 80 : 0, videosAI: plan?.name === 'Plan Avanzado' ? 15 : plan?.name === 'Plan Profesional' ? 30 : 0, conversationsAI: plan?.name === 'Plan Esencial' ? 250 : plan?.name === 'Plan Avanzado' ? 600 : plan?.name === 'Plan Profesional' ? 1500 : 0, emails: plan?.name === 'Plan Esencial' ? 1500 : plan?.name === 'Plan Avanzado' ? 3500 : plan?.name === 'Plan Profesional' ? 8000 : 0 }, {
                             headers: {
-                                'x-tenant-id': process.env.NEX_PUBLIC_MAIN_TENANT_ID
+                                'x-tenant-id': process.env.NEXT_PUBLIC_MAIN_TENANT_ID
                             }
                         })
                         setLoading(false)
@@ -137,14 +137,22 @@ export default function Page () {
                       } else {
                         let currentClient = clientRef.current
                         currentClient.services![0].payStatus = 'Pago no realizado'
-                        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/clients`, currentClient)
+                        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/clients`, currentClient, {
+                          headers: {
+                            'x-tenant-id': process.env.NEXT_PUBLIC_MAIN_TENANT_ID
+                          }
+                        })
                         resolve();
                       }
                     })
                     .catch(async (error) => {
                       let currentClient = clientRef.current
                       currentClient.services![0].payStatus = 'Pago no realizado'
-                      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/clients`, currentClient)
+                      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/clients`, currentClient, {
+                        headers: {
+                          'x-tenant-id': process.env.NEXT_PUBLIC_MAIN_TENANT_ID
+                        }
+                      })
                       reject();
                     });
               })
