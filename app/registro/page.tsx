@@ -8,6 +8,7 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import Cookies from 'js-cookie'
 import { IFunnel, IService } from '@/interfaces'
+import axios from 'axios'
 
 declare const fbq: Function
 
@@ -106,15 +107,27 @@ export default function Page () {
           redirect: false
         })
 
-        const res2 = await apiClient.get('/services')
+        const res2 = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/services`, {
+          headers: {
+            'x-tenant-id' : 'tenant_1760490526673_0i0f5snhu'
+          }
+        })
         const service = res2.data.find((service: IService) => service.name === 'Upviser IA')
 
         const newEventId = new Date().getTime().toString()
 
         if (funnel?._id) {
-          await apiClient.post('/client', { firstName: loginData.firstName, lastName: loginData.lastName, email: loginData.email, phone: loginData.phone && loginData.phone !== '' ? `56${loginData.phone}` : undefined, fbp: Cookies.get('_fbp'), fbc: Cookies.get('_fbc'), pathname: 'https://app.upviser.cl/registro', eventId: newEventId, service: service?._id, funnel: funnel._id, stepFunnel: funnel.steps[Number(step)]._id })
+          await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client`, { firstName: loginData.firstName, lastName: loginData.lastName, email: loginData.email, phone: loginData.phone && loginData.phone !== '' ? `56${loginData.phone}` : undefined, fbp: Cookies.get('_fbp'), fbc: Cookies.get('_fbc'), pathname: 'https://app.upviser.cl/registro', eventId: newEventId, service: service?._id, funnel: funnel._id, stepFunnel: funnel.steps[Number(step)]._id }, {
+            headers: {
+              'x-tenant-id': 'tenant_1760490526673_0i0f5snhu'
+            }
+          })
         } else {
-          await apiClient.post('/client', { firstName: loginData.firstName, lastName: loginData.lastName, email: loginData.email, phone: loginData.phone && loginData.phone !== '' ? `56${loginData.phone}` : undefined, fbp: Cookies.get('_fbp'), fbc: Cookies.get('_fbc'), pathname: 'https://app.upviser.cl/registro', eventId: newEventId, service: service?._id })
+          await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client`, { firstName: loginData.firstName, lastName: loginData.lastName, email: loginData.email, phone: loginData.phone && loginData.phone !== '' ? `56${loginData.phone}` : undefined, fbp: Cookies.get('_fbp'), fbc: Cookies.get('_fbc'), pathname: 'https://app.upviser.cl/registro', eventId: newEventId, service: service?._id }, {
+            headers: {
+              'x-tenant-id': 'tenant_1760490526673_0i0f5snhu'
+            }
+          })
         }
 
         if (typeof fbq === 'function') {
