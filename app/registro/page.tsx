@@ -40,7 +40,7 @@ export default function Page () {
   useEffect(() => {
     const getPlan = async () => {
       const planParam = searchParams.get("plan")
-      setLoginData({ ...loginData, plan: planParam ? planParam : '', imagesAI: planParam ? planParam === 'Prueba' ? 5 : 0 : 0, videosAI: 0, conversationsAI: planParam ? planParam === 'Prueba' ? 10 : 0 : 0, emails: planParam ? planParam === 'Prueba' ? 30 : 0 : 0, textAI: planParam ? planParam === 'Esencial' ? 10 : 0 : 0 })
+      setLoginData({ ...loginData, plan: planParam ? planParam : '', imagesAI: planParam ? planParam === 'Prueba' ? 5 : 0 : 0, videosAI: 0, conversationsAI: planParam ? planParam === 'Prueba' ? 10 : 0 : 0, emails: planParam ? planParam === 'Prueba' ? 30 : 0 : 0, textAI: planParam ? planParam === 'Prueba' ? 10 : 0 : 0 })
       const priceParam = searchParams.get("price")
       setPrice(priceParam)
       const funnelParam = searchParams.get("funnel")
