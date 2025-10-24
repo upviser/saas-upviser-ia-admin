@@ -40,7 +40,11 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
   const popupRef = useRef<HTMLFormElement | null>(null);
 
   const getCalendars = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/calendar`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/calendar`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setCalendars(res.data)
   }
 
