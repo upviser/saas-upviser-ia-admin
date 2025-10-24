@@ -102,7 +102,11 @@ export default function AvaliableCallsPage () {
               if (!loading) {
                 setLoading(true)
                 setError('')
-                await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/calendar/${selectedCalendar}`)
+                await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/calendar/${selectedCalendar}`, {
+                  headers: {
+                    'x-tenant-id': session?.tenantId
+                  }
+                })
                 setPopupDeleteCalendar({ ...popupDeleteCalendar, view: 'flex', opacity: 'opacity-0' })
                 getCaledars()
                 setTimeout(() => {
@@ -135,7 +139,11 @@ export default function AvaliableCallsPage () {
                 setLoading(false)
                 return
               }
-              await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/calendar`, newCalendar)
+              await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/calendar`, newCalendar, {
+                headers: {
+                  'x-tenant-id': session?.tenantId
+                }
+              })
               setPopupNewCalendar({ ...popupNewCalendar, view: 'flex', opacity: 'opacity-0' })
               getCaledars()
               setTimeout(() => {
