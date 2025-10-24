@@ -4,6 +4,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 import Image from 'next/image'
 import { Button2, Input, Select, Textarea } from '../ui'
 import axios from 'axios'
+import { useSession } from 'next-auth/react'
 
 interface Props {
     setTempEmail: any
@@ -23,8 +24,14 @@ export const Config: React.FC<Props> = ({ setTempEmail, automatization, tempEmai
 
   const [design, setDesign] = useState<Design>()
 
+  const { data: session } = useSession()
+
   const getDesign = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/design`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/design`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setDesign(res.data)
   }
 
@@ -104,7 +111,7 @@ export const Config: React.FC<Props> = ({ setTempEmail, automatization, tempEmai
               <Select change={(e: any) => setTempEmail({ ...tempEmail, url: e.target.value })}>
                 <option>Selecciona una pagina</option>
                 {
-                  design?.pages.map(page => <option key={page._id} value={`${domain.domain === 'upviser.cl' ? process.env.NEXT_PUBLIC_WEB_URL : `https://${domain.domain}`}/${page.slug}`}>{page.page}</option>)
+                  design?.pages?.map(page => <option key={page._id} value={`${domain.domain === 'upviser.cl' ? process.env.NEXT_PUBLIC_WEB_URL : `https://${domain.domain}`}/${page.slug}`}>{page.page}</option>)
                 }
                 {
                   funnels?.map(funnel => funnel.steps.filter(step => step.slug && step.slug !== '').map(step => <option key={step._id} value={`${domain.domain === 'upviser.cl' ? process.env.NEXT_PUBLIC_WEB_URL : `https://${domain.domain}`}/${step.slug}`}>Embudo: {funnel.funnel} - {step.step}</option>))

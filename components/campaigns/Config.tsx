@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Input, Select, Textarea } from '../ui'
 import axios from 'axios'
 import { Design, ICall, IFunnel, IService } from '@/interfaces'
+import { useSession } from 'next-auth/react'
 
 interface Props {
     setEmail: any
@@ -23,8 +24,14 @@ export const Config: React.FC<Props> = ({ setEmail, email, setDate, date, client
   const [funnels, setFunnels] = useState<IFunnel[]>([])
   const [design, setDesign] = useState<Design>()
 
+  const { data: session } = useSession()
+
   const getDesign = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/design`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/design`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setDesign(res.data)
   }
 
@@ -33,7 +40,11 @@ export const Config: React.FC<Props> = ({ setEmail, email, setDate, date, client
   }, [])
 
   const getFunnels = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/funnels`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/funnels`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setFunnels(res.data)
   }
 
@@ -92,7 +103,7 @@ export const Config: React.FC<Props> = ({ setEmail, email, setDate, date, client
           <Select change={(e: any) => setEmail({...email, url: e.target.value})}>
             <option>Selecciona una pagina</option>
             {
-              design?.pages.map(page => <option key={page._id} value={`${domain?.domain === 'upviser.cl' ? process.env.NEXT_PUBLIC_WEB_URL : `https://${domain?.domain}`}/${page.slug}`}>{page.page}</option>)
+              design?.pages?.map(page => <option key={page._id} value={`${domain?.domain === 'upviser.cl' ? process.env.NEXT_PUBLIC_WEB_URL : `https://${domain?.domain}`}/${page.slug}`}>{page.page}</option>)
             }
             {
               funnels?.map(funnel => funnel.steps.filter(step => step.slug && step.slug !== '').map(step => <option key={step._id} value={`${domain?.domain === 'upviser.cl' ? process.env.NEXT_PUBLIC_WEB_URL : `https://${domain?.domain}`}/${step.slug}`}>Embudo: {funnel.funnel} - {step.step}</option>))
