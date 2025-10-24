@@ -1,5 +1,6 @@
 import { IAutomatization, IClient } from '@/interfaces'
 import axios from 'axios'
+import { useSession } from 'next-auth/react'
 import React, { useEffect, useState } from 'react'
 
 interface Props {
@@ -12,8 +13,14 @@ export const PopupStadistics: React.FC<Props> = ({ popup, setPopup, automatizati
 
   const [clients, setClients] = useState<IClient[]>()
 
+  const { data: session } = useSession()
+
   const getClients = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/clients`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/clients`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
     setClients(res.data)
   }
 
