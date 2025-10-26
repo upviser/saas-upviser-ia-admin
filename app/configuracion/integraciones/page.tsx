@@ -30,7 +30,8 @@ export default function Page () {
     zoomAccountId: '',
     zoomToken: '',
     zoomExpiresIn: '',
-    zoomCreateToken: ''
+    zoomCreateToken: '',
+    googleMeetToken: ''
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -45,6 +46,9 @@ export default function Page () {
 
   const router = useRouter()
   const { data: session } = useSession()
+
+  const zoom = false
+  const googleMeet = false
 
   const getIntegrations = async () => {
     const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/integrations`, {
@@ -221,6 +225,18 @@ export default function Page () {
     return () => window.removeEventListener('message', handleZoomMessage);
   }, []);
 
+  useEffect(() => {
+    function handleGoogleMessage(event: any) {
+      if (event.origin !== window.location.origin) return;
+      if (event.data.type === 'GOOGLE_AUTH_SUCCESS') {
+        getIntegrations();
+      }
+    }
+
+    window.addEventListener('message', handleGoogleMessage);
+    return () => window.removeEventListener('message', handleGoogleMessage);
+  }, []);
+
   return (
     <>
       <Head>
@@ -321,36 +337,148 @@ export default function Page () {
                       )
                 }
               </div>
-              <div className='flex flex-col gap-2'>
-                <h3 className='text-sm'>Conectar cuenta de Zoom</h3>
-                {
-                  integrations.zoomToken && integrations.zoomToken !== '' && integrations.zoomAccountId && integrations.zoomAccountId !== ''
-                  ? <p className='text-sm'>Id Zoom: {integrations.zoomAccountId}</p>
-                  : ''
-                }
-                {
-                  integrations.zoomToken && integrations.zoomToken !== '' && integrations.zoomAccountId && integrations.zoomAccountId !== ''
-                    ? <Button action={async () => {
-                      await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/remove-zoom`, {
-                        headers: {
-                          'x-tenant-id': session?.tenantId
+              {
+                zoom
+                  ? (
+                    <div className='flex flex-col gap-2'>
+                      <h3 className='text-sm'>Conectar cuenta de Zoom</h3>
+                      {
+                        integrations.zoomToken && integrations.zoomToken !== '' && integrations.zoomAccountId && integrations.zoomAccountId !== ''
+                        ? <p className='text-sm'>Id Zoom: {integrations.zoomAccountId}</p>
+                        : ''
+                      }
+                      {
+                        integrations.zoomToken && integrations.zoomToken !== '' && integrations.zoomAccountId && integrations.zoomAccountId !== ''
+                          ? <Button action={async () => {
+                            await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/remove-zoom`, {
+                              headers: {
+                                'x-tenant-id': session?.tenantId
+                              }
+                            })
+                            getIntegrations()
+                          }}>Desconectar Zoom</Button>
+                          : (
+                            <Button action={async () => {
+                              const state = randomBytes(16).toString('hex')
+                              await axios.put(`${process.env.NEXT_PUBLIC_MAIN_API_URL}/tenant/${session?.tenantId}`, { zoomState: state })
+                              window.open(
+                                `${process.env.NEXT_PUBLIC_API_URL}/auth/zoom?state=${state}`,
+                                'Conectar Zoom',
+                                'width=600,height=800,resizable=yes,scrollbars=yes'
+                              );
+                            }}>Conectar Zoom</Button>
+                          )
+                      }
+                    </div>
+                  )
+                  : session?.tenantId === process.env.NEXT_PUBLIC_MAIN_TENANT_ID
+                    ? (
+                      <div className='flex flex-col gap-2'>
+                        <h3 className='text-sm'>Conectar cuenta de Zoom</h3>
+                        {
+                          integrations.zoomToken && integrations.zoomToken !== '' && integrations.zoomAccountId && integrations.zoomAccountId !== ''
+                          ? <p className='text-sm'>Id Zoom: {integrations.zoomAccountId}</p>
+                          : ''
                         }
-                      })
-                      getIntegrations()
-                    }}>Desconectar Zoom</Button>
-                    : (
-                      <Button action={async () => {
-                        const state = randomBytes(16).toString('hex')
-                        await axios.put(`${process.env.NEXT_PUBLIC_MAIN_API_URL}/tenant/${session?.tenantId}`, { zoomState: state })
-                        window.open(
-                          `${process.env.NEXT_PUBLIC_API_URL}/auth/zoom?state=${state}`,
-                          'Conectar Zoom',
-                          'width=600,height=800,resizable=yes,scrollbars=yes'
-                        );
-                      }}>Conectar Zoom</Button>
+                        {
+                          integrations.zoomToken && integrations.zoomToken !== '' && integrations.zoomAccountId && integrations.zoomAccountId !== ''
+                            ? <Button action={async () => {
+                              await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/remove-zoom`, {
+                                headers: {
+                                  'x-tenant-id': session?.tenantId
+                                }
+                              })
+                              getIntegrations()
+                            }}>Desconectar Zoom</Button>
+                            : (
+                              <Button action={async () => {
+                                const state = randomBytes(16).toString('hex')
+                                await axios.put(`${process.env.NEXT_PUBLIC_MAIN_API_URL}/tenant/${session?.tenantId}`, { zoomState: state })
+                                window.open(
+                                  `${process.env.NEXT_PUBLIC_API_URL}/auth/zoom?state=${state}`,
+                                  'Conectar Zoom',
+                                  'width=600,height=800,resizable=yes,scrollbars=yes'
+                                );
+                              }}>Conectar Zoom</Button>
+                            )
+                        }
+                      </div>
                     )
-                }
-              </div>
+                    : ''
+              }
+              {
+                googleMeet
+                  ? (
+                    <div className='flex flex-col gap-2'>
+                      <h3 className='text-sm'>Conectar cuenta de Google</h3>
+                      {
+                        integrations.googleMeetToken && integrations.googleMeetToken !== ''
+                          ? <p className='text-sm'>Id Zoom: {integrations.googleMeetToken}</p>
+                          : ''
+                      }
+                      {
+                        integrations.googleMeetToken && integrations.googleMeetToken !== ''
+                          ? (
+                            <Button action={async () => {
+                              await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/remove-google`, {
+                                headers: {
+                                  'x-tenant-id': session?.tenantId
+                                }
+                              })
+                              getIntegrations()
+                            }}>Desconectar Google</Button>
+                          )
+                          : (
+                             <Button action={async () => {
+                              const state = randomBytes(16).toString('hex')
+                              await axios.put(`${process.env.NEXT_PUBLIC_MAIN_API_URL}/tenant/${session?.tenantId}`, { googleState: state })
+                              window.open(
+                                `${process.env.NEXT_PUBLIC_API_URL}/google-auth?state=${state}`,
+                                'Conectar Google',
+                                'width=600,height=800,resizable=yes,scrollbars=yes'
+                              );
+                            }}>Conectar Google</Button>
+                          )
+                      }
+                    </div>
+                  )
+                  : session?.tenantId === process.env.NEXT_PUBLIC_MAIN_TENANT_ID
+                    ? (
+                      <div className='flex flex-col gap-2'>
+                        <h3 className='text-sm'>Conectar cuenta de Google</h3>
+                        {
+                          integrations.googleMeetToken && integrations.googleMeetToken !== ''
+                            ? <p className='text-sm'>Id Zoom: {integrations.googleMeetToken}</p>
+                            : ''
+                        }
+                        {
+                          integrations.googleMeetToken && integrations.googleMeetToken !== ''
+                            ? (
+                              <Button action={async () => {
+                                await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/remove-google`, {
+                                  headers: {
+                                    'x-tenant-id': session?.tenantId
+                                  }
+                                })
+                                getIntegrations()
+                              }}>Desconectar Google</Button>
+                            )
+                            : (
+                              <Button action={async () => {
+                                const state = randomBytes(16).toString('hex')
+                                await axios.put(`${process.env.NEXT_PUBLIC_MAIN_API_URL}/tenant/${session?.tenantId}`, { googleState: state })
+                                window.open(
+                                  `${process.env.NEXT_PUBLIC_API_URL}/google-auth?state=${state}`,
+                                  'Conectar Google',
+                                  'width=600,height=800,resizable=yes,scrollbars=yes'
+                                );
+                              }}>Conectar Google</Button>
+                            )
+                        }
+                      </div>
+                    )
+                    : ''
+              }
               <div className='flex flex-col gap-2'>
                 <h3 className='text-sm'>Api Meta Token</h3>
                 <Input change={(e: any) => setIntegrations({ ...integrations, apiToken: e.target.value })} value={integrations.apiToken} placeholder='Api Meta Token' config='h-40' />
