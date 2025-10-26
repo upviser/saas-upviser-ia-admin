@@ -364,7 +364,7 @@ export default function Page () {
                           : (
                             <Button action={async () => {
                               const state = randomBytes(16).toString('hex')
-                              await axios.put(`${process.env.NEXT_PUBLIC_MAIN_API_URL}/tenant/${session?.tenantId}`, { zoomState: state })
+                              await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/tenant/${session?.tenantId}`, { zoomState: state })
                               window.open(
                                 `${process.env.NEXT_PUBLIC_API_URL}/auth/zoom?state=${state}`,
                                 'Conectar Zoom',
@@ -470,7 +470,7 @@ export default function Page () {
                             : (
                               <Button action={async () => {
                                 const state = randomBytes(16).toString('hex')
-                                await axios.put(`${process.env.NEXT_PUBLIC_MAIN_API_URL}/tenant/${session?.tenantId}`, { googleState: state })
+                                await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/tenant/${session?.tenantId}`, { googleState: state })
                                 window.open(
                                   `${process.env.NEXT_PUBLIC_API_URL}/google-auth?state=${state}`,
                                   'Conectar Google',
