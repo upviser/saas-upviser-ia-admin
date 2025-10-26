@@ -35,8 +35,6 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
   const [loadingTag, setLoadingTag] = useState(false)
   const [calendars, setCalendars] = useState<any>([])
 
-  const zoom = false
-
   const { data: session } = useSession()
 
   const popupRef = useRef<HTMLFormElement | null>(null);
@@ -112,49 +110,23 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
           <p className="text-lg font-medium">{titleMeeting}</p>
           <div className="flex flex-col gap-2">
             <p className='text-sm font-medium'>Tipo</p>
-            {
-              zoom
-                ? (
-                  <div className='flex gap-2'>
-                    <input type='checkbox' onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      const zoomCallType = 'Llamada por Zoom';
-                      const newTypes = newCall.type ? [...newCall.type] : [];
-                      if (e.target.checked && !newTypes.includes(zoomCallType)) {
-                        newTypes.push(zoomCallType);
-                      } else {
-                        // Si desmarcas el checkbox, se elimina el tipo
-                        const index = newTypes.indexOf(zoomCallType);
-                        if (index !== -1) {
-                          newTypes.splice(index, 1);
-                        }
-                      }
-                      setNewCall({ ...newCall, type: newTypes });
-                    }} checked={newCall.type?.length ? newCall.type.find(typ => typ === 'Llamada por Zoom') ? true : false : false} />
-                    <p className='text-sm'>Llamada por Zoom</p>
-                  </div>
-                )
-                : session?.tenantId === process.env.NEXT_PUBLIC_MAIN_TENANT_ID
-                  ? (
-                    <div className='flex gap-2'>
-                      <input type='checkbox' onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        const zoomCallType = 'Llamada por Zoom';
-                        const newTypes = newCall.type ? [...newCall.type] : [];
-                        if (e.target.checked && !newTypes.includes(zoomCallType)) {
-                          newTypes.push(zoomCallType);
-                        } else {
-                          // Si desmarcas el checkbox, se elimina el tipo
-                          const index = newTypes.indexOf(zoomCallType);
-                          if (index !== -1) {
-                            newTypes.splice(index, 1);
-                          }
-                        }
-                        setNewCall({ ...newCall, type: newTypes });
-                      }} checked={newCall.type?.length ? newCall.type.find(typ => typ === 'Llamada por Zoom') ? true : false : false} />
-                      <p className='text-sm'>Llamada por Zoom</p>
-                    </div>
-                  )
-                  : ''
-            }
+            <div className='flex gap-2'>
+              <input type='checkbox' onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const zoomCallType = 'Llamada por Zoom';
+                const newTypes = newCall.type ? [...newCall.type] : [];
+                if (e.target.checked && !newTypes.includes(zoomCallType)) {
+                  newTypes.push(zoomCallType);
+                } else {
+                  // Si desmarcas el checkbox, se elimina el tipo
+                  const index = newTypes.indexOf(zoomCallType);
+                  if (index !== -1) {
+                    newTypes.splice(index, 1);
+                  }
+                }
+                setNewCall({ ...newCall, type: newTypes });
+              }} checked={newCall.type?.length ? newCall.type.find(typ => typ === 'Llamada por Zoom') ? true : false : false} />
+              <p className='text-sm'>Llamada por Zoom</p>
+            </div>
             <div className='flex gap-2'>
               <input type='checkbox' onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const zoomCallType = 'Llamada por Google Meet';
