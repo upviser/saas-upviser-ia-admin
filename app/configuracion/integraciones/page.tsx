@@ -31,7 +31,8 @@ export default function Page () {
     zoomToken: '',
     zoomExpiresIn: '',
     zoomCreateToken: '',
-    googleMeetToken: ''
+    googleToken: '',
+    googleRefreshToken: ''
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -416,12 +417,12 @@ export default function Page () {
                     <div className='flex flex-col gap-2'>
                       <h3 className='text-sm'>Conectar cuenta de Google</h3>
                       {
-                        integrations.googleMeetToken && integrations.googleMeetToken !== ''
-                          ? <p className='text-sm'>Id Zoom: {integrations.googleMeetToken}</p>
+                        integrations.googleToken && integrations.googleToken !== ''
+                          ? <p className='text-sm'>Id Zoom: {integrations.googleToken}</p>
                           : ''
                       }
                       {
-                        integrations.googleMeetToken && integrations.googleMeetToken !== ''
+                        integrations.googleToken && integrations.googleToken !== ''
                           ? (
                             <Button action={async () => {
                               await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/remove-google`, {
@@ -451,12 +452,12 @@ export default function Page () {
                       <div className='flex flex-col gap-2'>
                         <h3 className='text-sm'>Conectar cuenta de Google</h3>
                         {
-                          integrations.googleMeetToken && integrations.googleMeetToken !== ''
-                            ? <p className='text-sm'>Id Zoom: {integrations.googleMeetToken}</p>
+                          integrations.googleToken && integrations.googleToken !== ''
+                            ? <p className='text-sm'>Id Google: {integrations.googleToken}</p>
                             : ''
                         }
                         {
-                          integrations.googleMeetToken && integrations.googleMeetToken !== ''
+                          integrations.googleToken && integrations.googleToken !== ''
                             ? (
                               <Button action={async () => {
                                 await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/remove-google`, {
