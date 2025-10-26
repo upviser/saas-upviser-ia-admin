@@ -107,11 +107,15 @@ export default function Page () {
     if (loginCode && sessionInfo) {
       const conectar = async () => {
         try {
-          await axios.post(`${process.env.NEXT_PUBLIC_MAIN_API_URL}/user`, { api: process.env.NEXT_PUBLIC_API_URL, idPhone: sessionInfo.phone_number_id })
+          await axios.post(`${process.env.NEXT_PUBLIC_MAIN_API_URL}/tenant`, { tenantId: session?.tenantId, idPhone: sessionInfo.phone_number_id })
           const res = await axios.post(`${process.env.NEXT_PUBLIC_MAIN_API_URL}/whatsapp-token`, {
             code: loginCode,
             phone_number_id: sessionInfo.phone_number_id,
             waba_id: sessionInfo.waba_id
+          }, {
+            headers: {
+              'x-tenant-id': session?.tenantId
+            }
           });
           res.data.success === 'OK'
             ? getIntegrations()
@@ -393,7 +397,7 @@ export default function Page () {
                             : (
                               <Button action={async () => {
                                 const state = randomBytes(16).toString('hex')
-                                await axios.put(`${process.env.NEXT_PUBLIC_MAIN_API_URL}/tenant/${session?.tenantId}`, { zoomState: state })
+                                await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/tenant/${session?.tenantId}`, { zoomState: state })
                                 window.open(
                                   `${process.env.NEXT_PUBLIC_API_URL}/auth/zoom?state=${state}`,
                                   'Conectar Zoom',
@@ -431,7 +435,7 @@ export default function Page () {
                           : (
                              <Button action={async () => {
                               const state = randomBytes(16).toString('hex')
-                              await axios.put(`${process.env.NEXT_PUBLIC_MAIN_API_URL}/tenant/${session?.tenantId}`, { googleState: state })
+                              await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/tenant/${session?.tenantId}`, { googleState: state })
                               window.open(
                                 `${process.env.NEXT_PUBLIC_API_URL}/google-auth?state=${state}`,
                                 'Conectar Google',
