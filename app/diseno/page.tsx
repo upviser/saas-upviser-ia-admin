@@ -641,7 +641,7 @@ export default function Page () {
                     <p className={`my-auto px-4 py-2 text-white`} style={{ backgroundColor: style?.primary, color: style?.button, borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }}>Hablemos</p>
                   </div>
                 </div>
-                <div className='flex gap-4 p-4' style={{ backgroundColor: cartPage.bgColor, color: cartPage.textColor }}>
+                <div className='flex gap-4 p-4' style={{ backgroundColor: cartPage?.bgColor, color: cartPage?.textColor }}>
                   <div className='w-1/2 flex flex-col gap-4'>
                     <h1 className='text-3xl font-medium'>Carrito</h1>
                     <div className='flex gap-4 justify-between'>
@@ -690,7 +690,7 @@ export default function Page () {
                     <p className={`my-auto px-4 py-2 text-white`} style={{ backgroundColor: style?.primary, color: style?.button, borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }}>Hablemos</p>
                   </div>
                 </div>
-                <div className='flex gap-4 p-4' style={{ backgroundColor: checkoutPage.bgColor, color: checkoutPage.textColor }}>
+                <div className='flex gap-4 p-4' style={{ backgroundColor: checkoutPage?.bgColor, color: checkoutPage?.textColor }}>
                   <div className='w-1/2 flex flex-col gap-4'>
                     <h1 className='text-3xl font-medium'>Finalizar compra</h1>
                     <h2 className='text-2xl font-medium'>Información de contacto</h2>
@@ -808,7 +808,7 @@ export default function Page () {
                   </div>
                 </div>
                 <form className='flex gap-2 pr-3 pl-3 pb-3 sm:pr-4 sm:pl-4 sm:pb-4'>
-                  <input type={'text'} placeholder={'Mensaje'} style={{ backgroundColor: design?.chat.bgColor, color: design?.chat.textColor }} className={`w-full py-2 px-3 shadow shadow-black/5 rounded-xl transition-all duration-200 border border-[#f3f3f3] text-sm h-fit my-auto focus:outline-none focus:border-main focus:ring-1 focus:ring-main dark:border-neutral-600 hover:border-main/80`} />
+                  <input type={'text'} placeholder={'Mensaje'} style={{ backgroundColor: design?.chat?.bgColor, color: design?.chat?.textColor }} className={`w-full py-2 px-3 shadow shadow-black/5 rounded-xl transition-all duration-200 border border-[#f3f3f3] text-sm h-fit my-auto focus:outline-none focus:border-main focus:ring-1 focus:ring-main dark:border-neutral-600 hover:border-main/80`} />
                   <Input type={'text'} placeholder={'Mensaje'} change={undefined} config='bg-white' />
                   <button type='submit' className='text-white w-28 rounded-xl dark:bg-neutral-700 transition-colors duration-200 hover:bg-transparent' style={{ backgroundColor: style.primary }}>Enviar</button>
                 </form>
