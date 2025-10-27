@@ -36,7 +36,7 @@ export default function Page () {
       }
     })
     setChatIds(response.data)
-    const chatFilter = response.data.filter((chat: any) => chat.agent)
+    const chatFilter = response.data.filter((chat: any) => !chat.agent)
     setChatIdsFilter(chatFilter)
   }
 
