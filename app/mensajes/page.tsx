@@ -261,7 +261,11 @@ export default function Page () {
                 const newMe = newMessage
                 setNewMessage('')
                 socket.emit('messageAdmin', { senderId: chatId, response: newMe, adminView: true })
-                axios.post(`${process.env.NEXT_PUBLIC_API_URL}/chat/create`, {senderId: chatId, response: newMe, agent: false, adminView: true, tenantId: session?.tenantId})
+                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/chat/create`, {senderId: chatId, response: newMe, agent: false, adminView: true }, {
+                  headers: {
+                    'x-tenant-id': session?.tenantId
+                  }
+                })
                 getChats()
               }} className='flex gap-2 p-4'>
                 <input onChange={(e: any) => setNewMessage(e.target.value)} value={newMessage} type='text' placeholder='Escribe tu mensaje' className='border border-black/5 px-3 py-2 text-sm w-full rounded-xl dark:border-neutral-600 focus:outline-none focus:border-main focus:ring-1 focus:ring-main hover:border-main/80' />
