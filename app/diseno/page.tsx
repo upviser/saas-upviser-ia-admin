@@ -98,7 +98,7 @@ export default function Page () {
   const [whatsapp, setWhatsapp] = useState(false)
   const [editSubPage, setEditSubPage] = useState(-1)
   const [loadingSubPage, setLoadingSubPage] = useState(false)
-  const [chat, setChat] = useState({ bgColor: '' })
+  const [chat, setChat] = useState({ bgColor: '', textColor: '' })
   const [instagram, setInstagram] = useState(false)
   const [chatView, setChatView] = useState(false)
   const [categories, setCategories] = useState<ICategory[]>([])
@@ -808,8 +808,7 @@ export default function Page () {
                   </div>
                 </div>
                 <form className='flex gap-2 pr-3 pl-3 pb-3 sm:pr-4 sm:pl-4 sm:pb-4'>
-                  <input type={'text'} placeholder={'Mensaje'} style={{ backgroundColor: design?.chat?.bgColor, color: design?.chat?.textColor }} className={`w-full py-2 px-3 shadow shadow-black/5 rounded-xl transition-all duration-200 border border-[#f3f3f3] text-sm h-fit my-auto focus:outline-none focus:border-main focus:ring-1 focus:ring-main dark:border-neutral-600 hover:border-main/80`} />
-                  <Input type={'text'} placeholder={'Mensaje'} change={undefined} config='bg-white' />
+                  <input type={'text'} placeholder={'Mensaje'} style={{ backgroundColor: chat?.bgColor, color: chat?.textColor }} className={`w-full py-2 px-3 shadow shadow-black/5 rounded-xl transition-all duration-200 border border-[#f3f3f3] text-sm h-fit my-auto focus:outline-none focus:border-main focus:ring-1 focus:ring-main dark:border-neutral-600 hover:border-main/80`} />
                   <button type='submit' className='text-white w-28 rounded-xl dark:bg-neutral-700 transition-colors duration-200 hover:bg-transparent' style={{ backgroundColor: style.primary }}>Enviar</button>
                 </form>
               </div>
