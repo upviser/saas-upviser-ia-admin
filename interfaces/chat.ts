@@ -6,6 +6,7 @@ export interface IChatMessage {
     agent: boolean
     adminView?: boolean
     userView?: boolean
+    tag?: string
 
     createdAt?: Date
     updatedAt?: Date
