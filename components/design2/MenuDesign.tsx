@@ -530,6 +530,10 @@ export const MenuDesign: React.FC<Props> = ({ domain, pages, part, type, setType
                 <p className='text-sm'>Color de fondo</p>
                 <input type='color' onChange={(e: any) => setChat({ ...chat, bgColor: e.target.value })} value={chat?.bgColor} />
               </div>
+              <div className='flex flex-col gap-2'>
+                <p className='text-sm'>Color de fondo</p>
+                <input type='color' onChange={(e: any) => setChat({ ...chat, textColor: e.target.value })} value={chat?.textColor} />
+              </div>
             </div>
           )
           : ''

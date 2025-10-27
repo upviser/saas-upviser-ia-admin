@@ -2,7 +2,7 @@ export interface Design {
     _id?: string
     header: IHeader
     footer: IFooter
-    chat: { bgColor: string }
+    chat: { bgColor: string, textColor: string }
     pages: IPage[]
     productPage: IProductPage
     categoryPage: ICategoryPage[]
