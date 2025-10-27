@@ -18,6 +18,7 @@ export default function Page () {
     name: '',
     email: '',
     password: '',
+    business: '',
     subdomain: '',
     type: 'Administrador',
     plan: '',
@@ -103,7 +104,7 @@ export default function Page () {
 
         await apiClient.post('/create-default-design', { tenantId })
 
-        await apiClient.put('/domain', { domain: `${loginData.subdomain}.upviser.cl`, tenantId: tenantId, name: loginData.subdomain, email: `${loginData.subdomain}@emails.upviser.cl` })
+        await apiClient.put('/domain', { domain: `${loginData.subdomain}.upviser.cl`, tenantId: tenantId, name: loginData.business, email: `${loginData.subdomain}@emails.upviser.cl` })
         
         const res = await signIn('credentials', {
           email: loginData.email,
@@ -164,6 +165,10 @@ export default function Page () {
         <div className='flex flex-col gap-2'>
             <p className='text-sm'>Email</p>
             <Input placeholder='Email' name='email' change={inputChange} value={loginData.email} />
+        </div>
+         <div className='flex flex-col gap-2'>
+            <p className='text-sm'>Nombre del negocio</p>
+            <Input placeholder='Nombre del negocio' name='business' change={inputChange} value={loginData.business} />
         </div>
         <div className='flex flex-col gap-2'>
             <p className='text-sm'>Subdominio</p>
