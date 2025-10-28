@@ -14,6 +14,7 @@ import { LiaClipboardListSolid } from 'react-icons/lia'
 import { FaCogs } from 'react-icons/fa'
 import { useSession } from 'next-auth/react'
 import { TiFlowMerge } from 'react-icons/ti'
+import axios from 'axios'
 
 const socket = io(`${process.env.NEXT_PUBLIC_API_URL}`, {
   transports: ['websocket']
@@ -24,6 +25,23 @@ export const LeftMenu: React.FC<PropsWithChildren> = ({ children }) => {
   const [messages, setMessages] = useState(false)
   const { data: session } = useSession()
   const pathname = usePathname()
+
+  const getNotifications = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/notifications/ultimate`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
+    if (res.data.find((notification: any) => notification.title.includes('Nuevo mensaje') && notification.view === false)) {
+      setMessages(true)
+    }
+  }
+
+  useEffect(() => {
+    if (session?.tenantId) {
+      getNotifications()
+    }
+  }, [session])
 
   useEffect(() => {
     socket.on('message', async (message) => {

@@ -35,6 +35,7 @@ export default function Page () {
         'x-tenant-id': session?.tenantId
       }
     })
+    console.log(response.data)
     setChatIds(response.data)
     const chatFilter = response.data.filter((chat: any) => !chat.agent)
     setChatIdsFilter(chatFilter)
