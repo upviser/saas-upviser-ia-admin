@@ -68,6 +68,8 @@ export interface IPopupWeb {
     content?: string
     buttonText?: string
     buttonLink?: string
+    bgColor?: string
+    textColor?: string
 }
 
 export interface IDesign {

@@ -456,6 +456,14 @@ export const MenuDesign: React.FC<Props> = ({ domain, pages, part, type, setType
                 </div>
               </div>
               <div className='flex flex-col gap-2'>
+                <p className='text-sm'>Color fondo</p>
+                <input type='color' placeholder='Titulo' value={popupWeb.bgColor} onChange={(e: any) => setPopupWeb({ ...popupWeb, bgColor: e.target.value })} />
+              </div>
+               <div className='flex flex-col gap-2'>
+                <p className='text-sm'>Color Texto</p>
+                <input type='color' placeholder='Titulo' value={popupWeb.textColor} onChange={(e: any) => setPopupWeb({ ...popupWeb, textColor: e.target.value })} />
+              </div>
+              <div className='flex flex-col gap-2'>
                 <p className='text-sm'>Titulo</p>
                 <Input placeholder='Titulo' value={popupWeb.title} change={(e: any) => setPopupWeb({ ...popupWeb, title: e.target.value })} />
               </div>
