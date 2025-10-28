@@ -115,8 +115,10 @@ export const Navbar: React.FC<PropsWithChildren> = ({ children }) => {
       }
     }
 
-    getStoreData()
-  }, [])
+    if (session?.tenantId) {
+      getStoreData()
+    }
+  }, [session])
 
   const getNotifications = async () => {
     setLoadingNotifications(true)
@@ -128,6 +130,9 @@ export const Navbar: React.FC<PropsWithChildren> = ({ children }) => {
     })
     if (response.data.find((notification: any) => notification.view === false)) {
       setNotification(true)
+      if (response.data.find((notification: any) => notification.title.includes('Mensaje') && notification.view === false)) {
+        setMessages(true)
+      }
     } else {
       setNotification(false)
     }
@@ -136,8 +141,10 @@ export const Navbar: React.FC<PropsWithChildren> = ({ children }) => {
   }
 
   useEffect(() => {
-    getNotifications()
-  }, [])
+    if (session?.tenantId) {
+      getNotifications()
+    }
+  }, [session])
 
   useEffect(() => {
     notificationsRef.current = notifications
