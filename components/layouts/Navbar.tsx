@@ -130,7 +130,7 @@ export const Navbar: React.FC<PropsWithChildren> = ({ children }) => {
     })
     if (response.data.find((notification: any) => notification.view === false)) {
       setNotification(true)
-      if (response.data.find((notification: any) => notification.title.includes('Nuevo mensaje:') && notification.view === false)) {
+      if (response.data.find((notification: any) => notification.title.includes('Nuevo mensaje') && notification.view === false)) {
         setMessages(true)
       }
     } else {
