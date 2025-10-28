@@ -121,7 +121,7 @@ export const Navbar: React.FC<PropsWithChildren> = ({ children }) => {
   const getNotifications = async () => {
     setLoadingNotifications(true)
     setNotifications([])
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/notifications`, {
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/notifications/ultimate`, {
       headers: {
         'x-tenant-id': session?.tenantId
       }
