@@ -448,7 +448,7 @@ export const Call: React.FC<Props> = ({ edit, pages, setPages, design, index, in
             }} className={`${responsive === '400px' ? 'text-base' : 'text-lg'} p-1.5 rounded border bg-transparent text-center`} style={{ color: design.info.textColor }} />
             </div>
             <div className="w-full flex px-4">
-              <div className={`m-auto w-full max-w-[1280px]`} style={{ boxShadow: style.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}10` : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', color: design.info.textColor, backgroundColor: design.info.image }}>
+              <div className={`m-auto w-full max-w-[1280px]`} style={{ boxShadow: style.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}` : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', color: design.info.textColor, backgroundColor: design.info.image }}>
                 <div className="lg:flex">
                   <div className="p-6 flex flex-col gap-8 w-full lg:w-5/12" style={{ borderRight: responsive === '400px' ? 'none' : `1px solid ${style.borderColor}`, borderBottom: responsive === '400px' ? `1px solid ${style.borderColor}` : 'none' }}>
                     <div className="flex flex-col gap-3">
@@ -645,7 +645,7 @@ export const Call: React.FC<Props> = ({ edit, pages, setPages, design, index, in
                   dangerouslySetInnerHTML={{ __html: design.info.description ? design.info.description : '' }}
                 />
               </div>
-              <div className={`m-auto w-full max-w-[1280px]`} style={{ boxShadow: style.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}10` : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', color: design.info.textColor, backgroundColor: design.info.image }}>
+              <div className={`m-auto w-full max-w-[1280px]`} style={{ boxShadow: style.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}` : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', color: design.info.textColor, backgroundColor: design.info.image }}>
                 <div className={`flex ${responsive === '400px' ? 'flex-col' : 'flex-row'}`}>
                   <div className={`p-6 ${responsive === '400px' ? 'w-full' : 'w-5/12'} flex flex-col gap-8`} style={{ borderRight: responsive === '400px' ? 'none' : `1px solid ${style.borderColor}`, borderBottom: responsive === '400px' ? `1px solid ${style.borderColor}` : 'none' }}>
                     <div className="flex flex-col gap-3">

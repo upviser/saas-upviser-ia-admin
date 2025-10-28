@@ -407,7 +407,7 @@ export const Faq: React.FC<Props> = ({ edit, pages, setPages, design, index, ind
                 {
                   design.info.faq?.length
                     ? design.info.faq?.map((faq, i) => (
-                      <div key={i} className={`flex flex-col gap-4 p-6`} style={{ boxShadow: style.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}10` : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', backgroundColor: design.info.image }}>
+                      <div key={i} className={`flex flex-col gap-4 p-6`} style={{ boxShadow: style.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}` : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', backgroundColor: design.info.image }}>
                         <div className='flex gap-6 justify-between'>
                           <input onChange={(e: any) => {
                             if (inde !== undefined) {
@@ -535,7 +535,7 @@ export const Faq: React.FC<Props> = ({ edit, pages, setPages, design, index, ind
                 />
                 {
                   design.info.faq?.map((faq, i) => (
-                    <div key={i} className={`flex flex-col gap-4 p-6`} style={{ boxShadow: style.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}10` : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', color: design.info.textColor, backgroundColor: design.info.image }}>
+                    <div key={i} className={`flex flex-col gap-4 p-6`} style={{ boxShadow: style.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}` : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', color: design.info.textColor, backgroundColor: design.info.image }}>
                       <div className='flex gap-6 justify-between'>
                         <p className='font-medium text-lg'>{faq.question}</p>
                         <IoIosArrowDown className='my-auto text-2xl rotate-180' />

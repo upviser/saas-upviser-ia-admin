@@ -410,7 +410,7 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                       <div className='flex gap-6 justify-around flex-wrap'>
                         {
                           design.info.reviews?.map((review, i) => (
-                            <div key={i} className={`flex flex-col gap-4 p-6 w-full max-w-96 bg-white`} style={{ border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', boxShadow: style.design === 'Sombreado' ? '0px 3px 20px 3px #11111110' : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', backgroundColor: design.info.image }}>
+                            <div key={i} className={`flex flex-col gap-4 p-6 w-full max-w-96 bg-white`} style={{ border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', boxShadow: style.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}` : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', backgroundColor: design.info.image }}>
                               <div className='flex flex-col gap-2'>
                                 <p>Estrellas</p>
                                 <div className='flex gap-2 flex-wrap'>
@@ -787,7 +787,7 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                       <div className='flex gap-6 justify-around flex-wrap'>
                         {
                           design.info.reviews?.map((review, i) => (
-                            <div key={i} className={`${style.design === 'Borde' ? 'border' : ''} flex flex-col gap-4 p-6 w-full max-w-96 bg-white`} style={{ boxShadow: style.design === 'Sombreado' ? '0px 3px 20px 3px #11111110' : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '' }}>
+                            <div key={i} className={`flex flex-col gap-4 p-6 w-full max-w-96 bg-white`} style={{ boxShadow: style.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}` : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }}>
                               <div className='flex flex-col gap-4 m-auto'>
                                 <div className='flex gap-1 m-auto'>
                                   {

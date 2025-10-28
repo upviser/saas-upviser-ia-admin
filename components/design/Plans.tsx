@@ -895,7 +895,7 @@ export const Plans: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                       <div className='flex gap-6 justify-around'>
                         {
                           services?.find(service => service._id === design.service?.service)?.plans?.plans.map(plan => (
-                            <div className={`p-6 w-full max-w-96 flex flex-col gap-4`} key={plan._id} style={{ boxShadow: style.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}10` : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', color: design.info.textColor, backgroundColor: design.info.image }}>
+                            <div className={`p-6 w-full max-w-96 flex flex-col gap-4`} key={plan._id} style={{ boxShadow: style.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}` : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', color: design.info.textColor, backgroundColor: design.info.image }}>
                               <p className='text-center font-medium text-xl'>{plan.name}</p>
                               <div className='flex gap-2 w-fit m-auto'>
                                 <p className='text-center font-bold text-3xl'>${NumberFormat(Number(plan.price))}</p>
@@ -959,7 +959,7 @@ export const Plans: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                       <div className={`flex gap-6 justify-around ${responsive === '400px' ? 'flex-col' : 'flex-row'}`}>
                         {
                           services?.find(service => service._id === design.service?.service)?.plans?.plans.map(plan => (
-                            <div className={`p-6 w-full max-w-96 flex flex-col gap-4 justify-between`} key={plan._id} style={{ boxShadow: style.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}10` : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', color: design.info.textColor, backgroundColor: design.info.image }}>
+                            <div className={`p-6 w-full max-w-96 flex flex-col gap-4 justify-between`} key={plan._id} style={{ boxShadow: style.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}` : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', color: design.info.textColor, backgroundColor: design.info.image }}>
                               <div className='flex flex-col gap-4 h-fit'>
                                 <p className='text-center font-medium text-xl'>{plan.name}</p>
                                 <div className='flex gap-2 w-fit m-auto'>

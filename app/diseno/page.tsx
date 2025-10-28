@@ -752,7 +752,7 @@ export default function Page () {
           part === 'Estilo'
             ? (
               <div className='w-full bg-white text-black lg:w-[calc(100%-350px)] overflow-y-auto'>
-                <div className={`w-full p-4 flex gap-4 justify-between`} style={{ boxShadow: style?.design === 'Sombreado' ? `0px 0px 10px 0px ${style.borderColor}15` : '', borderBottom: style?.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }}>
+                <div className={`w-full p-4 flex gap-4 justify-between`} style={{ boxShadow: style?.design === 'Sombreado' ? `0px 0px 10px 0px ${style.borderColor}` : '', borderBottom: style?.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }}>
                   <p className='text-3xl font-semibold my-auto'>LOGO</p>
                   <div className='flex gap-4 my-auto'>
                     <p className='my-auto'>Inicio</p>

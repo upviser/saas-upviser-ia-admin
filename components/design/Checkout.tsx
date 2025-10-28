@@ -500,7 +500,7 @@ export const Checkout: React.FC<Props> = ({ edit, pages, setPages, design, index
                     </div>
                   </div>
                 </div>
-                <div className={`flex flex-col gap-4 w-2/5 p-6 h-fit`} style={{ boxShadow: style.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}10` : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', color: design.info.textColor, backgroundColor: design.info.image }}>
+                <div className={`flex flex-col gap-4 w-2/5 p-6 h-fit`} style={{ boxShadow: style.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}` : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', color: design.info.textColor, backgroundColor: design.info.image }}>
                   <p>Seleccionar servicio</p>
                   <Select change={(e: any) => {
                     if (inde !== undefined) {
@@ -692,7 +692,7 @@ export const Checkout: React.FC<Props> = ({ edit, pages, setPages, design, index
                     </div>
                   </div>
                 </div>
-                <div className={`flex flex-col gap-4 w-2/5 p-6 h-fit`} style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', boxShadow: style.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}10` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', color: design.info.textColor, backgroundColor: design.info.image }}>
+                <div className={`flex flex-col gap-4 w-2/5 p-6 h-fit`} style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', boxShadow: style.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', color: design.info.textColor, backgroundColor: design.info.image }}>
                   {
                     services.find(servi => servi._id === design.service?.service)?.name
                       ? ''

@@ -376,7 +376,7 @@ export const Calls: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                           const call = calls?.find(call => call._id === meeting)
                           if (call) {
                             return (
-                              <div key={meeting} className={` p-6`} style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', boxShadow: style.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}10` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', color: design.info.textColor }}>
+                              <div key={meeting} className={` p-6`} style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', boxShadow: style.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', color: design.info.textColor }}>
                                 <div className='flex gap-6 justify-between'>
                                   <div className='flex flex-col gap-4'>
                                     <p className='text-lg font-medium'>{call.nameMeeting}</p>
@@ -434,7 +434,7 @@ export const Calls: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                 const call = calls?.find(call => call._id === meeting)
                 if (call) {
                   return (
-                    <div key={meeting} className={` p-6`} style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', boxShadow: style.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}10` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', color: design.info.textColor }}>
+                    <div key={meeting} className={` p-6`} style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', boxShadow: style.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', color: design.info.textColor }}>
                       <div className='flex gap-6 justify-between'>
                         <div className='flex flex-col gap-4'>
                           <p className='text-lg font-medium'>{call.nameMeeting}</p>
