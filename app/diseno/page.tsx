@@ -764,17 +764,17 @@ export default function Page () {
                   <p className='text-center m-auto text-4xl font-semibold'>Lorem ipsum</p>
                   <p className='text-center m-auto'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti voluptatem dolorum deleniti doloremque nulla? Dolore, error assumenda. Repellendus similique natus ut accusamus ipsa voluptatem nostrum, eos, quidem sed, non reiciendis.</p>
                   <div className='flex gap-4 justify-around flex-wrap'>
-                    <div className={`p-6 w-96 flex flex-col gap-3`} style={{ boxShadow: style?.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}10` : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', border: style?.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }}>
+                    <div className={`p-6 w-96 flex flex-col gap-3`} style={{ boxShadow: style?.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}` : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', border: style?.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }}>
                       <p className='text-center m-auto font-medium text-2xl'>Lorem ipsum</p>
                       <p className='text-center m-auto'>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
                       <button className={` m-auto px-4 py-2 text-white w-full`} style={{ backgroundColor: style?.primary, color: style?.button, borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }}>Lorem ipsum</button>
                     </div>
-                    <div className={`p-6 w-96 flex flex-col gap-3`} style={{ boxShadow: style?.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}10` : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', border: style?.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }}>
+                    <div className={`p-6 w-96 flex flex-col gap-3`} style={{ boxShadow: style?.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}` : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', border: style?.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }}>
                       <p className='text-center m-auto font-medium text-2xl'>Lorem ipsum</p>
                       <p className='text-center m-auto'>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
                       <button className={` m-auto px-4 py-2 text-white w-full`} style={{ backgroundColor: style?.primary, color: style?.button, borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }}>Lorem ipsum</button>
                     </div>
-                    <div className={`p-6 w-96 flex flex-col gap-3`} style={{ boxShadow: style?.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}10` : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', border: style?.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }}>
+                    <div className={`p-6 w-96 flex flex-col gap-3`} style={{ boxShadow: style?.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}` : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', border: style?.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }}>
                       <p className='text-center m-auto font-medium text-2xl'>Lorem ipsum</p>
                       <p className='text-center m-auto'>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
                       <button className={` m-auto px-4 py-2 text-white w-full`} style={{ backgroundColor: style?.primary, color: style?.button, borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }}>Lorem ipsum</button>
