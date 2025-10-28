@@ -260,7 +260,7 @@ export default function Page () {
                 setMessages(messages.concat({senderId: chatId, response: newMessage, agent: false, adminView: true, createdAt: new Date()}))
                 const newMe = newMessage
                 setNewMessage('')
-                socket.emit('messageAdmin', { senderId: chatId, response: newMe, adminView: true })
+                socket.emit('messageAdmin', { senderId: chatId, response: newMe, adminView: true, agent: false })
                 await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/chat/create`, {senderId: chatId, response: newMe, agent: false, adminView: true, tag: messages.reverse()[0].tag }, {
                   headers: {
                     'x-tenant-id': session?.tenantId
