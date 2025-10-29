@@ -499,7 +499,7 @@ export const Plans: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                           oldPages[ind].design[index].info.url = e.target.value
                           setPages(oldPages)
                         }
-                      }} placeholder='Url personalizada' />
+                      }} placeholder='Url personalizada' config='bg-transparent' />
                     )
                     : ''
                 }
@@ -525,7 +525,7 @@ export const Plans: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                     oldPages[ind].design[index].info.button = e.target.value
                     setPages(oldPages)
                   }
-                }} placeholder='Texto boton' value={design.info.button} config='w-fit m-auto' />
+                }} placeholder='Texto boton' value={design.info.button} config='w-fit m-auto bg-transparent' />
                 {
                   design.info.video === 'Agendar llamada'
                     ? (
@@ -763,6 +763,7 @@ export const Plans: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                                                 }}
                                                 value={data} // Aquí se pasa el valor actual del input
                                                 placeholder={`Respuesta ${indexx + 1}`}
+                                                config='bg-transparent w-full'
                                               />
                                               <button onClick={(e: any) => {
                                                 e.preventDefault()
