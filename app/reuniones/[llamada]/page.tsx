@@ -103,7 +103,7 @@ export default function Page ({ params }: { params: { llamada: string } }) {
                   <div className="w-64 flex flex-col gap-4">
                     {
                       meeting?.url
-                        ? <ButtonLink href={meeting?.url}>Ingresar a la llamada</ButtonLink>
+                        ? <ButtonLink target="_blank" href={meeting?.url}>Ingresar a la llamada</ButtonLink>
                         : ''
                     }
                     <Button2Red action={async (e: any) => {
