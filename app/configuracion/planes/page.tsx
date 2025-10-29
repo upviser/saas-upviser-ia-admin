@@ -12,6 +12,9 @@ import { BiCheck } from "react-icons/bi";
 import { io } from "socket.io-client";
 import Cookies from 'js-cookie'
 import { CardNumber, CardPayment, createCardToken, ExpirationDate, initMercadoPago, SecurityCode, StatusScreen } from '@mercadopago/sdk-react';
+import Link from "next/link";
+import { IoIosArrowDown } from "react-icons/io";
+import { FaCheck } from "react-icons/fa";
 
 const socket = io(`${process.env.NEXT_PUBLIC_API_URL}/`, {
     transports: ['websocket']
@@ -36,6 +39,7 @@ export default function Page () {
   const [plan, setPlan] = useState<IPlan>()
   const [popup, setPopup] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
   const [loadingPayment, setLoadingPayment] = useState(true)
+  const [table, setTable] = useState(false)
 
   const { data: session } = useSession()
 
@@ -126,11 +130,7 @@ export default function Page () {
                                 'x-tenant-id': process.env.NEXT_PUBLIC_MAIN_TENANT_ID
                             }
                         })
-                        await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { state: true, subscription: true, dateSubscription: new Date(), plan: plan?.name, textAI: plan?.name === 'Plan Esencial' ? 100 : plan?.name === 'Plan Avanzado' ? 200 : plan?.name === 'Plan Profesional' ? 400 : 0, imagesAI: plan?.name === 'Plan Esencial' ? 20 : plan?.name === 'Plan Avanzado' ? 40 : plan?.name === 'Plan Profesional' ? 80 : 0, videosAI: plan?.name === 'Plan Avanzado' ? 15 : plan?.name === 'Plan Profesional' ? 30 : 0, conversationsAI: plan?.name === 'Plan Esencial' ? 250 : plan?.name === 'Plan Avanzado' ? 600 : plan?.name === 'Plan Profesional' ? 1500 : 0, emails: plan?.name === 'Plan Esencial' ? 1500 : plan?.name === 'Plan Avanzado' ? 3500 : plan?.name === 'Plan Profesional' ? 8000 : 0 }, {
-                            headers: {
-                                'x-tenant-id': process.env.NEXT_PUBLIC_MAIN_TENANT_ID
-                            }
-                        })
+                        await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { state: true, subscription: true, dateSubscription: new Date(), plan: plan?.name, textAI: plan?.name === 'Plan Esencial' ? 100 : plan?.name === 'Plan Avanzado' ? 200 : plan?.name === 'Plan Profesional' ? 400 : 0, imagesAI: plan?.name === 'Plan Esencial' ? 40 : plan?.name === 'Plan Avanzado' ? 80 : plan?.name === 'Plan Profesional' ? 160 : 0, videosAI: plan?.name === 'Plan Esencial' ? 15 : plan?.name === 'Plan Avanzado' ? 30 : plan?.name === 'Plan Profesional' ? 60 : 0, conversationsAI: plan?.name === 'Plan Esencial' ? 250 : plan?.name === 'Plan Avanzado' ? 600 : plan?.name === 'Plan Profesional' ? 1500 : 0, emails: plan?.name === 'Plan Esencial' ? 1500 : plan?.name === 'Plan Avanzado' ? 3500 : plan?.name === 'Plan Profesional' ? 8000 : 0 })
                         setLoading(false)
                         resolve();
                       } else {
@@ -339,6 +339,51 @@ export default function Page () {
                     ))
                   }
                 </div>
+                <button onClick={() => table ? setTable(false) : setTable(true)} className="m-auto flex gap-2">Ver todas las funcionalidades <IoIosArrowDown className={`text-xl my-auto transition-all duration-150 ${table ? 'rotate-180' : ''}`} /></button>
+                {
+                  table
+                    ? (
+                      <div className={`overflow-x-auto rounded-2xl w-full border dark:border-neutral-700`}>
+                        <table className={`min-w-full table-auto rounded-xl`}>
+                          <thead className="border-b dark:border-neutral-700">
+                            <tr>
+                              <th className='px-4 py-5 text-left font-medium'>Funcionalidades</th>
+                              {
+                                service?.plans?.plans.map((plan, idx) => (
+                                  <th key={plan._id} className='px-4 py-5 text-center font-medium'>{plan.name}</th>
+                                ))
+                              }
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {
+                              service?.plans?.functionalities.map((functionality, index) => (
+                                <tr key={index} className="border-b dark:border-neutral-700">
+                                  <td className='p-4'>{functionality}</td>
+                                  {
+                                    service?.plans?.plans.map((plan) => (
+                                      <td key={plan._id} className={`p-4 text-center`}>
+                                        {
+                                          // Buscar si la funcionalidad existe en el plan
+                                          plan.functionalities?.some(f => f.name === functionality)
+                                            ? (
+                                              // Si la funcionalidad existe, muestra el valor de la funcionalidad
+                                              plan.functionalities?.find(f => f.name === functionality)?.value === 'Si' ? <FaCheck className='m-auto' /> : plan.functionalities?.find(f => f.name === functionality)?.value
+                                            ) 
+                                            : '✘'
+                                        }
+                                      </td>
+                                    ))
+                                  }
+                                </tr>
+                              ))
+                            }
+                          </tbody>
+                        </table>
+                      </div>
+                    )
+                    : ''
+                }
             </div>
           </div>
         </div>
