@@ -253,7 +253,11 @@ export default function Page() {
                                     const oldClients = [...clients]
                                     oldClients.find(client => client.email === selectClient?.email)!.services!.find(servi => servi.service === service._id)!.step = step._id!
                                     setClients(oldClients)
-                                    await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/clients`, { email: selectClient?.email, services: [{ service: service._id, step: step._id }] })
+                                    await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/clients`, { email: selectClient?.email, services: [{ service: service._id, step: step._id }] }, {
+                                      headers: {
+                                        'x-tenant-id': session?.tenantId
+                                      }
+                                    })
                                   }} className="flex flex-col bg-white border border-black/5 rounded-xl dark:bg-neutral-800" style={{ minHeight: 'calc(100vh - 258px)', boxShadow: '0px 3px 10px 3px #11111108' }}>
                                     <p className="min-w-64 p-4 border-b border-black/5 dark:border-neutral-700">{step.step}</p>
                                     {
