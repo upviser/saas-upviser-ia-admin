@@ -45,6 +45,7 @@ export default function Page () {
           'x-tenant-id': session?.tenantId
         }
       })
+      getDomain()
       setLoading(false)
     }
   }
