@@ -99,24 +99,24 @@ export default function Page () {
                           <td className="p-2">216.198.79.1</td>
                         </tr>
                         <tr className='bg-white dark:bg-neutral-800'>
-                          <td className="p-2">{res.dkim1.type}</td>
-                          <td className="p-2">{res.dkim1.value}</td>
-                          <td className="p-2">{res.dkim1.hostname}</td>
+                          <td className="p-2">{res.dkim1?.type}</td>
+                          <td className="p-2">{res.dkim1?.value}</td>
+                          <td className="p-2">{res.dkim1?.hostname}</td>
                         </tr>
                         <tr className='bg-white dark:bg-neutral-800'>
-                          <td className="p-2">{res.dkim2.type}</td>
-                          <td className="p-2">{res.dkim2.value}</td>
-                          <td className="p-2">{res.dkim2.hostname}</td>
+                          <td className="p-2">{res.dkim2?.type}</td>
+                          <td className="p-2">{res.dkim2?.value}</td>
+                          <td className="p-2">{res.dkim2?.hostname}</td>
                         </tr>
                         <tr className='bg-white dark:bg-neutral-800'>
-                          <td className="p-2">{res.brevo.type}</td>
-                          <td className="p-2">{res.brevo.value}</td>
-                          <td className="p-2">{res.brevo.hostname}</td>
+                          <td className="p-2">{res.brevo?.type}</td>
+                          <td className="p-2">{res.brevo?.value}</td>
+                          <td className="p-2">{res.brevo?.hostname}</td>
                         </tr>
                         <tr className='bg-white dark:bg-neutral-800'>
-                          <td className="p-2">{res.dmarc.type}</td>
-                          <td className="p-2">{res.dmarc.value}</td>
-                          <td className="p-2">{res.dmarc.hostname}</td>
+                          <td className="p-2">{res.dmarc?.type}</td>
+                          <td className="p-2">{res.dmarc?.value}</td>
+                          <td className="p-2">{res.dmarc?.hostname}</td>
                         </tr>
                       </Table>
                     </> 
