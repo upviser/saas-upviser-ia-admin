@@ -47,6 +47,7 @@ export interface IPage {
     bgType?: string
     bgAngle?: string
     bgImage?: string
+    textColor?: string
 }
 
 export interface IProductPage {

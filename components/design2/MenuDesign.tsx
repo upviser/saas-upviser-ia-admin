@@ -275,6 +275,20 @@ export const MenuDesign: React.FC<Props> = ({ domain, pages, part, type, setType
                     )
                     : ''
                 }
+                {
+                  page.page === 'Blog'
+                    ? (
+                      <div className='flex flex-col gap-2'>
+                        <p className='text-sm'>Color texto</p>
+                        <input type="color" onChange={(e: any) => {
+                          const oldPages = [...pages]
+                          oldPages[i].textColor = e.target.value
+                          setPages(oldPages)
+                        }} value={page.bgColor} />
+                      </div>
+                    )
+                    : ''
+                }
               </div>
             )
           }
