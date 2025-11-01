@@ -284,7 +284,7 @@ export const MenuDesign: React.FC<Props> = ({ domain, pages, part, type, setType
                           const oldPages = [...pages]
                           oldPages[i].textColor = e.target.value
                           setPages(oldPages)
-                        }} value={page.bgColor} />
+                        }} value={page.textColor} />
                       </div>
                     )
                     : ''
