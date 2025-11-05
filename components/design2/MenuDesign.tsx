@@ -92,9 +92,10 @@ interface Props {
   setLoadingImage2: any
   errorImage2: any
   setErrorImage2: any
+  setCategoryPage: any
 }
 
-export const MenuDesign: React.FC<Props> = ({ domain, pages, part, type, setType, setMenu, setPart, setPages, session, handleMoveUp, handleMoveDown, setSelectPage, setPopupDeletePage, popupDeletePage, funnels, setSelectFunnel, setPopupDeleteFunnel, popupDeleteFunnel, services, setSelectService, setPopupDeleteService, popupDeleteService, setError, setPopupPage, popupPage, whatsapp, setWhatsapp, id, instagram, setInstagram, chatView, setChatView, setNewFunnel, setTitle, setPopupNewFunnel, popupNewFunnel, style, newPage, setNewPage, productsOrder, editSubPage, setEditSubPage, loadingSubPage, setLoadingSubPage, loadingImage, setLoadingImage, setErrorImage, setStyle, productPage, setProductPage, cartPage, setCartPage, checkoutPage, setCheckoutPage, popupWeb, setPopupWeb, forms, calls, setTitleForm, setNewForm, popupForm, setPopupForm, setNewCall, popupCall, setPopupCall, setTitleMeeting, chat, setChat, step, setFunnels, setStep, setServices, selectService, setNewService, popupService, setPopupService, loading, setLoading, color, header, footer, categoryPage, loadingImage2, setLoadingImage2, errorImage2, setErrorImage2 }) => {
+export const MenuDesign: React.FC<Props> = ({ domain, pages, part, type, setType, setMenu, setPart, setPages, session, handleMoveUp, handleMoveDown, setSelectPage, setPopupDeletePage, popupDeletePage, funnels, setSelectFunnel, setPopupDeleteFunnel, popupDeleteFunnel, services, setSelectService, setPopupDeleteService, popupDeleteService, setError, setPopupPage, popupPage, whatsapp, setWhatsapp, id, instagram, setInstagram, chatView, setChatView, setNewFunnel, setTitle, setPopupNewFunnel, popupNewFunnel, style, newPage, setNewPage, productsOrder, editSubPage, setEditSubPage, loadingSubPage, setLoadingSubPage, loadingImage, setLoadingImage, setErrorImage, setStyle, productPage, setProductPage, cartPage, setCartPage, checkoutPage, setCheckoutPage, popupWeb, setPopupWeb, forms, calls, setTitleForm, setNewForm, popupForm, setPopupForm, setNewCall, popupCall, setPopupCall, setTitleMeeting, chat, setChat, step, setFunnels, setStep, setServices, selectService, setNewService, popupService, setPopupService, loading, setLoading, color, header, footer, categoryPage, loadingImage2, setLoadingImage2, errorImage2, setErrorImage2, setCategoryPage }) => {
   return (
     <div className='w-[350px] border-r hidden lg:flex flex-col justify-between bg-white dark:border-neutral-800 dark:bg-neutral-900' style={{ overflow: 'overlay' }}>
       {
@@ -361,6 +362,22 @@ export const MenuDesign: React.FC<Props> = ({ domain, pages, part, type, setType
                 <button onClick={() => setPart('')} className='flex gap-2 pt-1 pb-1 pl-2 pr-2 rounded transition-colors duration-150 hover:bg-neutral-100 dark:hover:bg-neutral-700'><BiArrowBack className='text-lg my-auto' /><p className='my-auto text-sm'>Volver</p></button>
               </div>
               <h2 className='text-lg font-medium'>Pagina de producto</h2>
+              <div className='flex flex-col gap-2'>
+                <p className='text-sm'>Color fondo</p>
+                <input type='color' placeholder='Color fondo' value={productPage[0].bgColor} onChange={(e: any) => {
+                  const beforeProductPage = [...productPage]
+                  beforeProductPage[0].bgColor = e.target.value
+                  setProductPage(beforeProductPage)
+                }} />
+              </div>
+              <div className='flex flex-col gap-2'>
+                <p className='text-sm'>Color texto</p>
+                <input type='color' placeholder='Color texto' value={productPage[0].textColor} onChange={(e: any) => {
+                  const beforeProductPage = [...productPage]
+                  beforeProductPage[0].textColor = e.target.value
+                  setProductPage(beforeProductPage)
+                }} />
+              </div>
               <div className='flex gap-2'>
                 <input type='checkbox' checked={productPage[0].reviews} onChange={(e: any) => {
                   const beforeProductPage = [...productPage]
@@ -398,6 +415,22 @@ export const MenuDesign: React.FC<Props> = ({ domain, pages, part, type, setType
                 <button onClick={() => setPart('')} className='flex gap-2 pt-1 pb-1 pl-2 pr-2 rounded transition-colors duration-150 hover:bg-neutral-100 dark:hover:bg-neutral-700'><BiArrowBack className='text-lg my-auto' /><p className='my-auto text-sm'>Volver</p></button>
               </div>
               <h2 className='text-lg font-medium'>Pagina de categorias</h2>
+              <div className='flex flex-col gap-2'>
+                <p className='text-sm'>Color fondo</p>
+                <input type='color' placeholder='Color fondo' value={categoryPage[0].bgColor} onChange={(e: any) => {
+                  const beforeProductPage = [...categoryPage]
+                  beforeProductPage[0].bgColor = e.target.value
+                  setCategoryPage(beforeProductPage)
+                }} />
+              </div>
+              <div className='flex flex-col gap-2'>
+                <p className='text-sm'>Color texto</p>
+                <input type='color' placeholder='Color texto' value={categoryPage[0].textColor} onChange={(e: any) => {
+                  const beforeProductPage = [...categoryPage]
+                  beforeProductPage[0].textColor = e.target.value
+                  setCategoryPage(beforeProductPage)
+                }} />
+              </div>
             </div>
           )
           : ''

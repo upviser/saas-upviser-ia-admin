@@ -43,10 +43,10 @@ export const Categories2: React.FC<Props> = ({ edit, categories, setPages, pages
           edit !== 'Categorias 2'
             ? (
               <div className='flex gap-4 m-auto'>
-                <Link className={`hover:border-black transition-colors duration-200 py-1 px-4 border`} style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} href='/tienda'>Todos los productos</Link>
+                <Link className={`transition-colors duration-200 py-1 px-4`} style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '', border: `1px solid ${style.borderColor}` }} href='/tienda'>Todos los productos</Link>
                 {
                   categories.map(category => (
-                    <Link key={category._id} className={`hover:border-black py-1 px-4 border transition-colors duration-200`} style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} href={`/tienda/${category.slug}`}>{ category.category }</Link>
+                    <Link key={category._id} className={`py-1 px-4 transition-colors duration-200`} style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '', border: `1px solid ${style.borderColor}` }} href={`/tienda/${category.slug}`}>{ category.category }</Link>
                   ))
                 }
               </div>
@@ -342,10 +342,10 @@ export const Categories2: React.FC<Props> = ({ edit, categories, setPages, pages
                   </div>
                 </div>
                 <div className='flex gap-4 m-auto'>
-                  <Link className={`hover:border-black transition-colors duration-200 py-1 px-4 border`} style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} href='/tienda'>Todos los productos</Link>
+                  <Link className={`transition-colors duration-200 py-1 px-4`} style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '', border: `1px solid ${style.borderColor}` }} href='/tienda'>Todos los productos</Link>
                   {
                     categories.map(category => (
-                      <Link key={category._id} className={`hover:border-black py-1 px-4 border transition-colors duration-200`} style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} href={`/tienda/${category.slug}`}>{ category.category }</Link>
+                      <Link key={category._id} className={`py-1 px-4 transition-colors duration-200`} style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '', border: `1px solid ${style.borderColor}` }} href={`/tienda/${category.slug}`}>{ category.category }</Link>
                     ))
                   }
                 </div>

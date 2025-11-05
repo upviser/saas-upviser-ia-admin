@@ -4,7 +4,7 @@ export interface Design {
     footer: IFooter
     chat: { bgColor: string, textColor: string }
     pages: IPage[]
-    productPage: IProductPage
+    productPage: IProductPage[]
     categoryPage: ICategoryPage[]
     cartPage: { bgColor: string, textColor: string, detailsColor: string }
     checkoutPage: { bgColor: string, textColor: string, detailsColor: string }
@@ -55,10 +55,14 @@ export interface IProductPage {
     text: string
     reviews: boolean
     design: IDesign[]
+    bgColor?: string
+    textColor?: string
 }
 
 export interface ICategoryPage {
     design: IDesign[]
+    bgColor?: string
+    textColor?: string
 }
 
 export interface IPopupWeb {

@@ -46,7 +46,7 @@ export const PageProduct = ({ productsOrder, productPage, style }: { productsOrd
                 ? (
                   <div className="w-fit h-fit cursor-pointer">
                     <div className='flex gap-1 mb-2'>
-                      <span className='mr-1 text-[#444444] text-[14px] dark:text-neutral-400'>0</span>
+                      <span className='mr-1 text-[14px]'>0</span>
                       <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16" className="text-lg text-yellow-400" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"></path></svg>
                       <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16" className="text-lg text-yellow-400" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"></path></svg>
                       <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16" className="text-lg text-yellow-400" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"></path></svg>
@@ -85,16 +85,16 @@ export const PageProduct = ({ productsOrder, productPage, style }: { productsOrd
                                     {
                                       productsOrder![0].variations?.formatVariation === 'Imagen'
                                         ? (
-                                          <Image src={find!.image!} alt='Imagen variación' width={80} height={80} className={`w-20 h-20 transition-colors duration-150 border p-1 cursor-pointer hover:border-main`} style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} />
+                                          <Image src={find!.image!} alt='Imagen variación' width={80} height={80} className={`w-20 h-20 transition-colors duration-150 p-1 cursor-pointer hover:border-main`} style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }} />
                                         )
                                         : productsOrder![0].variations?.formatVariation === 'Color'
                                           ? (
-                                            <div className={`w-10 h-10 rounded-full border p-1 cursor-pointer transition-colors duration-150 hover:border-main dark:border-neutral-700`}>
+                                            <div className={`w-10 h-10 rounded-full p-1 cursor-pointer transition-colors duration-150`} style={{ border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }}>
                                               <div className={`m-auto w-full h-full rounded-full`} style={{ backgroundColor: `${variation.colorVariation}` }} />
                                             </div>
                                           )
                                           : productsOrder![0].variations?.formatVariation === 'Texto'
-                                            ? <div className={`py-1.5 px-4 rounded-full border transition-colors duration-150 hover:border-main cursor-pointer dark:border-neutral-700`}>{variation.variation}</div>
+                                            ? <div className={`py-1.5 px-4 rounded-full transition-colors duration-150 cursor-pointer`} style={{ border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }}>{variation.variation}</div>
                                             : ''
                                     }
                                     
@@ -127,16 +127,16 @@ export const PageProduct = ({ productsOrder, productPage, style }: { productsOrd
                                     {
                                       productsOrder![0].variations?.formatSubVariation === 'Imagen'
                                         ? (
-                                          <Image src={find!.image!} alt='Imagen variación' width={80} height={80} className={`w-20 h-20 transition-colors duration-150 border p-1 cursor-pointer hover:border-button`} style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} />
+                                          <Image src={find!.image!} alt='Imagen variación' width={80} height={80} className={`w-20 h-20 transition-colors duration-150 p-1 cursor-pointer hover:border-button`} style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }} />
                                         )
                                         : productsOrder![0].variations?.formatSubVariation === 'Color'
                                           ? (
-                                            <div className={`w-10 h-10 rounded-full border p-1 cursor-pointer transition-colors duration-150 hover:border-main`}>
+                                            <div className={`w-10 h-10 rounded-full p-1 cursor-pointer transition-colors duration-150`} style={{ border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }}>
                                               <div className={`m-auto w-full h-full rounded-full`} style={{ backgroundColor: `${variation.colorSubVariation}` }} />
                                             </div>
                                           )
                                           : productsOrder![0].variations?.formatSubVariation === 'Texto'
-                                            ? <div className={`py-1.5 px-4 rounded-full border transition-colors duration-150 hover:border-main cursor-pointer`}>{variation.subVariation}</div>
+                                            ? <div className={`py-1.5 px-4 rounded-full transition-colors duration-150 cursor-pointer`} style={{ border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }}>{variation.subVariation}</div>
                                             : ''
                                     }
                                     
@@ -169,16 +169,16 @@ export const PageProduct = ({ productsOrder, productPage, style }: { productsOrd
                                     {
                                       productsOrder![0].variations?.formatSubVariation2 === 'Imagen'
                                         ? (
-                                          <Image src={find!.image!} alt='Imagen variación' width={80} height={80} className={`w-20 h-20 transition-colors duration-150 border p-1 cursor-pointer hover:border-button`} style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} />
+                                          <Image src={find!.image!} alt='Imagen variación' width={80} height={80} className={`w-20 h-20 transition-colors duration-150 p-1 cursor-pointer hover:border-button`} style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }} />
                                         )
                                         : productsOrder![0].variations?.formatSubVariation2 === 'Color'
                                           ? (
-                                            <div className={`w-10 h-10 rounded-full border p-1 cursor-pointer transition-colors duration-150 hover:border-main`}>
+                                            <div className={`w-10 h-10 rounded-full p-1 cursor-pointer transition-colors duration-150`} style={{ border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }}>
                                               <div className={`m-auto w-full h-full rounded-full`} style={{ backgroundColor: `${variation.colorSubVariation2}` }} />
                                             </div>
                                           )
                                           : productsOrder![0].variations?.formatSubVariation2 === 'Texto'
-                                            ? <div className={`py-1.5 px-4 rounded-full border transition-colors duration-150 hover:border-main cursor-pointer`}>{variation.subVariation2}</div>
+                                            ? <div className={`py-1.5 px-4 rounded-full transition-colors duration-150 cursor-pointer`} style={{ border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }}>{variation.subVariation2}</div>
                                             : ''
                                     }
                                     
@@ -201,7 +201,7 @@ export const PageProduct = ({ productsOrder, productPage, style }: { productsOrd
                     <div className='flex flex-col gap-2'>
                       {
                           productsOrder![0].quantityOffers.map(offer => (
-                            <div key={offer._id} className={`flex gap-4 justify-between p-3 border transition-colors duration-150 bg-gray-50 cursor-pointer hover:border-main`} style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }}>
+                            <div key={offer._id} className={`flex gap-4 justify-between p-3 border transition-colors duration-150 cursor-pointer`} style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }}>
                               <div className='flex flex-col gap-2'>
                                 <p>{offer.quantity} unidades</p>
                                 <p className='py-1 px-3 text-sm rounded-full bg-main text-white'>Ahorra {offer.descount}%</p>
@@ -215,8 +215,8 @@ export const PageProduct = ({ productsOrder, productPage, style }: { productsOrd
                   )
                   : ''
               }
-              <div className='flex flex-col gap-2 mt-2 border-b pb-4'>
-                <div className='border border-[#0071e3] w-fit h-[45px] flex bg-white dark:bg-transparent' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }}>
+              <div className='flex flex-col gap-2 mt-2 pb-4' style={{ borderBottom: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }}>
+                <div className='border border-[#0071e3] w-fit h-[45px] flex dark:bg-transparent' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }}>
                   <button className='pl-4 pr-6 text-[#0071e3] text-sm'>-</button>
                   <span className='mt-auto mb-auto text-[#0071e3] w-4 text-center text-sm'>1</span>
                   <button className='pl-6 pr-4 text-[#0071e3] text-sm'>+</button>
@@ -225,18 +225,18 @@ export const PageProduct = ({ productsOrder, productPage, style }: { productsOrd
                   Añadir al carrito - ${NumberFormat(productsOrder![0].price)}
                 </button>
               </div>
-            <div className='mt-4 border-b pb-4'>
+            <div className='mt-4 pb-4' style={{ borderBottom: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }}>
               <button className='flex gap-2 w-full justify-between'>
                 <h5 className='text-[16px] font-medium md:text-[18px]'>Descripción</h5>
                 <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024" className={` -rotate-90 transition-all duration-150 ml-auto text-lg w-4 text-neutral-500`} xmlns="http://www.w3.org/2000/svg"><path d="M765.7 486.8L314.9 134.7A7.97 7.97 0 0 0 302 141v77.3c0 4.9 2.3 9.6 6.1 12.6l360 281.1-360 281.1c-3.9 3-6.1 7.7-6.1 12.6V883c0 6.7 7.7 10.4 12.9 6.3l450.8-352.1a31.96 31.96 0 0 0 0-50.4z"></path></svg>
               </button>
               <div style={{ overflow: 'hidden', transition: 'max-height 0.3s' }} className={`transition-all duration-200 flex flex-col gap-2 mt-2`}>
                 {productsOrder![0].description.split('/').map(des => {
-                  return <p className='text-[#444444] mb-1 text-sm md:text-[16px]' key={des}>{des}</p>
+                  return <p className='mb-1 text-sm md:text-[16px]' key={des}>{des}</p>
                 })}
               </div>
             </div>
-            <ShippingPrice />
+            <ShippingPrice style={style} />
             {
               productPage[0].title !== '' || productPage[0].text !== ''
                 ? (
@@ -261,10 +261,10 @@ export const PageProduct = ({ productsOrder, productPage, style }: { productsOrd
             <div className='flex p-4'>
               <div className='w-[1600px] m-auto'>
                 <h2 className="text-[20px] font-medium lg:text-[24px]">Evaluaciones de clientes</h2>
-                <span className='text-[14px] md:text-[16px] dark:text-neutral-400'>Valoracion media</span>
+                <span className='text-[14px] md:text-[16px]'>Valoracion media</span>
                 <div className='mt-2'>
                 <div className='flex gap-1'>
-                  <span className='text-[#444444] dark:text-neutral-400'>0</span>
+                  <span className='dark:text-neutral-400'>0</span>
                   <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16" className="text-lg text-yellow-400" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"></path></svg>
                   <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16" className="text-lg text-yellow-400" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"></path></svg>
                   <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16" className="text-lg text-yellow-400" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"></path></svg>
