@@ -8,6 +8,7 @@ import { BiArrowBack } from 'react-icons/bi'
 import axios from 'axios'
 import { Content, Image, Seo, Visibility } from '@/components/blog'
 import { IPost } from '@/interfaces'
+import { useSession } from 'next-auth/react'
 
 export default function Page () {
 
@@ -24,6 +25,8 @@ export default function Page () {
   const [content, setContent] = useState('')
   const [error, setError] = useState('')
 
+  const { data: session } = useSession()
+
   const router = useRouter()
 
   const handleSubmit = async () => {
@@ -35,7 +38,11 @@ export default function Page () {
         setSubmitLoading(false)
         return
       }
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/post`, { ...contentData, content: content })
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/post`, { ...contentData, content: content }, {
+        headers: {
+          'x-tenant-id': session?.tenantId
+        }
+      })
       router.push('/blog')
     }
   }
