@@ -49,8 +49,7 @@ export const Navbar: React.FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter()
   const pathname = usePathname()
 
-  useEffect(() => {
-    // Rutas públicas que no requieren autenticación
+  const get = async () => {
     const publicRoutes = ['/registro', '/ingresar'];
     
     if (session === null) {
@@ -64,6 +63,17 @@ export const Navbar: React.FC<PropsWithChildren> = ({ children }) => {
         router.push('/configuracion/planes')
         setLoading(false)
         return
+      } else {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, {
+          headers: {
+            'x-tenant-id': session.tenantId
+          }
+        })
+        if (res.data.state === false) {
+          router.push('/configuracion/planes')
+          setLoading(false)
+          return
+        }
       }
       if (pathname === '/configuracion-usuario') return setLoading(false);
       const userPermissions = session.user.permissions || [];
@@ -97,6 +107,10 @@ export const Navbar: React.FC<PropsWithChildren> = ({ children }) => {
         setLoading(false);
       }
     }
+  }
+
+  useEffect(() => {
+    get()
   }, [session, pathname, router]);
 
   useEffect(() => {

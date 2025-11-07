@@ -8,6 +8,7 @@ export interface Design {
     categoryPage: ICategoryPage[]
     cartPage: { bgColor: string, textColor: string, detailsColor: string }
     checkoutPage: { bgColor: string, textColor: string, detailsColor: string }
+    accountPage: { bgColor: string, textColor: string }
     popup: IPopupWeb
     whatsapp: boolean
     instagram: boolean

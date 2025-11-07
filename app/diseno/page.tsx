@@ -4,7 +4,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
-import { PopupNewCall, PopupNewForm, PopupNewPage, PopupPagesBlocks, PopupDeleteFunnel, PopupDeletePage, Bloque7, PopupDeleteService } from '@/components/design'
+import { PopupNewCall, PopupNewForm, PopupNewPage, PopupPagesBlocks, PopupDeleteFunnel, PopupDeletePage, Bloque7, PopupDeleteService, Layout } from '@/components/design'
 import { Button, Input, Select } from '@/components/ui'
 import { PopupNewFunnel } from '@/components/funnels'
 import { PopupNewService } from '@/components/service'
@@ -16,6 +16,7 @@ import "swiper/css/pagination"
 import styles from  "./Slider.module.css"
 import { Pagination } from "swiper/modules"
 import { Page2, ServicesDesign, ProductDesign, CategoryDesign, FunnelDesign, MenuDesign, MenuDesignPhone, Popup } from '@/components/design2'
+import { IoLaptopOutline, IoPhonePortraitOutline } from 'react-icons/io5'
 
 export default function Page () {
 
@@ -121,6 +122,7 @@ export default function Page () {
   const [checkoutPage, setCheckoutPage] = useState({ bgColor: '#ffffff', textColor: '#111111', detailsColor: '#ffffff' })
   const [design, setDesign] = useState<Design>()
   const [domain, setDomain] = useState()
+  const [accountPage, setAccountPage] = useState({ bgColor: '', textColor: '' })
 
   const { data: session } = useSession()
 
@@ -174,6 +176,7 @@ export default function Page () {
       setCheckoutPage(data.checkoutPage)
       setProductPage(data.productPage)
       setCategoryPage(data.categoryPage)
+      setAccountPage(data.accountPage)
       if (data.popup) {
         setPopupWeb(data.popup)
       }
@@ -447,7 +450,7 @@ export default function Page () {
           }} className='h-fit'>{menu === 'hidden' ? <SlMenu className='text-lg' /> : <GrClose className='text-lg' />}</button>
         </div>
         <MenuDesignPhone domain={domain} menu={menu} pages={pages} part={part} type={type} setType={setType} setMenu={setMenu} setPart={setPart} setPages={setPages} session={session} handleMoveUp={handleMoveUp} handleMoveDown={handleMoveDown} setSelectPage={setSelectPage} setPopupDeletePage={setPopupDeletePage} popupDeletePage={popupDeletePage} funnels={funnels} setSelectFunnel={setSelectFunnel} setPopupDeleteFunnel={setPopupDeleteFunnel} popupDeleteFunnel={popupDeleteFunnel} services={services} setSelectService={setSelectService} setPopupDeleteService={setPopupDeleteService} popupDeleteService={popupDeleteService} setError={setError} setPopupPage={setPopupPage} popupPage={popupPage} whatsapp={whatsapp} setWhatsapp={setWhatsapp} id={id} instagram={instagram} setInstagram={setInstagram} chatView={chatView} setChatView={setChatView} setNewFunnel={setNewFunnel} setTitle={setTitle} setPopupNewFunnel={setPopupNewFunnel} popupNewFunnel={popupNewFunnel} style={style} newPage={newPage} setNewPage={setNewPage} productsOrder={productsOrder} editSubPage={editSubPage} setEditSubPage={setEditSubPage} loadingSubPage={loadingSubPage} setLoadingSubPage={setLoadingSubPage} loadingImage={loadingImage} setLoadingImage={setLoadingImage} setErrorImage={setErrorImage} setStyle={setStyle} productPage={productPage} setProductPage={setProductPage} cartPage={cartPage} setCartPage={setCartPage} checkoutPage={checkoutPage} setCheckoutPage={setCheckoutPage} popupWeb={popupWeb} setPopupWeb={setPopupWeb} forms={forms!} calls={calls!} setTitleForm={setTitleForm} setNewForm={setNewForm} popupForm={popupForm} setPopupForm={setPopupForm} setNewCall={setNewCall} popupCall={popupCall} setPopupCall={setPopupCall} setTitleMeeting={setTitleMeeting} chat={chat} setChat={setChat} step={step} setFunnels={setFunnels} setStep={setStep} setServices={setServices} selectService={selectService!} setNewService={setNewService} popupService={popupService} setPopupService={setPopupService} loading={loading} setLoading={setLoading} color={color} header={header} footer={footer} categoryPage={categoryPage} />
-        <MenuDesign domain={domain} pages={pages} part={part} type={type} setType={setType} setMenu={setMenu} setPart={setPart} setPages={setPages} session={session} handleMoveUp={handleMoveUp} handleMoveDown={handleMoveDown} setSelectPage={setSelectPage} setPopupDeletePage={setPopupDeletePage} popupDeletePage={popupDeletePage} funnels={funnels} setSelectFunnel={setSelectFunnel} setPopupDeleteFunnel={setPopupDeleteFunnel} popupDeleteFunnel={popupDeleteFunnel} services={services} setSelectService={setSelectService} setPopupDeleteService={setPopupDeleteService} popupDeleteService={popupDeleteService} setError={setError} setPopupPage={setPopupPage} popupPage={popupPage} whatsapp={whatsapp} setWhatsapp={setWhatsapp} id={id} instagram={instagram} setInstagram={setInstagram} chatView={chatView} setChatView={setChatView} setNewFunnel={setNewFunnel} setTitle={setTitle} setPopupNewFunnel={setPopupNewFunnel} popupNewFunnel={popupNewFunnel} style={style} newPage={newPage} setNewPage={setNewPage} productsOrder={productsOrder} editSubPage={editSubPage} setEditSubPage={setEditSubPage} loadingSubPage={loadingSubPage} setLoadingSubPage={setLoadingSubPage} loadingImage={loadingImage} setLoadingImage={setLoadingImage} setErrorImage={setErrorImage} setStyle={setStyle} productPage={productPage} setProductPage={setProductPage} cartPage={cartPage} setCartPage={setCartPage} checkoutPage={checkoutPage} setCheckoutPage={setCheckoutPage} popupWeb={popupWeb} setPopupWeb={setPopupWeb} forms={forms!} calls={calls!} setTitleForm={setTitleForm} setNewForm={setNewForm} popupForm={popupForm} setPopupForm={setPopupForm} setNewCall={setNewCall} popupCall={popupCall} setPopupCall={setPopupCall} setTitleMeeting={setTitleMeeting} chat={chat} setChat={setChat} step={step} setFunnels={setFunnels} setStep={setStep} setServices={setServices} selectService={selectService!} setNewService={setNewService} popupService={popupService} setPopupService={setPopupService} loading={loading} setLoading={setLoading} color={color} header={header} footer={footer} categoryPage={categoryPage} loadingImage2={loadingImage2} setLoadingImage2={setLoadingImage2} errorImage2={errorImage2} setErrorImage2={setErrorImage2} setCategoryPage={setCategoryPage} />
+        <MenuDesign domain={domain} pages={pages} part={part} type={type} setType={setType} setMenu={setMenu} setPart={setPart} setPages={setPages} session={session} handleMoveUp={handleMoveUp} handleMoveDown={handleMoveDown} setSelectPage={setSelectPage} setPopupDeletePage={setPopupDeletePage} popupDeletePage={popupDeletePage} funnels={funnels} setSelectFunnel={setSelectFunnel} setPopupDeleteFunnel={setPopupDeleteFunnel} popupDeleteFunnel={popupDeleteFunnel} services={services} setSelectService={setSelectService} setPopupDeleteService={setPopupDeleteService} popupDeleteService={popupDeleteService} setError={setError} setPopupPage={setPopupPage} popupPage={popupPage} whatsapp={whatsapp} setWhatsapp={setWhatsapp} id={id} instagram={instagram} setInstagram={setInstagram} chatView={chatView} setChatView={setChatView} setNewFunnel={setNewFunnel} setTitle={setTitle} setPopupNewFunnel={setPopupNewFunnel} popupNewFunnel={popupNewFunnel} style={style} newPage={newPage} setNewPage={setNewPage} productsOrder={productsOrder} editSubPage={editSubPage} setEditSubPage={setEditSubPage} loadingSubPage={loadingSubPage} setLoadingSubPage={setLoadingSubPage} loadingImage={loadingImage} setLoadingImage={setLoadingImage} setErrorImage={setErrorImage} setStyle={setStyle} productPage={productPage} setProductPage={setProductPage} cartPage={cartPage} setCartPage={setCartPage} checkoutPage={checkoutPage} setCheckoutPage={setCheckoutPage} popupWeb={popupWeb} setPopupWeb={setPopupWeb} forms={forms!} calls={calls!} setTitleForm={setTitleForm} setNewForm={setNewForm} popupForm={popupForm} setPopupForm={setPopupForm} setNewCall={setNewCall} popupCall={popupCall} setPopupCall={setPopupCall} setTitleMeeting={setTitleMeeting} chat={chat} setChat={setChat} step={step} setFunnels={setFunnels} setStep={setStep} setServices={setServices} selectService={selectService!} setNewService={setNewService} popupService={popupService} setPopupService={setPopupService} loading={loading} setLoading={setLoading} color={color} header={header} footer={footer} categoryPage={categoryPage} loadingImage2={loadingImage2} setLoadingImage2={setLoadingImage2} errorImage2={errorImage2} setErrorImage2={setErrorImage2} setCategoryPage={setCategoryPage} accountPage={accountPage} setAccountPage={setAccountPage} />
         {
           part === ''
             ? (
@@ -472,6 +475,58 @@ export default function Page () {
         {
           part === 'Pagina de categorias'
             ? categoryPage.map((page, i) => <CategoryDesign key={i} edit={edit} setEdit={setEdit} setHeader={setHeader} header={header} setPart={setPart} pages={pages} storeData={storeData} responsive={responsive} footer={footer} setFooter={setFooter} style={style} page={page} categoryPage={categoryPage} setCategoryPage={setCategoryPage} i={i} setMouse={setMouse} mouse={mouse} calls={calls} forms={forms} categories={categories} order={order} setOrder={setOrder} productsOrder={productsOrder} popupForm={popupForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} setNewCall={setNewCall} setPopupCall={setPopupCall} setTitleMeeting={setTitleMeeting} selectFunnel={selectFunnel} popupCall={popupCall} setSelectFunnel={setSelectFunnel} step={step} setNewForm={setNewForm} error={error} setError={setError} getForms={getForms} newForm={newForm} setPopupService={setPopupService} setNewService={setNewService} popupService={popupService} setTitle={setTitle} services={services} funnels={funnels} setFunnels={setFunnels} clientData={clientData} getClientData={getClientData} setResponsive={setResponsive} moveBlockCategories={moveBlockCategories} setIndexCategory={setIndexCategory} setIndexFunnel={setIndexFunnel} setIndexPage={setIndexPage} setIndexProduct={setIndexProduct} setIndexService={setIndexService} setIndexStep={setIndexStep} setIndexStepService={setIndexStepService} popup={popup} setPopup={setPopup} />)
+            : ''
+        }
+        {
+          part === 'Pagina de cuenta'
+            ? (
+              <div className={`m-auto h-full bg-white text-black ${responsive === '400px' ? 'w-[400px]' : 'w-full lg:w-[calc(100%-350px)]'} lg:w-[${responsive}]`}>
+                <div className='flex p-4 bg-white border-b border-border dark:bg-neutral-900 dark:border-neutral-700'>
+                  <div className='flex gap-4 w-fit m-auto'>
+                    <button onClick={(e: any) => {
+                      e.preventDefault()
+                      setResponsive('calc(100%-350px)')
+                    }} className='border border-border rounded-lg p-2 dark:border-neutral-700'><IoLaptopOutline className='text-2xl dark:text-white' /></button>
+                    <button  onClick={(e: any) => {
+                      e.preventDefault()
+                      setResponsive('400px')
+                    }}className='border border-border rounded-lg p-2 dark:border-neutral-700'><IoPhonePortraitOutline className='text-2xl dark:text-white' /></button>
+                  </div>
+                </div>
+                <div className="overflow-y-auto" style={{ height: 'calc(100% - 75px)' }}>
+                  <div style={{ backgroundColor: accountPage.bgColor, color: accountPage.textColor }}>
+                    <Layout edit={edit} setEdit={setEdit} setHeader={setHeader} header={header} setPart={setPart} pages={pages} storeData={storeData} responsive={responsive} style={style} footer={footer} setFooter={setFooter}>
+                      <div className='p-4 flex flex-col gap-4 w-full'>
+                        <p className='text-5xl font-semibold'>Cuenta</p>
+                        <div className='flex gap-4 w-full'>
+                          <div className='flex flex-col gap-4 w-2/3'>
+                            <p className='text-4xl font-semibold'>Compras</p>
+                            <p>Aun no tienes compras</p>
+                          </div>
+                          <div className='flex flex-col gap-4 w-1/3'>
+                            <p className='text-4xl font-semibold'>Datos</p>
+                            <div className='flex flex-col gap-2'>
+                              <p className='text-3xl font-semibold'>Datos de contacto</p>
+                              <p>Nombre</p>
+                              <p>Apellido</p>
+                              <p>Email</p>
+                              <p>Teléfono</p>
+                            </div>
+                            <div className='flex flex-col gap-2'>
+                              <p className='text-3xl font-semibold'>Dirección</p>
+                              <p>Dirección</p>
+                              <p>Número</p>
+                              <p>Ciudad</p>
+                              <p>Región</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </Layout>
+                  </div>
+                </div>
+              </div>
+            )
             : ''
         }
         {

@@ -184,6 +184,9 @@ export const Pages: React.FC<Props> = ({ domain, pages, setType, setMenu, setPar
                 <div className='flex gap-4'>
                   <button onClick={() => setPart('Pagina de checkout')} className='text-left w-full text-[15px]'>Pagina de checkout</button>
                 </div>
+                <div className='flex gap-4'>
+                  <button onClick={() => setPart('Pagina de cuenta')} className='text-left w-full text-[15px]'>Pagina de cuenta</button>
+                </div>
               </>
             )
             : ''
