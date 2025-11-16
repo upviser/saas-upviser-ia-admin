@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AiOutlineFileDone } from 'react-icons/ai'
 import { BsCreditCard } from 'react-icons/bs'
 import { FaUser } from 'react-icons/fa'
@@ -9,14 +9,19 @@ import { MdOutlineIntegrationInstructions, MdOutlineLocalShipping } from 'react-
 import { TbWorldWww } from 'react-icons/tb'
 import { HiChevronDown, HiChevronUp } from 'react-icons/hi'
 import { IoPodiumOutline } from 'react-icons/io5'
+import axios from 'axios'
+import { useSession } from 'next-auth/react'
 
 export const Nav = () => {
   const pathname = usePathname()
+  const { data: session } = useSession()
   const [isOpen, setIsOpen] = useState(false)
+  const [shopLoginAdmin, setShopLoginAdmin] = useState<any>()
 
   const menuItems = [
     { href: '/configuracion', label: 'Información del negocio', icon: HiOutlineInformationCircle },
     { href: '/configuracion/planes', label: 'Planes', icon: IoPodiumOutline },
+    { href: '/configuracion/creditos-adicionales', label: 'Creditos adicionales', icon: IoPodiumOutline },
     { href: '/configuracion/dominio', label: 'Dominio', icon: TbWorldWww },
     { href: '/configuracion/usuarios', label: 'Usuarios', icon: FaUser },
     { href: '/configuracion/pasarela-de-pago', label: 'Pasarela de pago', icon: BsCreditCard },
@@ -26,6 +31,21 @@ export const Nav = () => {
   ]
 
   const currentItem = menuItems.find(item => item.href === pathname)
+
+  const getShopLoginAdmin = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
+    setShopLoginAdmin(res.data)
+  }
+
+  useEffect(() => {
+    if (session?.tenantId) {
+      getShopLoginAdmin()
+    }
+  }, [session])
 
   return (
     <div className='bg-white mr-3 ml-3 lg:mr-0 lg:ml-0 lg:w-1/4 h-fit rounded-xl border border-black/5 dark:bg-neutral-800 dark:border-neutral-700 fixed top-16 left-0 right-0 z-40 lg:sticky lg:top-0 lg:z-auto' style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
@@ -67,6 +87,8 @@ export const Nav = () => {
             {menuItems.map((item) => {
               const Icon = item.icon
               const isActive = pathname === item.href
+
+              if (shopLoginAdmin?.plan === 'Esencial' && (item.label === 'Pasarela de pago' || item.label === 'Envíos')) return
               
               return (
                 <Link

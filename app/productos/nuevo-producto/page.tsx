@@ -144,8 +144,12 @@ export default function Page () {
             <div className='flex gap-6 flex-col w-full lg:w-2/3'>
               <NameDescription information={information} setInformation={setInformation} shopLogin={shopLogin} />
               <Media information={information} setInformation={setInformation} shopLogin={shopLogin} />
-              <StockVariations information={information} setInformation={setInformation} />
-              <ProductOffer productsOffer={productsOffer} setProductsOffer={setProductsOffer} />
+              <StockVariations information={information} setInformation={setInformation} shopLogin={shopLogin} />
+              {
+                shopLogin?.plan === 'profesional'
+                  ? <ProductOffer productsOffer={productsOffer} setProductsOffer={setProductsOffer} />
+                  : ''
+              }
               <Information information={information} setInformation={setInformation} />
               <ProductSeo information={information} setInformation={setInformation} shopLogin={shopLogin} />
             </div>
@@ -153,7 +157,11 @@ export default function Page () {
               <Visibility information={information} setInformation={setInformation} />
               <Price information={information} setInformation={setInformation} />
               <CategoryProduct categories={categories} information={information} setInformation={setInformation} setNewCategory={setNewCategory} newCategory={newCategory} />
-              <QuantityOffers quantityOffers={quantityOffers} setQuantityOffers={setQuantityOffers} />
+              {
+                shopLogin?.plan === 'profesional'
+                  ? <QuantityOffers quantityOffers={quantityOffers} setQuantityOffers={setQuantityOffers} />
+                  : ''
+              }
             </div>
           </form>
         </div>

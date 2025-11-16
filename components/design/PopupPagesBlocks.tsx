@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { IFunnel, IProduct, IService } from '@/interfaces'
 import { useSession } from 'next-auth/react'
+import axios from 'axios'
 
 interface Props {
     popup: any
@@ -28,7 +29,24 @@ interface Props {
 
 export const PopupPagesBlocks: React.FC<Props> = ({ popup, setPopup, pages, pageProduct, setPageProduct, pageCategory, setPageCategory, indexPage, indexFunnel, indexStep, indexProduct, indexCategory, setPages, funnels, setFunnels, indexService, indexStepService, services, setServices, products }) => {
   
+  const [shopLoginAdmin, setShopLoginAdmin] = useState<any>()
+  
   const { data: session } = useSession()
+
+  const getShopLoginAdmin = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
+    setShopLoginAdmin(res.data)
+  }
+
+  useEffect(() => {
+    if (session?.tenantId) {
+      getShopLoginAdmin()
+    }
+  }, [session])
   
   return (
     <div onClick={() => {
@@ -594,52 +612,58 @@ export const PopupPagesBlocks: React.FC<Props> = ({ popup, setPopup, pages, page
               <Image className="border m-auto dark:border-neutral-600" width={450} height={216} draggable='false' alt="Imagen Slider" src='/Bloque%207.png' />
               <p className="mx-auto">Bloque 7</p>
             </div>
-            <div onClick={() => {
-              if (indexPage !== -1) {
-                const oldPages = [...pages]
-                oldPages[indexPage].design.push({ content: 'Checkout', info: {  } })
-                setPages(oldPages)
-                setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
-                setTimeout(() => {
-                  setPopup({ ...popup, view: 'hidden', opacity: 'opacity-0' })
-                }, 200)
-              } else if (indexFunnel !== -1 && indexStep !== -1) {
-                const oldFunnels = [...funnels!]
-                oldFunnels[indexFunnel].steps[indexStep].design?.push({ content: 'Checkout', info: {  } })
-                setFunnels(oldFunnels)
-                setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
-                setTimeout(() => {
-                  setPopup({ ...popup, view: 'hidden', opacity: 'opacity-0' })
-                }, 200)
-              } else if (indexService !== -1 && indexStepService !== -1) {
-                const oldServices = [...services!]
-                oldServices[indexService].steps[indexStepService].design?.push({ content: 'Checkout', info: {  } })
-                setServices(oldServices)
-                setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
-                setTimeout(() => {
-                  setPopup({ ...popup, view: 'hidden', opacity: 'opacity-0' })
-                }, 200)
-              } else if (indexCategory !== -1) {
-                const oldPageCategory = [...pageCategory!]
-                oldPageCategory[indexCategory].design.push({ content: 'Checkout', info: {  } })
-                setPageCategory(oldPageCategory)
-                setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
-                setTimeout(() => {
-                  setPopup({ ...popup, view: 'hidden', opacity: 'opacity-0' })
-                }, 200)
-              } else if (indexProduct !== -1) {
-                const oldPageProduct = [...pageProduct!]
-                oldPageProduct[indexProduct].design.push({ content: 'Checkout', info: {  } })
-                setPageProduct(oldPageProduct)
-                setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
-                setTimeout(() => {
-                  setPopup({ ...popup, view: 'hidden', opacity: 'opacity-0' })
-                }, 200)
-              }
-            }} className={`w-[355px] border p-2 rounded-xl flex flex-col gap-2 cursor-pointer transition-all duration-150 hover:border-main dark:border-neutral-600 dark:hover:border-main`}>
-              <Image className="border rounded-xl dark:border-neutral-600" width={450} height={216} draggable='false' alt="Imagen Slider" src='/Checkout.png' />
-              <p className="m-auto">Checkout</p>
-            </div>
+            {
+              shopLoginAdmin?.plan === 'Avanzado' || shopLoginAdmin?.plan === 'Profesional'
+                ? (
+                  <div onClick={() => {
+                    if (indexPage !== -1) {
+                      const oldPages = [...pages]
+                      oldPages[indexPage].design.push({ content: 'Checkout', info: {  } })
+                      setPages(oldPages)
+                      setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
+                      setTimeout(() => {
+                        setPopup({ ...popup, view: 'hidden', opacity: 'opacity-0' })
+                      }, 200)
+                    } else if (indexFunnel !== -1 && indexStep !== -1) {
+                      const oldFunnels = [...funnels!]
+                      oldFunnels[indexFunnel].steps[indexStep].design?.push({ content: 'Checkout', info: {  } })
+                      setFunnels(oldFunnels)
+                      setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
+                      setTimeout(() => {
+                        setPopup({ ...popup, view: 'hidden', opacity: 'opacity-0' })
+                      }, 200)
+                    } else if (indexService !== -1 && indexStepService !== -1) {
+                      const oldServices = [...services!]
+                      oldServices[indexService].steps[indexStepService].design?.push({ content: 'Checkout', info: {  } })
+                      setServices(oldServices)
+                      setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
+                      setTimeout(() => {
+                        setPopup({ ...popup, view: 'hidden', opacity: 'opacity-0' })
+                      }, 200)
+                    } else if (indexCategory !== -1) {
+                      const oldPageCategory = [...pageCategory!]
+                      oldPageCategory[indexCategory].design.push({ content: 'Checkout', info: {  } })
+                      setPageCategory(oldPageCategory)
+                      setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
+                      setTimeout(() => {
+                        setPopup({ ...popup, view: 'hidden', opacity: 'opacity-0' })
+                      }, 200)
+                    } else if (indexProduct !== -1) {
+                      const oldPageProduct = [...pageProduct!]
+                      oldPageProduct[indexProduct].design.push({ content: 'Checkout', info: {  } })
+                      setPageProduct(oldPageProduct)
+                      setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
+                      setTimeout(() => {
+                        setPopup({ ...popup, view: 'hidden', opacity: 'opacity-0' })
+                      }, 200)
+                    }
+                  }} className={`w-[355px] border p-2 rounded-xl flex flex-col gap-2 cursor-pointer transition-all duration-150 hover:border-main dark:border-neutral-600 dark:hover:border-main`}>
+                    <Image className="border rounded-xl dark:border-neutral-600" width={450} height={216} draggable='false' alt="Imagen Slider" src='/Checkout.png' />
+                    <p className="m-auto">Checkout</p>
+                  </div>
+                )
+                : ''
+            }
             <div onClick={() => {
               if (indexPage !== -1) {
                 const oldPages = [...pages]

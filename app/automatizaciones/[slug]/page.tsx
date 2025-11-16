@@ -33,9 +33,25 @@ export default function Page ({ params }: { params: { slug: string } }) {
   const [funnels, setFunnels] = useState<IFunnel[]>([])
   const [popup, setPopup] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
   const [domain, setDomain] = useState<any>()
+  const [shopLoginAdmin, setShopLoginAdmin] = useState<any>()
 
   const router = useRouter()
   const { data: session } = useSession()
+
+  const getShopLoginAdmin = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
+    setShopLoginAdmin(res.data)
+  }
+
+  useEffect(() => {
+    if (session?.tenantId) {
+      getShopLoginAdmin()
+    }
+  }, [session])
 
   useEffect(() => {
     const getAutomatization = async () => {
@@ -281,7 +297,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
                   <div className='w-full flex max-w-[1280px] mx-auto'>
                     <div className='m-auto flex gap-6 flex-col lg:flex-row'>
                       <div className='flex flex-col h-fit'>
-                        <Segment setAutomatization={setAutomatization} automatization={automatization} clientTags={clientTags} forms={forms} calls={calls} services={services} funnels={funnels} />
+                        <Segment setAutomatization={setAutomatization} automatization={automatization} clientTags={clientTags} forms={forms} calls={calls} services={services} funnels={funnels} shopLoginAdmin={shopLoginAdmin} />
                         {
                           automatization.startType === 'Comentario en post de Instagram'
                             ? ''

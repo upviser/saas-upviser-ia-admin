@@ -48,9 +48,10 @@ interface Props {
     loadingSubPage: any,
     setLoadingSubPage: any,
     domain: any
+    shopLoginAdmin: any
 }
 
-export const Pages: React.FC<Props> = ({ domain, pages, setType, setMenu, setPart, setPages, session, handleMoveUp, handleMoveDown, setSelectPage, setPopupDeletePage, popupDeletePage, funnels, setSelectFunnel, setPopupDeleteFunnel, popupDeleteFunnel, services, setSelectService, setPopupDeleteService, popupDeleteService, setError, setPopupPage, popupPage, whatsapp, setWhatsapp, id, instagram, setInstagram, chatView, setChatView, setNewFunnel, setTitle, setPopupNewFunnel, popupNewFunnel, style, newPage, setNewPage, productsOrder, editSubPage, setEditSubPage, loadingSubPage, setLoadingSubPage }) => {
+export const Pages: React.FC<Props> = ({ domain, pages, setType, setMenu, setPart, setPages, session, handleMoveUp, handleMoveDown, setSelectPage, setPopupDeletePage, popupDeletePage, funnels, setSelectFunnel, setPopupDeleteFunnel, popupDeleteFunnel, services, setSelectService, setPopupDeleteService, popupDeleteService, setError, setPopupPage, popupPage, whatsapp, setWhatsapp, id, instagram, setInstagram, chatView, setChatView, setNewFunnel, setTitle, setPopupNewFunnel, popupNewFunnel, style, newPage, setNewPage, productsOrder, editSubPage, setEditSubPage, loadingSubPage, setLoadingSubPage, shopLoginAdmin }) => {
   return (
     <div className='flex flex-col gap-4 p-4'>
       <div className='flex gap-2 justify-between'>
@@ -60,7 +61,7 @@ export const Pages: React.FC<Props> = ({ domain, pages, setType, setMenu, setPar
       <div className='flex flex-col gap-2'>
         {
           pages.map((page, index) => {
-            if (page.page !== 'Tienda' || (page.page === 'Tienda' && productsOrder?.length)) {
+            if (page.page !== 'Tienda' || (page.page === 'Tienda' && productsOrder?.length && (shopLoginAdmin?.plan === 'Avanzado' || shopLoginAdmin?.plan === 'Profesional'))) {
               return (
                 <div key={page.slug} className='flex flex-col gap-2'>
                   <div className='flex gap-4' draggable onDragStart={() => setNewPage({ ...newPage, page: page.page, slug: page.slug })} onDragOver={(e) => e.preventDefault()} onDrop={async () => {
@@ -178,15 +179,23 @@ export const Pages: React.FC<Props> = ({ domain, pages, setType, setMenu, setPar
                 <div className='flex gap-4'>
                   <button onClick={() => setPart('Pagina de categorias')} className='text-left w-full text-[15px]'>Pagina de categorias</button>
                 </div>
-                <div className='flex gap-4'>
-                  <button onClick={() => setPart('Pagina de carrito')} className='text-left w-full text-[15px]'>Pagina de Carrito</button>
-                </div>
-                <div className='flex gap-4'>
-                  <button onClick={() => setPart('Pagina de checkout')} className='text-left w-full text-[15px]'>Pagina de checkout</button>
-                </div>
-                <div className='flex gap-4'>
-                  <button onClick={() => setPart('Pagina de cuenta')} className='text-left w-full text-[15px]'>Pagina de cuenta</button>
-                </div>
+                {
+                  shopLoginAdmin?.plan === 'Avanzado' || shopLoginAdmin?.plan === 'Profesional' 
+                    ? (
+                      <>
+                        <div className='flex gap-4'>
+                          <button onClick={() => setPart('Pagina de carrito')} className='text-left w-full text-[15px]'>Pagina de Carrito</button>
+                        </div>
+                        <div className='flex gap-4'>
+                          <button onClick={() => setPart('Pagina de checkout')} className='text-left w-full text-[15px]'>Pagina de checkout</button>
+                        </div>
+                        <div className='flex gap-4'>
+                          <button onClick={() => setPart('Pagina de cuenta')} className='text-left w-full text-[15px]'>Pagina de cuenta</button>
+                        </div>
+                      </>
+                    )
+                    : ''
+                }
               </>
             )
             : ''
@@ -198,32 +207,40 @@ export const Pages: React.FC<Props> = ({ domain, pages, setType, setMenu, setPar
           <button onClick={() => setPart('Chat')} className='text-left w-full text-[15px]'>Chat</button>
         </div>
       </div>
-      <h2 className='text-lg font-medium'>Embudos</h2>
-      <div className='flex flex-col gap-2'>
-        {
-          funnels.length
-            ? (
-              funnels.map((funnel, index) => (
-                <div key={funnel._id} className='flex gap-4 justify-between' draggable onDragStart={() => setNewPage({ ...newPage, page: funnel.funnel, slug: funnel.steps[0].slug })} onDragOver={(e) => e.preventDefault()}>
-                  <button onClick={(e: any) => {
-                    setType('Funnel')
-                    setPart(funnel.funnel)
-                    setSelectFunnel(funnel)
-                  }} className='text-left w-full text-[15px]'>{funnel.funnel}</button>
-                  <button onClick={(e: any) => {
-                    e.preventDefault()
-                    setSelectFunnel(funnel)
-                    setPopupDeleteFunnel({ ...popupDeleteFunnel, view: 'flex', opacity: 'opacity-0' })
-                    setTimeout(() => {
-                      setPopupDeleteFunnel({ ...popupDeleteFunnel, view: 'flex', opacity: 'opacity-1' })
-                    }, 10)
-                  }}><svg className="m-auto w-[17px]" role="presentation" viewBox="0 0 16 14"><path d="M15 0L1 14m14 0L1 0" stroke="currentColor" fill="none" fill-rule="evenodd"></path></svg></button>
-                </div>
-              ))
-            )
-            : <p className='text-[15px]'>No hay embudos creados</p>
-        }
-      </div>
+      {
+        shopLoginAdmin?.plan === 'Avanzado' || shopLoginAdmin?.plan === 'Profesional'
+          ? (
+            <>
+              <h2 className='text-lg font-medium'>Embudos</h2>
+              <div className='flex flex-col gap-2'>
+                {
+                  funnels.length
+                    ? (
+                      funnels.map((funnel, index) => (
+                        <div key={funnel._id} className='flex gap-4 justify-between' draggable onDragStart={() => setNewPage({ ...newPage, page: funnel.funnel, slug: funnel.steps[0].slug })} onDragOver={(e) => e.preventDefault()}>
+                          <button onClick={(e: any) => {
+                            setType('Funnel')
+                            setPart(funnel.funnel)
+                            setSelectFunnel(funnel)
+                          }} className='text-left w-full text-[15px]'>{funnel.funnel}</button>
+                          <button onClick={(e: any) => {
+                            e.preventDefault()
+                            setSelectFunnel(funnel)
+                            setPopupDeleteFunnel({ ...popupDeleteFunnel, view: 'flex', opacity: 'opacity-0' })
+                            setTimeout(() => {
+                              setPopupDeleteFunnel({ ...popupDeleteFunnel, view: 'flex', opacity: 'opacity-1' })
+                            }, 10)
+                          }}><svg className="m-auto w-[17px]" role="presentation" viewBox="0 0 16 14"><path d="M15 0L1 14m14 0L1 0" stroke="currentColor" fill="none" fill-rule="evenodd"></path></svg></button>
+                        </div>
+                      ))
+                    )
+                    : <p className='text-[15px]'>No hay embudos creados</p>
+                }
+              </div>
+            </>
+          )
+          : ''
+      }
       <h2 className='text-lg font-medium'>Servicios</h2>
       <div className='flex flex-col gap-2'>
         {
@@ -313,16 +330,22 @@ export const Pages: React.FC<Props> = ({ domain, pages, setType, setMenu, setPar
               }} className={`w-full min-h-9 h-9 px-4 text-white text-sm rounded-xl transition-colors duration-300`} style={{ backgroundColor: style.primary }}>Activar boton Chat</button>
             )
         }
-        <ButtonSecondary2 action={(e: any) => {
-          e.preventDefault()
-          setError('')
-          setNewFunnel({ funnel: '', description: '', steps: [{ step: '', slug: '' }] })
-          setTitle('Nuevo embudo')
-          setPopupNewFunnel({ ...popupNewFunnel, view: 'flex', opacity: 'opacity-0' })
-          setTimeout(() => {
-            setPopupNewFunnel({ ...popupNewFunnel, view: 'flex', opacity: 'opacity-1' })
-          }, 10)
-        }} config='w-full'>Agregar embudo</ButtonSecondary2>
+        {
+          shopLoginAdmin?.plan === 'Avanzado' || shopLoginAdmin?.plan === 'Profesional'
+            ? (
+              <ButtonSecondary2 action={(e: any) => {
+                e.preventDefault()
+                setError('')
+                setNewFunnel({ funnel: '', description: '', steps: [{ step: '', slug: '' }] })
+                setTitle('Nuevo embudo')
+                setPopupNewFunnel({ ...popupNewFunnel, view: 'flex', opacity: 'opacity-0' })
+                setTimeout(() => {
+                  setPopupNewFunnel({ ...popupNewFunnel, view: 'flex', opacity: 'opacity-1' })
+                }, 10)
+              }} config='w-full'>Agregar embudo</ButtonSecondary2>
+            )
+            : ''
+        }
         <button onClick={(e: any) => setPart('Estilo')} className='mt-2 text-sm'>Editar estilo del sitio web</button>
       </div>
     </div>

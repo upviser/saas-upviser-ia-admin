@@ -34,6 +34,7 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
   const [newTag, setNewTag] = useState('')
   const [loadingTag, setLoadingTag] = useState(false)
   const [calendars, setCalendars] = useState<any>([])
+  const [shopLoginAdmin, setShopLoginAdmin] = useState<any>()
 
   const { data: session } = useSession()
 
@@ -49,8 +50,25 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
   }
 
   useEffect(() => {
-    getCalendars()
-  }, [])
+    if (session?.tenantId) {
+      getCalendars()
+    }
+  }, [session])
+
+  const getShopLoginAdmin = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
+    setShopLoginAdmin(res.data)
+  }
+
+  useEffect(() => {
+    if (session?.tenantId) {
+      getShopLoginAdmin()
+    }
+  }, [session])
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -110,40 +128,48 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
           <p className="text-lg font-medium">{titleMeeting}</p>
           <div className="flex flex-col gap-2">
             <p className='text-sm font-medium'>Tipo</p>
-            <div className='flex gap-2'>
-              <input type='checkbox' onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const zoomCallType = 'Llamada por Zoom';
-                const newTypes = newCall.type ? [...newCall.type] : [];
-                if (e.target.checked && !newTypes.includes(zoomCallType)) {
-                  newTypes.push(zoomCallType);
-                } else {
-                  // Si desmarcas el checkbox, se elimina el tipo
-                  const index = newTypes.indexOf(zoomCallType);
-                  if (index !== -1) {
-                    newTypes.splice(index, 1);
-                  }
-                }
-                setNewCall({ ...newCall, type: newTypes });
-              }} checked={newCall.type?.length ? newCall.type.find(typ => typ === 'Llamada por Zoom') ? true : false : false} />
-              <p className='text-sm'>Llamada por Zoom</p>
-            </div>
-            <div className='flex gap-2'>
-              <input type='checkbox' onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const zoomCallType = 'Llamada por Google Meet';
-                const newTypes = newCall.type ? [...newCall.type] : [];
-                if (e.target.checked && !newTypes.includes(zoomCallType)) {
-                  newTypes.push(zoomCallType);
-                } else {
-                  // Si desmarcas el checkbox, se elimina el tipo
-                  const index = newTypes.indexOf(zoomCallType);
-                  if (index !== -1) {
-                    newTypes.splice(index, 1);
-                  }
-                }
-                setNewCall({ ...newCall, type: newTypes });
-              }} checked={newCall.type?.length ? newCall.type.find(typ => typ === 'Llamada por Google Meet') ? true : false : false} />
-              <p className='text-sm'>Llamada por Google Meet</p>
-            </div>
+            {
+              shopLoginAdmin?.plan === 'Avanzado' || shopLoginAdmin?.plan === 'Profesional'
+                ? (
+                  <>
+                    <div className='flex gap-2'>
+                      <input type='checkbox' onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        const zoomCallType = 'Llamada por Zoom';
+                        const newTypes = newCall.type ? [...newCall.type] : [];
+                        if (e.target.checked && !newTypes.includes(zoomCallType)) {
+                          newTypes.push(zoomCallType);
+                        } else {
+                          // Si desmarcas el checkbox, se elimina el tipo
+                          const index = newTypes.indexOf(zoomCallType);
+                          if (index !== -1) {
+                            newTypes.splice(index, 1);
+                          }
+                        }
+                        setNewCall({ ...newCall, type: newTypes });
+                      }} checked={newCall.type?.length ? newCall.type.find(typ => typ === 'Llamada por Zoom') ? true : false : false} />
+                      <p className='text-sm'>Llamada por Zoom</p>
+                    </div>
+                    <div className='flex gap-2'>
+                      <input type='checkbox' onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        const zoomCallType = 'Llamada por Google Meet';
+                        const newTypes = newCall.type ? [...newCall.type] : [];
+                        if (e.target.checked && !newTypes.includes(zoomCallType)) {
+                          newTypes.push(zoomCallType);
+                        } else {
+                          // Si desmarcas el checkbox, se elimina el tipo
+                          const index = newTypes.indexOf(zoomCallType);
+                          if (index !== -1) {
+                            newTypes.splice(index, 1);
+                          }
+                        }
+                        setNewCall({ ...newCall, type: newTypes });
+                      }} checked={newCall.type?.length ? newCall.type.find(typ => typ === 'Llamada por Google Meet') ? true : false : false} />
+                      <p className='text-sm'>Llamada por Google Meet</p>
+                    </div>
+                  </>
+                )
+                : ''
+            }
             <div className='flex gap-2'>
               <input type='checkbox' onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const zoomCallType = 'Visita a domicilio';

@@ -9,9 +9,10 @@ import Image from 'next/image'
 interface Props {
   information: IProduct,
   setInformation: any
+  shopLogin: any
 }
 
-export const StockVariations: React.FC<Props> = ({information, setInformation}) => {
+export const StockVariations: React.FC<Props> = ({information, setInformation, shopLogin}) => {
 
   const [indexImage, setIndexImage] = useState(-1)
   const [variations, setVariations] = useState('rotate-90')
@@ -213,27 +214,31 @@ export const StockVariations: React.FC<Props> = ({information, setInformation}) 
                   {
                     information.variations?.nameSubVariation2 === '' || information.variations?.nameSubVariation2
                       ? ''
-                      : (
-                        <Button2 action={(e: any) => {
-                          e.preventDefault()
-                          let mod = information.variations
-                          mod!.nameSubVariations2 = [{ subVariation2: '', colorSubVariation2: '#000000' }]
-                          mod!.nameSubVariation2 = ''
-                          setInformation({ ...information, variations: mod })
-                        }}>Crear segunda subvariación</Button2>
-                      )
+                      : shopLogin?.plan === 'Profesional'
+                        ? (
+                          <Button2 action={(e: any) => {
+                            e.preventDefault()
+                            let mod = information.variations
+                            mod!.nameSubVariations2 = [{ subVariation2: '', colorSubVariation2: '#000000' }]
+                            mod!.nameSubVariation2 = ''
+                            setInformation({ ...information, variations: mod })
+                          }}>Crear segunda subvariación</Button2>
+                        )
+                        : ''
                   }
                 </>
               )
-              : (
-                <Button2 action={(e: any) => {
-                  e.preventDefault()
-                  let mod = information.variations
-                  mod!.nameSubVariations = [{ subVariation: '', colorSubVariation: '#000000' }]
-                  mod!.nameSubVariation = ''
-                  setInformation({ ...information, variations: mod })
-                }}>Crear subvariación</Button2>
-              )
+              : shopLogin?.plan === 'Avanzado' || shopLogin?.plan === 'Profesional'
+                ? (
+                  <Button2 action={(e: any) => {
+                    e.preventDefault()
+                    let mod = information.variations
+                    mod!.nameSubVariations = [{ subVariation: '', colorSubVariation: '#000000' }]
+                    mod!.nameSubVariation = ''
+                    setInformation({ ...information, variations: mod })
+                  }}>Crear subvariación</Button2>
+                )
+                : ''
           }
           {
             information.variations?.nameSubVariation2 !== undefined

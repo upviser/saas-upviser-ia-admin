@@ -23,6 +23,7 @@ const socket = io(`${process.env.NEXT_PUBLIC_API_URL}`, {
 export const LeftMenu: React.FC<PropsWithChildren> = ({ children }) => {
   
   const [messages, setMessages] = useState(false)
+  const [shopLoginAdmin, setShopLoginAdmin] = useState<any>()
   const { data: session } = useSession()
   const pathname = usePathname()
 
@@ -40,6 +41,21 @@ export const LeftMenu: React.FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     if (session?.tenantId) {
       getNotifications()
+    }
+  }, [session])
+
+  const getShopLoginAdmin = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
+    setShopLoginAdmin(res.data)
+  }
+
+  useEffect(() => {
+    if (session?.tenantId) {
+      getShopLoginAdmin()
     }
   }, [session])
 
@@ -89,9 +105,15 @@ export const LeftMenu: React.FC<PropsWithChildren> = ({ children }) => {
                             <div className='flex flex-col gap-2'>
                               <Link href='/productos/categorias' className={`${pathname.includes('/productos/categorias') ? 'bg-neutral-200 dark:bg-neutral-700' : 'hover:bg-neutral-100 dark:hover:bg-neutral-800'} transition-all duration-150 flex gap-2 py-1.5 px-3 rounded-lg text-sm`}>Categorías</Link>
                             </div>
-                            <div className='flex flex-col gap-2'>
-                              <Link href='/productos/codigos-promocionales' className={`${pathname.includes('/productos/codigos-promocionales') ? 'bg-neutral-200 dark:bg-neutral-700' : 'hover:bg-neutral-100 dark:hover:bg-neutral-800'} transition-all duration-150 flex gap-2 py-1.5 px-3 rounded-lg text-sm`}>Códigos</Link>
-                            </div>
+                            {
+                              shopLoginAdmin?.plan === 'Avanzado' || shopLoginAdmin?.plan === 'Profesional'
+                                ? (
+                                  <div className='flex flex-col gap-2'>
+                                    <Link href='/productos/codigos-promocionales' className={`${pathname.includes('/productos/codigos-promocionales') ? 'bg-neutral-200 dark:bg-neutral-700' : 'hover:bg-neutral-100 dark:hover:bg-neutral-800'} transition-all duration-150 flex gap-2 py-1.5 px-3 rounded-lg text-sm`}>Códigos</Link>
+                                  </div>
+                                )
+                                : ''
+                            }
                           </>
                         )
                         : ''
@@ -102,7 +124,7 @@ export const LeftMenu: React.FC<PropsWithChildren> = ({ children }) => {
                         : ''
                     }
                     {
-                      session?.user.permissions?.includes('Embudos') || session?.user.type === 'Administrador'
+                      (session?.user.permissions?.includes('Embudos') || session?.user.type === 'Administrador') && (shopLoginAdmin?.plan === 'Avanzado' || shopLoginAdmin?.plan === 'Profesional')
                         ? <Link href='/embudos' className={`transition-all duration-150 ${pathname.includes('/embudos') ? 'bg-main' : 'hover:bg-neutral-100 dark:hover:bg-main/30'} flex py-1.5 px-3 gap-2 rounded-xl`}><AiOutlineFunnelPlot className={`mt-auto mb-auto text-lg ${pathname.includes('/embudos') ? 'text-white' : 'text-main'}`} /><p className={`${pathname.includes('/embudos') ? 'text-white' : ''} text-sm`}>Embudos</p></Link>
                         : ''
                     }

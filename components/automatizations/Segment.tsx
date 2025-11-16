@@ -10,9 +10,10 @@ interface Props {
     calls: ICall[]
     services: IService[]
     funnels: IFunnel[]
+    shopLoginAdmin: any
 }
 
-export const Segment: React.FC<Props> = ({ setAutomatization, automatization, clientTags, forms, calls, services, funnels }) => {
+export const Segment: React.FC<Props> = ({ setAutomatization, automatization, clientTags, forms, calls, services, funnels, shopLoginAdmin }) => {
   return (
     <div className='w-full max-w-[500px] p-5 flex flex-col gap-4 bg-white m-auto rounded-xl border border-black/5 dark:bg-neutral-800 dark:border-neutral-700' style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
       <div className='flex flex-col gap-2'>
@@ -25,7 +26,11 @@ export const Segment: React.FC<Props> = ({ setAutomatization, automatization, cl
           <option>Añadido a una etapa de un embudo</option>
           <option>Añadido a una etapa de un servicio</option>
           <option>Tag añadido</option>
-          <option>Comentario en post de Instagram</option>
+          {
+            shopLoginAdmin?.plan === 'Avanzado' || shopLoginAdmin?.plan === 'Profesional'
+              ? <option>Comentario en post de Instagram</option>
+              : ''
+          }
         </Select>
       </div>
       {

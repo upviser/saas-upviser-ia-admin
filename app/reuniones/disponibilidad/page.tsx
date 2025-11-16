@@ -134,7 +134,7 @@ export default function AvaliableCallsPage () {
             setLoading(true)
             setError('')
             if (newCalendar.name !== '') {
-              if ((shopLogin.plan === 'Esencial' && calendars.length === 1) || (shopLogin.plan === 'Avanzado' && calendars.length === 3) || (shopLogin.plan === 'Profesional' && calendars.length === 10)) {
+              if ((shopLogin?.plan === 'Esencial' && calendars.length === 1) || (shopLogin?.plan === 'Avanzado' && calendars.length === 3) || (shopLogin?.plan === 'Profesional' && calendars.length === 5)) {
                 setError('Has llegado al limite de calendarios de tu plan')
                 setLoading(false)
                 return

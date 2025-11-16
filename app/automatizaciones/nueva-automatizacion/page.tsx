@@ -47,9 +47,25 @@ export default function Page() {
   const [funnels, setFunnels] = useState<IFunnel[]>([])
   const [error, setError] = useState('')
   const [domain, setDomain] = useState<any>()
+  const [shopLoginAdmin, setShopLoginAdmin] = useState<any>()
 
   const router = useRouter()
   const { data: session } = useSession()
+
+  const getShopLoginAdmin = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
+    setShopLoginAdmin(res.data)
+  }
+
+  useEffect(() => {
+    if (session?.tenantId) {
+      getShopLoginAdmin()
+    }
+  }, [session])
 
   const getClientTags = async () => {
     const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-tag`, {
@@ -271,7 +287,7 @@ export default function Page() {
           <div className='w-full flex max-w-[1280px] mx-auto'>
             <div className='m-auto flex gap-6 flex-col lg:flex-row'>
               <div className='flex flex-col h-fit'>
-                <Segment setAutomatization={setAutomatization} automatization={automatization} clientTags={clientTags} forms={forms} calls={calls} services={services} funnels={funnels} />
+                <Segment setAutomatization={setAutomatization} automatization={automatization} clientTags={clientTags} forms={forms} calls={calls} services={services} funnels={funnels} shopLoginAdmin={shopLoginAdmin} />
                 {
                   automatization.startType === 'Comentario en post de Instagram'
                     ? ''
@@ -282,21 +298,27 @@ export default function Page() {
                             <Step key={email.affair} email={email} index={index} setAutomatization={setAutomatization} automatization={automatization} setTempEmail={setTempEmail} selectStep={selectStep} setSelectStep={setSelectStep} popupCondition={popupCondition} setPopupCondition={setPopupCondition} />
                           ))
                         }
-                        <Button2 action={(e: any) => {
-                          e.preventDefault()
-                          setAutomatization({
-                            ...automatization, automatization: automatization.automatization.concat({
-                              affair: '',
-                              title: 'Lorem ipsum',
-                              paragraph: 'Lorem ipsum',
-                              buttonText: 'Lorem ipsum',
-                              condition: [],
-                              url: '',
-                              number: 0,
-                              time: 'Días'
-                            })
-                          })
-                        }} config='m-auto mt-4'>Agregar paso</Button2>
+                        {
+                          (shopLoginAdmin?.plan === 'Avanzado' && automatization.automatization.length === 1) || shopLoginAdmin?.plan === 'Profesional'
+                            ? (
+                              <Button2 action={(e: any) => {
+                                e.preventDefault()
+                                setAutomatization({
+                                  ...automatization, automatization: automatization.automatization.concat({
+                                    affair: '',
+                                    title: 'Lorem ipsum',
+                                    paragraph: 'Lorem ipsum',
+                                    buttonText: 'Lorem ipsum',
+                                    condition: [],
+                                    url: '',
+                                    number: 0,
+                                    time: 'Días'
+                                  })
+                                })
+                              }} config='m-auto mt-4'>Agregar paso</Button2>
+                            )
+                            : ''
+                        }
                       </>
                     )
                 }

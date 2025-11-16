@@ -44,12 +44,28 @@ export default function Page () {
   const [user, setUser] = useState<any>()
   const [connecting, setConnecting] = useState(false)
   const [loginCode, setLoginCode] = useState(null)
+  const [shopLoginAdmin, setShopLoginAdmin] = useState<any>()
 
   const router = useRouter()
   const { data: session } = useSession()
 
   const zoom = false
   const googleMeet = false
+
+  const getShopLoginAdmin = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
+    setShopLoginAdmin(res.data)
+  }
+
+  useEffect(() => {
+    if (session?.tenantId) {
+      getShopLoginAdmin()
+    }
+  }, [session])
 
   const getIntegrations = async () => {
     const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/integrations`, {
@@ -484,18 +500,26 @@ export default function Page () {
                     )
                     : ''
               }
-              <div className='flex flex-col gap-2'>
-                <h3 className='text-sm'>Api Meta Token</h3>
-                <Input change={(e: any) => setIntegrations({ ...integrations, apiToken: e.target.value })} value={integrations.apiToken} placeholder='Api Meta Token' config='h-40' />
-              </div>
-              <div className='flex flex-col gap-2'>
-                <h3 className='text-sm'>Api Pixel Id</h3>
-                <Input change={(e: any) => setIntegrations({ ...integrations, apiPixelId: e.target.value })} value={integrations.apiPixelId} placeholder='Api Pixel Id' config='h-40' />
-              </div>
-              <div className='flex flex-col gap-2'>
-                <h3 className='text-sm'>Google Analytics</h3>
-                <Input change={(e: any) => setIntegrations({ ...integrations, googleAnalytics: e.target.value })} value={integrations.googleAnalytics} placeholder='Google Analytics' config='h-40' />
-              </div>
+              {
+                shopLoginAdmin?.plan === 'Profesional'
+                  ? (
+                    <>
+                      <div className='flex flex-col gap-2'>
+                        <h3 className='text-sm'>Api Meta Token</h3>
+                        <Input change={(e: any) => setIntegrations({ ...integrations, apiToken: e.target.value })} value={integrations.apiToken} placeholder='Api Meta Token' config='h-40' />
+                      </div>
+                      <div className='flex flex-col gap-2'>
+                        <h3 className='text-sm'>Api Pixel Id</h3>
+                        <Input change={(e: any) => setIntegrations({ ...integrations, apiPixelId: e.target.value })} value={integrations.apiPixelId} placeholder='Api Pixel Id' config='h-40' />
+                      </div>
+                      <div className='flex flex-col gap-2'>
+                        <h3 className='text-sm'>Google Analytics</h3>
+                        <Input change={(e: any) => setIntegrations({ ...integrations, googleAnalytics: e.target.value })} value={integrations.googleAnalytics} placeholder='Google Analytics' config='h-40' />
+                      </div>
+                    </>
+                  )
+                  : ''
+              }
             </div>
           </div>
         </div>

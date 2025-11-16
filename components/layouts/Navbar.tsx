@@ -43,6 +43,7 @@ export const Navbar: React.FC<PropsWithChildren> = ({ children }) => {
   const [menu2, setMenu2] = useState(false)
   const [messages, setMessages] = useState(false)
   const [loadingNotifications, setLoadingNotifications] = useState(false)
+  const [shopLoginAdmin, setShopLoginAdmin] = useState<any>()
 
   const notificationsRef = useRef(notifications)
 
@@ -116,6 +117,21 @@ export const Navbar: React.FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  const getShopLoginAdmin = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, {
+      headers: {
+        'x-tenant-id': session?.tenantId
+      }
+    })
+    setShopLoginAdmin(res.data)
+  }
+
+  useEffect(() => {
+    if (session?.tenantId) {
+      getShopLoginAdmin()
+    }
+  }, [session])
 
   useEffect(() => {
     const getStoreData = async () => {
@@ -253,14 +269,20 @@ export const Navbar: React.FC<PropsWithChildren> = ({ children }) => {
                       }, 200);
                     }} className={`${pathname.includes('/productos/categorias') ? 'bg-neutral-200 dark:bg-neutral-700' : 'hover:bg-neutral-100 dark:hover:bg-neutral-800'} transition-all duration-150 flex gap-2 py-1.5 px-3 rounded-lg text-sm`}>Categorías</Link>
                     </div>
-                    <div className='flex flex-col gap-2'>
-                      <Link href='/productos/codigos-promocionales' onClick={() => {
-                        setMenu2(false)
-                        setTimeout(() => {
-                          setMenu('hidden')
-                        }, 200);
-                      }} className={`${pathname.includes('/productos/codigos-promocionales') ? 'bg-neutral-200 dark:bg-neutral-700' : 'hover:bg-neutral-100 dark:hover:bg-neutral-800'} transition-all duration-150 flex gap-2 py-1.5 px-3 rounded-lg text-sm`}>Códigos</Link>
-                    </div>
+                    {
+                      shopLoginAdmin?.plan === 'Avanzado' || shopLoginAdmin?.plan === 'Profesional'
+                        ? (
+                          <div className='flex flex-col gap-2'>
+                            <Link href='/productos/codigos-promocionales' onClick={() => {
+                              setMenu2(false)
+                              setTimeout(() => {
+                                setMenu('hidden')
+                              }, 200);
+                            }} className={`${pathname.includes('/productos/codigos-promocionales') ? 'bg-neutral-200 dark:bg-neutral-700' : 'hover:bg-neutral-100 dark:hover:bg-neutral-800'} transition-all duration-150 flex gap-2 py-1.5 px-3 rounded-lg text-sm`}>Códigos</Link>
+                          </div>
+                        )
+                        : ''
+                    }
                   </>
                 )
                 : ''
@@ -276,7 +298,7 @@ export const Navbar: React.FC<PropsWithChildren> = ({ children }) => {
                 : ''
             }
             {
-              session?.user.permissions?.includes('Embudos') || session?.user.type === 'Administrador'
+              (session?.user.permissions?.includes('Embudos') || session?.user.type === 'Administrador') && (shopLoginAdmin?.plan === 'Avanzado' || shopLoginAdmin?.plan === 'Profesional')
                 ? <Link href='/embudos' onClick={() => {
                   setMenu2(false)
                   setTimeout(() => {
@@ -383,7 +405,7 @@ export const Navbar: React.FC<PropsWithChildren> = ({ children }) => {
                 : ''
             }
             {
-              session?.user.permissions?.includes('Contenido IA') || session?.user.type === 'Administrador'
+              (session?.user.permissions?.includes('Contenido IA') || session?.user.type === 'Administrador') && (shopLoginAdmin?.plan === 'Avanzado' || shopLoginAdmin?.plan === 'Profesional')
                 ? <Link href='/contenido-ia' onClick={() => {
                     setMenu2(false)
                     setTimeout(() => {
