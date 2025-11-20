@@ -88,8 +88,6 @@ export const Nav = () => {
             {menuItems.map((item) => {
               const Icon = item.icon
               const isActive = pathname === item.href
-
-              if (shopLoginAdmin?.plan === 'Esencial' && (item.label === 'Pasarela de pago' || item.label === 'Envíos')) return
               
               return (
                 <Link

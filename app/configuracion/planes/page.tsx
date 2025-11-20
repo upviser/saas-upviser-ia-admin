@@ -48,7 +48,19 @@ export default function Page () {
   const clientRef = useRef<IClient>(client)
   const initializationRef = useRef({ amount: Number(service?.typePrice === '2 pagos' ? service?.typePay === 'Hay que agregarle el IVA al precio' ? Number(plan?.price) / 100 * 119 / 2 : Number(plan?.price) / 2 : service?.typePrice === 'Pago unico' ? service?.typePay === 'Hay que agregarle el IVA al precio' ? Number(plan?.price) / 100 * 119 : plan?.price : typePrice === 'Mensual' ? service?.typePay === 'Hay que agregarle el IVA al precio' ? Number(plan?.price) / 100 * 119 : plan?.price : service?.typePay === 'Hay que agregarle el IVA al precio' ? Number(plan?.anualPrice) / 100 * 119 : plan?.anualPrice) })
 
-  initMercadoPago(process.env.NEXT_PUBLIC_MERCADOPAGO_PUBLIC_KEY!)
+  useEffect(() => {
+    async function loadKey() {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/payment`, {
+        headers: {
+          'x-tenant-id': process.env.NEXT_PUBLIC_MAIN_TENANT_ID
+        }
+      });
+
+      initMercadoPago(res.data.mercadoPago.publicKey);
+    }
+
+    loadKey();
+  }, []);
 
   const getClient = async () => {
     const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-email/${session?.user.email}`, {
@@ -91,6 +103,7 @@ export default function Page () {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
+                  'x-tenant-id': process.env.NEXT_PUBLIC_MAIN_TENANT_ID!
                 },
                 body: JSON.stringify({ cardToken: formData.token, price: initializationRef.current.amount, frequency: typePrice === 'Mensual' ? 'months' : 'years', email: clientRef.current.email }),
               })

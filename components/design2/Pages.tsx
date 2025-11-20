@@ -61,7 +61,7 @@ export const Pages: React.FC<Props> = ({ domain, pages, setType, setMenu, setPar
       <div className='flex flex-col gap-2'>
         {
           pages.map((page, index) => {
-            if (page.page !== 'Tienda' || (page.page === 'Tienda' && productsOrder?.length && (shopLoginAdmin?.plan === 'Avanzado' || shopLoginAdmin?.plan === 'Profesional'))) {
+            if (page.page !== 'Tienda' || (page.page === 'Tienda' && productsOrder?.length)) {
               return (
                 <div key={page.slug} className='flex flex-col gap-2'>
                   <div className='flex gap-4' draggable onDragStart={() => setNewPage({ ...newPage, page: page.page, slug: page.slug })} onDragOver={(e) => e.preventDefault()} onDrop={async () => {
@@ -179,23 +179,15 @@ export const Pages: React.FC<Props> = ({ domain, pages, setType, setMenu, setPar
                 <div className='flex gap-4'>
                   <button onClick={() => setPart('Pagina de categorias')} className='text-left w-full text-[15px]'>Pagina de categorias</button>
                 </div>
-                {
-                  shopLoginAdmin?.plan === 'Avanzado' || shopLoginAdmin?.plan === 'Profesional' 
-                    ? (
-                      <>
-                        <div className='flex gap-4'>
-                          <button onClick={() => setPart('Pagina de carrito')} className='text-left w-full text-[15px]'>Pagina de Carrito</button>
-                        </div>
-                        <div className='flex gap-4'>
-                          <button onClick={() => setPart('Pagina de checkout')} className='text-left w-full text-[15px]'>Pagina de checkout</button>
-                        </div>
-                        <div className='flex gap-4'>
-                          <button onClick={() => setPart('Pagina de cuenta')} className='text-left w-full text-[15px]'>Pagina de cuenta</button>
-                        </div>
-                      </>
-                    )
-                    : ''
-                }
+                <div className='flex gap-4'>
+                  <button onClick={() => setPart('Pagina de carrito')} className='text-left w-full text-[15px]'>Pagina de Carrito</button>
+                </div>
+                <div className='flex gap-4'>
+                  <button onClick={() => setPart('Pagina de checkout')} className='text-left w-full text-[15px]'>Pagina de checkout</button>
+                </div>
+                <div className='flex gap-4'>
+                  <button onClick={() => setPart('Pagina de cuenta')} className='text-left w-full text-[15px]'>Pagina de cuenta</button>
+                </div>
               </>
             )
             : ''
